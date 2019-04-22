@@ -1,0 +1,36 @@
+cabal-version: 2.4
+
+name: fltkhs-simple
+version: 0
+
+library
+  build-depends:
+    base,
+    fltkhs,
+    text,
+
+  default-extensions:
+    FlexibleContexts
+    InstanceSigs
+    LambdaCase
+    MonoLocalBinds
+    -- MonoLocalBinds implied by GADTs/TypeFamilies
+    RankNTypes
+    TypeApplications
+
+  exposed-modules:
+    Fltk.Button
+    Fltk.Group
+    Fltk.Image
+    Fltk.WidgetBase
+    Fltk.WindowBase
+
+  hs-source-dirs:
+    src
+
+  other-modules:
+    Fltk.Group.Internal
+    Fltk.GroupBase.Internal
+    Fltk.Image.Internal
+    Fltk.WidgetBase.Internal
+    Fltk.WindowBase.Internal
