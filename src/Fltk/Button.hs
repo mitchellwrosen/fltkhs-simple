@@ -22,6 +22,7 @@ module Fltk.Button
   , output
   , parent
   , selectionColor
+  , shortcut
   , tooltip
   , type_
   , visible
@@ -43,7 +44,6 @@ module Fltk.Button
   , getDownColor
   , getH
   , getRectangle
-  , getShortcut
   , getTopWindow
   , getTopWindowOffset
   , getValue
@@ -65,7 +65,6 @@ module Fltk.Button
   , setDownBox
   , setDownColor
   , setonly
-  , setShortcut
   , setValue
   , takeFocus
   , takesevents
@@ -77,6 +76,7 @@ import Fltk.Internal.Types (Button(..), Group(..), Image(..), Widget(..),
 import qualified Fltk.Internal.Widget as Widget
 
 import Data.Coerce   (coerce)
+import Data.Maybe    (fromMaybe)
 import Data.StateVar (StateVar, makeStateVar)
 import Data.Text     (Text)
 import Foreign.Ptr   (FunPtr)
@@ -252,6 +252,16 @@ selectionColor ::
 selectionColor =
   wrapped Widget.selectionColor
 
+shortcut ::
+     Button -- ^
+  -> StateVar (Maybe Fltk.ShortcutKeySequence)
+shortcut =
+  prop
+    Fltk.getShortcut
+    (\button ->
+      Fltk.setShortcut button .
+        fromMaybe (Fltk.ShortcutKeySequence [] (Fltk.NormalKeyType '\0')))
+
 tooltip ::
      Button -- ^
   -> StateVar Text
@@ -383,12 +393,6 @@ getRectangle ::
   -> IO Fltk.Rectangle
 getRectangle =
   wrapped Fltk.getRectangle
-
-getShortcut ::
-     Button -- ^
-  -> IO (Maybe Fltk.ShortcutKeySequence)
-getShortcut =
-  wrapped Fltk.getShortcut
 
 getTopWindow ::
      Button -- ^
@@ -526,13 +530,6 @@ setonly ::
   -> IO ()
 setonly =
   wrapped Fltk.setonly
-
-setShortcut ::
-     Button -- ^
-  -> Fltk.ShortcutKeySequence -- ^
-  -> IO ()
-setShortcut =
-  wrapped Fltk.setShortcut
 
 setValue ::
      Button -- ^
