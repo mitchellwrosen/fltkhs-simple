@@ -14,6 +14,7 @@ module Fltk.Internal.Widget
   , labelSize
   , labelType
   , output
+  , parent
   , selectionColor
   , tooltip
   , type_
@@ -22,7 +23,7 @@ module Fltk.Internal.Widget
   , when
   ) where
 
-import Fltk.Internal.Types (Image(..))
+import Fltk.Internal.Types (Group(..), Image(..))
 
 import Data.Coerce   (coerce)
 import Data.Foldable (traverse_)
@@ -231,6 +232,19 @@ output x =
     (\case
       False -> Fltk.clearOutput x
       True -> Fltk.setOutput x)
+
+parent ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetParent ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetParent ())
+     , Fltk.Op (Fltk.GetParent ()) r a (IO (Maybe (Fltk.Ref Fltk.GroupBase)))
+     , Fltk.Op (Fltk.SetParent ()) s a (Maybe (Fltk.Ref Fltk.GroupBase) -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar (Maybe Group)
+parent x =
+  makeStateVar
+    (coerce @(IO (Maybe (Fltk.Ref Fltk.GroupBase))) (Fltk.getParent x))
+    (coerce @(Maybe (Fltk.Ref Fltk.GroupBase) -> IO ()) (Fltk.setParent x))
 
 selectionColor ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetSelectionColor ())

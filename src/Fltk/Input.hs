@@ -19,6 +19,7 @@ module Fltk.Input
   , labelSize
   , labelType
   , output
+  , parent
   , selectionColor
   , tooltip
   , type_
@@ -48,7 +49,6 @@ module Fltk.Input
   , getInputType
   , getMark
   , getMaximumSize
-  , getParent
   , getPosition
   , getReadonly
   , getRectangle
@@ -87,7 +87,6 @@ module Fltk.Input
   , setInputType
   , setMark
   , setMaximumSize
-  , setParent
   , setPosition
   , setReadonly
   , setShortcut
@@ -232,6 +231,12 @@ output ::
   -> StateVar Bool
 output =
   wrapped Widget.output
+
+parent ::
+     Input -- ^
+  -> StateVar (Maybe Group)
+parent =
+  wrapped Widget.parent
 
 selectionColor ::
      Input -- ^
@@ -420,12 +425,6 @@ getMaximumSize ::
   -> IO Int
 getMaximumSize =
   wrapped Fltk.getMaximumSize
-
-getParent ::
-     Input -- ^
-  -> IO (Maybe Group)
-getParent =
-  coerce (wrapped Fltk.getParent)
 
 getPosition ::
      Input -- ^
@@ -674,13 +673,6 @@ setMaximumSize ::
   -> IO ()
 setMaximumSize =
   wrapped Fltk.setMaximumSize
-
-setParent ::
-     Input -- ^
-  -> Maybe Group -- ^
-  -> IO ()
-setParent input group =
-  wrapped Fltk.setParent input (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setPosition ::
      Input -- ^

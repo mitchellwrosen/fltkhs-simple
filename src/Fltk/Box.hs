@@ -19,6 +19,7 @@ module Fltk.Box
   , labelSize
   , labelType
   , output
+  , parent
   , selectionColor
   , tooltip
   , type_
@@ -38,7 +39,6 @@ module Fltk.Box
   , drawLabel
   , getCallback
   , getH
-  , getParent
   , getRectangle
   , getTopWindow
   , getTopWindowOffset
@@ -57,7 +57,6 @@ module Fltk.Box
   , setCallback
   , setColorWithBgSel
   , setDamageInside
-  , setParent
   , takeFocus
   , takesevents
   ) where
@@ -190,6 +189,12 @@ output ::
 output =
   wrapped Widget.output
 
+parent ::
+     Box -- ^
+  -> StateVar (Maybe Group)
+parent =
+  wrapped Widget.parent
+
 
 selectionColor ::
      Box -- ^
@@ -311,12 +316,6 @@ getH ::
 getH =
   wrapped Fltk.getH
 
-getParent ::
-     Box -- ^
-  -> IO (Maybe Group)
-getParent =
-  coerce (wrapped Fltk.getParent)
-
 getRectangle ::
      Box -- ^
   -> IO Fltk.Rectangle
@@ -433,13 +432,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setParent ::
-     Box -- ^
-  -> Maybe Group -- ^
-  -> IO ()
-setParent box group =
-  wrapped Fltk.setParent box (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 takeFocus ::
      Box -- ^

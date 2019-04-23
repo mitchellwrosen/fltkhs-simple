@@ -20,6 +20,7 @@ module Fltk.Button
   , labelSize
   , labelType
   , output
+  , parent
   , selectionColor
   , tooltip
   , type_
@@ -41,7 +42,6 @@ module Fltk.Button
   , getDownBox
   , getDownColor
   , getH
-  , getParent
   , getRectangle
   , getShortcut
   , getTopWindow
@@ -65,7 +65,6 @@ module Fltk.Button
   , setDownBox
   , setDownColor
   , setonly
-  , setParent
   , setShortcut
   , setValue
   , takeFocus
@@ -241,6 +240,12 @@ output ::
 output =
   wrapped Widget.output
 
+parent ::
+     Button -- ^
+  -> StateVar (Maybe Group)
+parent =
+  wrapped Widget.parent
+
 selectionColor ::
      Button -- ^
   -> StateVar Fltk.Color
@@ -372,12 +377,6 @@ getH ::
   -> IO Fltk.Height
 getH =
   wrapped Fltk.getH
-
-getParent ::
-     Button -- ^
-  -> IO (Maybe Group)
-getParent =
-  coerce (wrapped Fltk.getParent)
 
 getRectangle ::
      Button -- ^
@@ -527,13 +526,6 @@ setonly ::
   -> IO ()
 setonly =
   wrapped Fltk.setonly
-
-setParent ::
-     Button -- ^
-  -> Maybe Group -- ^
-  -> IO ()
-setParent button group =
-  wrapped Fltk.setParent button (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setShortcut ::
      Button -- ^

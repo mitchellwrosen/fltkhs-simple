@@ -19,6 +19,7 @@ module Fltk.Group
   , labelSize
   , labelType
   , output
+  , parent
   , selectionColor
   , tooltip
   , type_
@@ -53,7 +54,6 @@ module Fltk.Group
   , getCallback
   , getChild
   , getH
-  , getParent
   , getRectangle
   , getResizable
   , getTopWindow
@@ -79,7 +79,6 @@ module Fltk.Group
   , setColorWithBgSel
   , setDamageInside
   , setNotResizable
-  , setParent
   , setResizable
   , takeFocus
   , takesevents
@@ -212,6 +211,12 @@ output ::
   -> StateVar Bool
 output =
   wrapped Widget.output
+
+parent ::
+     Group -- ^
+  -> StateVar (Maybe Group)
+parent =
+  wrapped Widget.parent
 
 selectionColor ::
      Group -- ^
@@ -430,12 +435,6 @@ getH ::
 getH =
   wrapped Fltk.getH
 
-getParent ::
-     Group -- ^
-  -> IO (Maybe Group)
-getParent =
-  coerce (wrapped Fltk.getParent)
-
 getRectangle ::
      Group -- ^
   -> IO Fltk.Rectangle
@@ -603,13 +602,6 @@ setNotResizable ::
   -> IO ()
 setNotResizable =
   wrapped Fltk.setNotResizable
-
-setParent ::
-     Group -- ^
-  -> Maybe Group -- ^
-  -> IO ()
-setParent group parent =
-  wrapped Fltk.setParent group (coerce parent :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setResizable ::
      Group -- ^

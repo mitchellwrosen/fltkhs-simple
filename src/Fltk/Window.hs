@@ -18,6 +18,7 @@ module Fltk.Window
   , labelSize
   , labelType
   , output
+  , parent
   , selectionColor
   , tooltip
   , type_
@@ -65,7 +66,6 @@ module Fltk.Window
   , getMenuWindow
   , getModal
   , getOverride
-  , getParent
   , getRectangle
   , getResizable
   , getTooltipWindow
@@ -112,7 +112,6 @@ module Fltk.Window
   , setNonModal
   , setNotResizable
   , setOverride
-  , setParent
   , setResizable
   , setTooltipWindow
   , setXclass
@@ -262,6 +261,12 @@ output ::
   -> StateVar Bool
 output =
   wrapped Widget.output
+
+parent ::
+     Window -- ^
+  -> StateVar (Maybe Group)
+parent =
+  wrapped Widget.parent
 
 selectionColor ::
      Window -- ^
@@ -559,12 +564,6 @@ getOverride ::
   -> IO Bool
 getOverride =
   wrapped Fltk.getOverride
-
-getParent ::
-     Window -- ^
-  -> IO (Maybe Group)
-getParent =
-  coerce (wrapped Fltk.getParent)
 
 getRectangle ::
      Window -- ^
@@ -875,13 +874,6 @@ setOverride ::
   -> IO ()
 setOverride =
   wrapped Fltk.setOverride
-
-setParent ::
-     Window -- ^
-  -> Maybe Group -- ^
-  -> IO ()
-setParent box group =
-  wrapped Fltk.setParent box (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setResizable ::
      Window -- ^
