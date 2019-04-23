@@ -12,6 +12,7 @@ module Fltk.Button
   , color
   , damage
   , deimage
+  , downColor
   , flags
   , image
   , label
@@ -41,7 +42,6 @@ module Fltk.Button
   , drawLabel
   , getCallback
   , getDownBox
-  , getDownColor
   , getH
   , getRectangle
   , getTopWindow
@@ -63,7 +63,6 @@ module Fltk.Button
   , setColorWithBgSel
   , setDamageInside
   , setDownBox
-  , setDownColor
   , setonly
   , setValue
   , takeFocus
@@ -191,6 +190,12 @@ deimage ::
   -> StateVar (Maybe Image)
 deimage =
   wrapped Widget.deimage
+
+downColor ::
+     Button -- ^
+  -> StateVar Fltk.Color
+downColor =
+  prop Fltk.getDownColor Fltk.setDownColor
 
 flags ::
      Button -- ^
@@ -376,12 +381,6 @@ getDownBox ::
 getDownBox =
   wrapped Fltk.getDownBox
 
-getDownColor ::
-     Button -- ^
-  -> IO Fltk.Color
-getDownColor =
-  wrapped Fltk.getDownColor
-
 getH ::
      Button -- ^
   -> IO Fltk.Height
@@ -517,13 +516,6 @@ setDownBox ::
   -> IO ()
 setDownBox =
   wrapped Fltk.setDownBox
-
-setDownColor ::
-     Button -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setDownColor =
-  wrapped Fltk.setDownColor
 
 setonly ::
      Button -- ^
