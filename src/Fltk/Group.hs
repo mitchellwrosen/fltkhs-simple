@@ -3,11 +3,12 @@ module Fltk.Group
     Group
   , new
     -- * API
-    -- ** Properties
+    -- ** Read-write properties
   , active
   , align
   , box
   , changed
+  , clipChildren
   , color
   , damage
   , deimage
@@ -27,15 +28,31 @@ module Fltk.Group
   , visible
   , visibleFocus
   , when
-    -- ** Functions
+    -- ** Read-only queries
   , activeR
+  , array
+  , callback
+  , child
+  , children
+  , contains
+  , find
+  , hasCallback
+  , height
+  , inside
+  , rectangle
+  , takesEvents
+  , topWindow
+  , topWindowOffset
+  , visibleR
+  , width
+  , window
+  , x
+  , y
+    -- ** Effectful functions
   , add
   , addResizable
   , begin
-  , children
   , clear
-  , clipChildren
-  , contains
   , copyTooltip
   , ddfdesignKludge
   , destroy
@@ -49,25 +66,10 @@ module Fltk.Group
   , drawLabel
   , drawOutsideLabel
   , end
-  , find
   , focus
-  , getArray
-  , getCallback
-  , getChild
-  , getH
-  , getRectangle
-  , getTopWindow
-  , getTopWindowOffset
-  , getVisibleR
-  , getW
-  , getWindow
-  , getX
-  , getY
   , handle
-  , hasCallback
   , initSizes
   , insert
-  , inside
   , measureLabel
   , redraw
   , redrawLabel
@@ -75,18 +77,16 @@ module Fltk.Group
   , removeWidget
   , resize
   , setCallback
-  , setClipChildren
   , setColorWithBgSel
   , setDamageInside
   , takeFocus
-  , takesevents
   , updateChild
   , within
   ) where
 
 import Fltk.Internal.Types (Group(..), Image(..), Widget(..), Window(..))
 
--- import qualified Fltk.Internal.Group  as Group
+import qualified Fltk.Internal.Group  as Group
 import qualified Fltk.Internal.Widget as Widget
 
 import Data.Coerce   (coerce)
@@ -118,7 +118,7 @@ wrapped =
 
 
 --------------------------------------------------------------------------------
--- Properties
+-- Read-write properties
 --------------------------------------------------------------------------------
 
 active ::
@@ -144,6 +144,12 @@ changed ::
   -> StateVar Bool
 changed =
   wrapped Widget.changed
+
+clipChildren ::
+     Group -- ^
+  -> StateVar Bool
+clipChildren =
+  wrapped Group.clipChildren
 
 color ::
      Group -- ^
@@ -265,14 +271,131 @@ when =
 
 
 --------------------------------------------------------------------------------
--- Functions
---------------------------------------------------------------------------------
+-- Read-only queries
+-------------------------------------------------------------------------------
 
 activeR ::
      Group -- ^
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
+
+array ::
+     Group -- ^
+  -> IO [Widget]
+array =
+  coerce (wrapped Fltk.getArray)
+
+callback ::
+     Group -- ^
+  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
+callback =
+  wrapped Fltk.getCallback
+
+child ::
+     Group -- ^
+  -> Fltk.AtIndex -- ^
+  -> IO (Maybe Widget)
+child =
+  coerce (wrapped Fltk.getChild)
+
+children ::
+     Group -- ^
+  -> IO Int
+children =
+  wrapped Fltk.children
+
+contains ::
+     Group -- ^
+  -> Widget -- ^
+  -> IO Bool
+contains group widget =
+  wrapped Fltk.contains group (unWidget widget)
+
+find ::
+     Group -- ^
+  -> Widget -- ^
+  -> IO Fltk.AtIndex
+find group widget =
+  wrapped Fltk.find group (unWidget widget)
+
+hasCallback ::
+     Group -- ^
+  -> IO Bool
+hasCallback =
+  wrapped Fltk.hasCallback
+
+height ::
+     Group -- ^
+  -> IO Fltk.Height
+height =
+  wrapped Fltk.getH
+
+inside ::
+     Group -- ^
+  -> Widget -- ^
+  -> IO Bool
+inside group widget =
+  wrapped Fltk.inside group (unWidget widget)
+
+rectangle ::
+     Group -- ^
+  -> IO Fltk.Rectangle
+rectangle =
+  wrapped Fltk.getRectangle
+
+takesEvents ::
+     Group -- ^
+  -> IO Bool
+takesEvents =
+  wrapped Fltk.takesevents
+
+topWindow ::
+     Group -- ^
+  -> IO (Maybe Window)
+topWindow =
+  coerce (wrapped Fltk.getTopWindow)
+
+topWindowOffset ::
+     Group -- ^
+  -> IO Fltk.Position
+topWindowOffset  =
+  wrapped Fltk.getTopWindowOffset
+
+visibleR ::
+     Group -- ^
+  -> IO Bool
+visibleR =
+  wrapped Fltk.getVisibleR
+
+width ::
+     Group -- ^
+  -> IO Fltk.Width
+width =
+  wrapped Fltk.getW
+
+window ::
+     Group -- ^
+  -> IO (Maybe Window)
+window =
+  coerce (wrapped Fltk.getWindow)
+
+x ::
+     Group -- ^
+  -> IO Fltk.X
+x =
+  wrapped Fltk.getX
+
+y ::
+     Group -- ^
+  -> IO Fltk.Y
+y =
+  wrapped Fltk.getY
+
+
+--------------------------------------------------------------------------------
+-- Effectful functions
+--------------------------------------------------------------------------------
 
 add ::
      Group -- ^
@@ -294,30 +417,11 @@ begin ::
 begin =
   wrapped Fltk.begin
 
-children ::
-     Group -- ^
-  -> IO Int
-children =
-  wrapped Fltk.children
-
 clear ::
      Group -- ^
   -> IO ()
 clear =
   wrapped Fltk.clear
-
-clipChildren ::
-     Group -- ^
-  -> IO Bool
-clipChildren =
-  wrapped Fltk.clipChildren
-
-contains ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO Bool
-contains group widget =
-  wrapped Fltk.contains group (unWidget widget)
 
 copyTooltip ::
      Group -- ^
@@ -405,13 +509,6 @@ end ::
 end =
   wrapped Fltk.end
 
-find ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO Fltk.AtIndex
-find group widget =
-  wrapped Fltk.find group (unWidget widget)
-
 focus ::
      Group -- ^
   -> Widget -- ^
@@ -419,91 +516,12 @@ focus ::
 focus group widget =
   wrapped Fltk.focus group (unWidget widget)
 
-getArray ::
-     Group -- ^
-  -> IO [Widget]
-getArray =
-  coerce (wrapped Fltk.getArray)
-
-getCallback ::
-     Group -- ^
-  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
-getCallback =
-  wrapped Fltk.getCallback
-
-getChild ::
-     Group -- ^
-  -> Fltk.AtIndex -- ^
-  -> IO (Maybe Widget)
-getChild =
-  coerce (wrapped Fltk.getChild)
-
-getH ::
-     Group -- ^
-  -> IO Fltk.Height
-getH =
-  wrapped Fltk.getH
-
-getRectangle ::
-     Group -- ^
-  -> IO Fltk.Rectangle
-getRectangle =
-  wrapped Fltk.getRectangle
-
-getTopWindow ::
-     Group -- ^
-  -> IO (Maybe Window)
-getTopWindow =
-  coerce (wrapped Fltk.getTopWindow)
-
-getTopWindowOffset ::
-     Group -- ^
-  -> IO Fltk.Position
-getTopWindowOffset =
-  wrapped Fltk.getTopWindowOffset
-
-getVisibleR ::
-     Group -- ^
-  -> IO Bool
-getVisibleR =
-  wrapped Fltk.getVisibleR
-
-getW ::
-     Group -- ^
-  -> IO Fltk.Width
-getW =
-  wrapped Fltk.getW
-
-getWindow ::
-     Group -- ^
-  -> IO (Maybe Window)
-getWindow =
-  coerce (wrapped Fltk.getWindow)
-
-getX ::
-     Group -- ^
-  -> IO Fltk.X
-getX =
-  wrapped Fltk.getX
-
-getY ::
-     Group -- ^
-  -> IO Fltk.Y
-getY =
-  wrapped Fltk.getY
-
 handle ::
      Group -- ^
   -> Fltk.Event -- ^
   -> IO (Either Fltk.UnknownEvent ())
 handle =
   wrapped Fltk.handle
-
-hasCallback ::
-     Group -- ^
-  -> IO Bool
-hasCallback =
-  wrapped Fltk.hasCallback
 
 initSizes ::
      Group -- ^
@@ -522,13 +540,6 @@ insert group widget =
 -- insertBefore :: (Parent a WidgetBase) => Group -> Ref a -> Ref b -> IO ()
 -- insertBefore=
 --   wrapped Fltk.insertBefore
-
-inside ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO Bool
-inside group widget =
-  wrapped Fltk.inside group (unWidget widget)
 
 measureLabel ::
      Group -- ^
@@ -577,13 +588,6 @@ setCallback ::
 setCallback group callback =
   wrapped Fltk.setCallback group (coerce callback)
 
-setClipChildren ::
-     Group -- ^
-  -> Bool -- ^
-  -> IO ()
-setClipChildren =
-  wrapped Fltk.setClipChildren
-
 setColorWithBgSel ::
      Group -- ^
   -> Fltk.Color -- ^
@@ -605,12 +609,6 @@ takeFocus ::
   -> IO (Either Fltk.NoChange ())
 takeFocus =
   wrapped Fltk.takeFocus
-
-takesevents ::
-     Group -- ^
-  -> IO Bool
-takesevents =
-  wrapped Fltk.takesevents
 
 updateChild ::
      Group -- ^

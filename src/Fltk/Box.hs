@@ -3,7 +3,7 @@ module Fltk.Box
     Box
   , new
     -- * API
-    -- ** Properties
+    -- ** Read-write properties
   , active
   , align
   , box
@@ -26,9 +26,22 @@ module Fltk.Box
   , visible
   , visibleFocus
   , when
-    -- ** Functions
+    -- ** Read-only queries
   , activeR
+  , callback
   , contains
+  , hasCallback
+  , height
+  , rectangle
+  , takesEvents
+  , topWindow
+  , topWindowOffset
+  , visibleR
+  , width
+  , window
+  , x
+  , y
+    -- ** Effectful functions
   , copyTooltip
   , destroy
   , doCallback
@@ -37,18 +50,7 @@ module Fltk.Box
   , drawBoxWithBoxtype
   , drawFocus
   , drawLabel
-  , getCallback
-  , getH
-  , getRectangle
-  , getTopWindow
-  , getTopWindowOffset
-  , getVisibleR
-  , getW
-  , getWindow
-  , getX
-  , getY
   , handle
-  , hasCallback
   , inside
   , measureLabel
   , redraw
@@ -58,7 +60,6 @@ module Fltk.Box
   , setColorWithBgSel
   , setDamageInside
   , takeFocus
-  , takesevents
   ) where
 
 import Fltk.Internal.Types (Box(..), Group(..), Image(..), Widget(..),
@@ -96,7 +97,7 @@ wrapped =
 
 
 --------------------------------------------------------------------------------
--- Properties
+-- Read-write properties
 --------------------------------------------------------------------------------
 
 active ::
@@ -195,7 +196,6 @@ parent ::
 parent =
   wrapped Widget.parent
 
-
 selectionColor ::
      Box -- ^
   -> StateVar Fltk.Color
@@ -234,7 +234,7 @@ when =
 
 
 --------------------------------------------------------------------------------
--- Functions
+-- Read-only queries
 --------------------------------------------------------------------------------
 
 activeR ::
@@ -243,12 +243,89 @@ activeR ::
 activeR =
   wrapped Fltk.activeR
 
+callback ::
+     Box -- ^
+  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
+callback =
+  wrapped Fltk.getCallback
+
 contains ::
      Box -- ^
   -> Widget -- ^
   -> IO Bool
 contains box widget =
   wrapped Fltk.contains box (unWidget widget)
+
+hasCallback ::
+     Box -- ^
+  -> IO Bool
+hasCallback =
+  wrapped Fltk.hasCallback
+
+height ::
+     Box -- ^
+  -> IO Fltk.Height
+height =
+  wrapped Fltk.getH
+
+rectangle ::
+     Box -- ^
+  -> IO Fltk.Rectangle
+rectangle =
+ wrapped Fltk.getRectangle
+
+takesEvents ::
+     Box -- ^
+  -> IO Bool
+takesEvents =
+  wrapped Fltk.takesevents
+
+topWindow ::
+     Box -- ^
+  -> IO (Maybe Window)
+topWindow =
+  coerce (wrapped Fltk.getTopWindow)
+
+topWindowOffset ::
+     Box -- ^
+  -> IO Fltk.Position
+topWindowOffset =
+  wrapped Fltk.getTopWindowOffset
+
+visibleR ::
+     Box -- ^
+  -> IO Bool
+visibleR =
+  wrapped Fltk.getVisibleR
+
+width ::
+     Box -- ^
+  -> IO Fltk.Width
+width =
+  wrapped Fltk.getW
+
+window ::
+     Box -- ^
+  -> IO (Maybe Window)
+window =
+  coerce (wrapped Fltk.getWindow)
+
+x ::
+     Box -- ^
+  -> IO Fltk.X
+x =
+  wrapped Fltk.getX
+
+y ::
+     Box -- ^
+  -> IO Fltk.Y
+y =
+  wrapped Fltk.getY
+
+
+--------------------------------------------------------------------------------
+-- Effectful functions
+--------------------------------------------------------------------------------
 
 copyTooltip ::
      Box -- ^
@@ -304,78 +381,12 @@ drawLabel ::
 drawLabel =
   wrapped Fltk.drawLabel
 
-getCallback ::
-     Box -- ^
-  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
-getCallback =
-  wrapped Fltk.getCallback
-
-getH ::
-     Box -- ^
-  -> IO Fltk.Height
-getH =
-  wrapped Fltk.getH
-
-getRectangle ::
-     Box -- ^
-  -> IO Fltk.Rectangle
-getRectangle =
- wrapped Fltk.getRectangle
-
-getTopWindow ::
-     Box -- ^
-  -> IO (Maybe Window)
-getTopWindow =
-  coerce (wrapped Fltk.getTopWindow)
-
-getTopWindowOffset ::
-     Box -- ^
-  -> IO Fltk.Position
-getTopWindowOffset =
-  wrapped Fltk.getTopWindowOffset
-
-getVisibleR ::
-     Box -- ^
-  -> IO Bool
-getVisibleR =
-  wrapped Fltk.getVisibleR
-
-getW ::
-     Box -- ^
-  -> IO Fltk.Width
-getW =
-  wrapped Fltk.getW
-
-getWindow ::
-     Box -- ^
-  -> IO (Maybe Window)
-getWindow =
-  coerce (wrapped Fltk.getWindow)
-
-getX ::
-     Box -- ^
-  -> IO Fltk.X
-getX =
-  wrapped Fltk.getX
-
-getY ::
-     Box -- ^
-  -> IO Fltk.Y
-getY =
-  wrapped Fltk.getY
-
 handle ::
      Box -- ^
   -> Fltk.Event -- ^
   -> IO (Either Fltk.UnknownEvent ())
 handle =
   wrapped Fltk.handle
-
-hasCallback ::
-     Box -- ^
-  -> IO Bool
-hasCallback =
-  wrapped Fltk.hasCallback
 
 inside ::
      Box -- ^
@@ -438,9 +449,3 @@ takeFocus ::
   -> IO (Either Fltk.NoChange ())
 takeFocus =
   wrapped Fltk.takeFocus
-
-takesevents ::
-     Box -- ^
-  -> IO Bool
-takesevents =
-  wrapped Fltk.takesevents

@@ -4,7 +4,7 @@ module Fltk.Button
   , Style(..)
   , new
     -- * API
-    -- ** Properties
+    -- ** Read-write properties
   , active
   , align
   , box
@@ -30,9 +30,22 @@ module Fltk.Button
   , visible
   , visibleFocus
   , when
-    -- ** Functions
+    -- ** Read-only queries
   , activeR
+  , callback
   , contains
+  , height
+  , rectangle
+  , topWindow
+  , topWindowOffset
+  , takesEvents
+  , value
+  , visibleR
+  , width
+  , window
+  , x
+  , y
+    -- ** Effectful functions
   , copyTooltip
   , destroy
   , doCallback
@@ -41,17 +54,6 @@ module Fltk.Button
   , drawBoxWithBoxtype
   , drawFocus
   , drawLabel
-  , getCallback
-  , getH
-  , getRectangle
-  , getTopWindow
-  , getTopWindowOffset
-  , getValue
-  , getVisibleR
-  , getW
-  , getWindow
-  , getX
-  , getY
   , handle
   , hasCallback
   , inside
@@ -65,7 +67,6 @@ module Fltk.Button
   , setonly
   , setValue
   , takeFocus
-  , takesevents
   ) where
 
 import Fltk.Internal.Types (Button(..), Group(..), Image(..), Widget(..),
@@ -137,7 +138,7 @@ new style bounds label =
 
 
 --------------------------------------------------------------------------------
--- Properties
+-- Read-write properties
 --------------------------------------------------------------------------------
 
 prop ::
@@ -304,7 +305,7 @@ when =
 
 
 --------------------------------------------------------------------------------
--- Functions
+-- Read-only queries
 --------------------------------------------------------------------------------
 
 activeR ::
@@ -313,12 +314,89 @@ activeR ::
 activeR =
   wrapped Fltk.activeR
 
+callback ::
+     Button -- ^
+  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
+callback =
+  wrapped Fltk.getCallback
+
 contains ::
      Button -- ^
   -> Widget -- ^
   -> IO Bool
 contains button widget =
   wrapped Fltk.contains button (unWidget widget)
+
+height ::
+     Button -- ^
+  -> IO Fltk.Height
+height =
+  wrapped Fltk.getH
+
+rectangle ::
+     Button -- ^
+  -> IO Fltk.Rectangle
+rectangle =
+  wrapped Fltk.getRectangle
+
+takesEvents ::
+     Button -- ^
+  -> IO Bool
+takesEvents =
+  wrapped Fltk.takesevents
+
+topWindow ::
+     Button -- ^
+  -> IO (Maybe Window)
+topWindow =
+  coerce (wrapped Fltk.getTopWindow)
+
+topWindowOffset ::
+     Button -- ^
+  -> IO Fltk.Position
+topWindowOffset =
+  wrapped Fltk.getTopWindowOffset
+
+value ::
+     Button -- ^
+  -> IO Bool
+value =
+  wrapped Fltk.getValue
+
+visibleR ::
+     Button -- ^
+  -> IO Bool
+visibleR =
+  wrapped Fltk.getVisibleR
+
+width ::
+     Button -- ^
+  -> IO Fltk.Width
+width =
+  wrapped Fltk.getW
+
+window ::
+     Button -- ^
+  -> IO (Maybe Window)
+window =
+  coerce (wrapped Fltk.getWindow)
+
+x ::
+     Button -- ^
+  -> IO Fltk.X
+x =
+  wrapped Fltk.getX
+
+y ::
+     Button -- ^
+  -> IO Fltk.Y
+y =
+  wrapped Fltk.getY
+
+
+--------------------------------------------------------------------------------
+-- Effectful functions
+--------------------------------------------------------------------------------
 
 copyTooltip ::
      Button -- ^
@@ -373,72 +451,6 @@ drawLabel ::
   -> IO ()
 drawLabel =
   wrapped Fltk.drawLabel
-
-getCallback ::
-     Button -- ^
-  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
-getCallback =
-  wrapped Fltk.getCallback
-
-getH ::
-     Button -- ^
-  -> IO Fltk.Height
-getH =
-  wrapped Fltk.getH
-
-getRectangle ::
-     Button -- ^
-  -> IO Fltk.Rectangle
-getRectangle =
-  wrapped Fltk.getRectangle
-
-getTopWindow ::
-     Button -- ^
-  -> IO (Maybe Window)
-getTopWindow =
-  coerce (wrapped Fltk.getTopWindow)
-
-getTopWindowOffset ::
-     Button -- ^
-  -> IO Fltk.Position
-getTopWindowOffset =
-  wrapped Fltk.getTopWindowOffset
-
-getValue ::
-     Button -- ^
-  -> IO Bool
-getValue =
-  wrapped Fltk.getValue
-
-getVisibleR ::
-     Button -- ^
-  -> IO Bool
-getVisibleR =
-  wrapped Fltk.getVisibleR
-
-getW ::
-     Button -- ^
-  -> IO Fltk.Width
-getW =
-  wrapped Fltk.getW
-
-getWindow ::
-     Button -- ^
-  -> IO (Maybe Window)
-getWindow =
-  coerce (wrapped Fltk.getWindow)
-
-getX ::
-     Button -- ^
-  -> IO Fltk.X
-getX =
-  wrapped Fltk.getX
-
-getY ::
-     Button -- ^
-  -> IO Fltk.Y
-getY =
-  wrapped Fltk.getY
 
 handle ::
      Button -- ^
@@ -527,9 +539,3 @@ takeFocus ::
   -> IO (Either Fltk.NoChange ())
 takeFocus =
   wrapped Fltk.takeFocus
-
-takesevents ::
-     Button -- ^
-  -> IO Bool
-takesevents =
-  wrapped Fltk.takesevents
