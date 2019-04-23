@@ -47,12 +47,7 @@ library
     src
 
   other-modules:
-    Fltk.Box.Internal
-    Fltk.Group.Internal
-    Fltk.Image.Internal
     Fltk.Types.Internal
-    Fltk.Widget.Internal
-    Fltk.Window.Internal
 
 executable blah
   build-depends:

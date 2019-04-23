@@ -12,6 +12,9 @@ import qualified Graphics.UI.FLTK.LowLevel.Hierarchy as Fltk
 newtype Box
   = Box { unBox :: Fltk.Ref Fltk.Box }
 
+newtype Button
+  = Button { unButton :: Fltk.Ref Fltk.ButtonBase }
+
 newtype Group
   = Group { unGroup :: Fltk.Ref Fltk.GroupBase }
 
@@ -41,4 +44,10 @@ class IsWidget a where
   asWidget ::
        a
     -> (forall b. Fltk.Parent b Fltk.WidgetBase => Fltk.Ref b -> r)
+    -> r
+
+class IsWindow a where
+  asWindow ::
+       a
+    -> (forall b. Fltk.Parent b Fltk.WindowBase => Fltk.Ref b -> r)
     -> r

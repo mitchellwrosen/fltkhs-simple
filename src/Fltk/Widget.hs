@@ -4,4 +4,3 @@ module Fltk.Widget
   ) where
 
 import Fltk.Types.Internal
-import Fltk.Widget.Internal

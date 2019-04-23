@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 module Fltk.Button
   ( Button
   , new
@@ -104,8 +106,8 @@ module Fltk.Button
   , takesevents
   ) where
 
-import Fltk.Types.Internal (Group(..), Image(..), IsGroup(..), IsImage(..),
-                            IsWidget(..), Window(..))
+import Fltk.Types.Internal (Button(..), Group(..), Image(..), IsGroup(..),
+                            IsImage(..), IsWidget(..), Window(..))
 
 import Data.Coerce (coerce)
 import Data.Text   (Text)
@@ -113,15 +115,11 @@ import Foreign.Ptr (FunPtr)
 
 import qualified Graphics.UI.FLTK.LowLevel.Base.Button     as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Base.Widget     as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Button          as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 
-
-newtype Button
-  = Button { unButton :: Fltk.Ref Fltk.ButtonBase }
 
 instance IsWidget Button where
   asWidget ::
