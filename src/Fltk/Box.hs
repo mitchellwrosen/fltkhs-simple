@@ -231,12 +231,6 @@ doCallback ::
 doCallback =
   wrapped Fltk.doCallback
 
--- draw ::
---      Box
---   -> IO ()
--- draw =
---   wrapped Fltk.draw
-
 drawBackdrop ::
      Box -- ^
   -> IO ()

@@ -8,7 +8,6 @@ module Fltk.Button
   , active
   , activeR
   , changed
-  , clear
   , clearActive
   , clearChanged
   , clearDamage
@@ -70,7 +69,6 @@ module Fltk.Button
   , redraw
   , redrawLabel
   , resize
-  , set
   , setActive
   , setAlign
   , setBox
@@ -193,12 +191,6 @@ changed ::
 changed =
   wrapped Fltk.changed
 
-clear ::
-     Button -- ^
-  -> IO Bool
-clear =
-  wrapped Fltk.clear
-
 clearActive ::
      Button -- ^
   -> IO ()
@@ -281,12 +273,6 @@ doCallback ::
   -> IO ()
 doCallback =
   wrapped Fltk.doCallback
-
--- draw ::
---      Button
---   -> IO ()
--- draw button =
---   Fltk.draw (unButton button)
 
 drawBackdrop ::
      Button -- ^
@@ -586,12 +572,6 @@ resize ::
   -> IO ()
 resize =
   wrapped Fltk.resize
-
-set ::
-     Button -- ^
-  -> IO Bool
-set =
-  wrapped Fltk.set
 
 setActive ::
      Button -- ^
