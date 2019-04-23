@@ -1,5 +1,6 @@
 module Fltk.Internal.Widget
-  ( align
+  ( active
+  , align
   , box
   , color
   , damage
@@ -23,6 +24,24 @@ import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
+
+
+active ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.Active ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.Activate ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.Deactivate ())
+     , Fltk.Op (Fltk.Active ()) r a (IO Bool)
+     , Fltk.Op (Fltk.Activate ()) s a (IO ())
+     , Fltk.Op (Fltk.Deactivate ()) t a (IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+active x =
+  makeStateVar
+    (Fltk.active x)
+    (\case
+      False -> Fltk.deactivate x
+      True -> Fltk.activate x)
 
 align ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetAlign ())

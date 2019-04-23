@@ -4,6 +4,7 @@ module Fltk.Window
   , new
     -- * API
     -- ** Properties
+  , active
   , align
   , box
   , color
@@ -19,8 +20,6 @@ module Fltk.Window
   , visibleFocus
   , when
     -- ** Functions
-  , activate
-  , active
   , activeR
   , add
   , addResizable
@@ -28,7 +27,6 @@ module Fltk.Window
   , changed
   , children
   , clear
-  , clearActive
   , clearBorder
   , clearChanged
   , clearDamage
@@ -40,7 +38,6 @@ module Fltk.Window
   , copyLabel
   , copyTooltip
   , ddfdesignKludge
-  , deactivate
   , destroy
   , doCallback
   , drawBackdrop
@@ -104,7 +101,6 @@ module Fltk.Window
   , removeIndex
   , removeWidget
   , resize
-  , setActive
   , setBorder
   , setCallback
   , setChanged
@@ -189,6 +185,12 @@ prop ::
   -> StateVar a
 prop getter setter window =
   makeStateVar (wrapped getter window) (wrapped setter window)
+
+active ::
+     Window -- ^
+  -> StateVar Bool
+active =
+  wrapped Widget.active
 
 align ::
      Window -- ^
@@ -279,18 +281,6 @@ when =
 -- Functions
 --------------------------------------------------------------------------------
 
-activate ::
-     Window -- ^
-  -> IO ()
-activate =
-  wrapped Fltk.activate
-
-active ::
-     Window -- ^
-  -> IO Bool
-active =
-  wrapped Fltk.active
-
 activeR ::
      Window -- ^
   -> IO Bool
@@ -336,12 +326,6 @@ clear ::
   -> IO ()
 clear =
   wrapped Fltk.clear
-
-clearActive ::
-     Window -- ^
-  -> IO ()
-clearActive =
-  wrapped Fltk.clearActive
 
 clearBorder ::
      Window -- ^
@@ -414,12 +398,6 @@ ddfdesignKludge ::
   -> IO (Maybe Widget)
 ddfdesignKludge =
   coerce (wrapped Fltk.ddfdesignKludge)
-
-deactivate ::
-     Window -- ^
-  -> IO ()
-deactivate =
-  wrapped Fltk.deactivate
 
 destroy ::
      Window -- ^
@@ -833,12 +811,6 @@ resize ::
   -> IO ()
 resize =
   wrapped Fltk.resize
-
-setActive ::
-     Window -- ^
-  -> IO ()
-setActive =
-  wrapped Fltk.setActive
 
 setBorder ::
      Window -- ^

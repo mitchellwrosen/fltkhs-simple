@@ -4,6 +4,7 @@ module Fltk.Box
   , new
     -- * API
     -- ** Properties
+  , active
   , align
   , box
   , color
@@ -19,11 +20,8 @@ module Fltk.Box
   , visibleFocus
   , when
     -- ** Functions
-  , activate
-  , active
   , activeR
   , changed
-  , clearActive
   , clearChanged
   , clearDamage
   , clearDamageThenSet
@@ -31,7 +29,6 @@ module Fltk.Box
   , clearOutput
   , contains
   , copyTooltip
-  , deactivate
   , destroy
   , doCallback
   , drawBackdrop
@@ -62,7 +59,6 @@ module Fltk.Box
   , redraw
   , redrawLabel
   , resize
-  , setActive
   , setCallback
   , setChanged
   , setColorWithBgSel
@@ -114,6 +110,12 @@ wrapped =
 --------------------------------------------------------------------------------
 -- Properties
 --------------------------------------------------------------------------------
+
+active ::
+     Box -- ^
+  -> StateVar Bool
+active =
+  wrapped Widget.active
 
 align ::
      Box -- ^
@@ -204,18 +206,6 @@ when =
 -- Functions
 --------------------------------------------------------------------------------
 
-activate ::
-     Box -- ^
-  -> IO ()
-activate =
-  wrapped Fltk.activate
-
-active ::
-     Box -- ^
-  -> IO Bool
-active =
-  wrapped Fltk.active
-
 activeR ::
      Box -- ^
   -> IO Bool
@@ -227,12 +217,6 @@ changed ::
   -> IO Bool
 changed =
   wrapped Fltk.changed
-
-clearActive ::
-     Box -- ^
-  -> IO ()
-clearActive =
-  wrapped Fltk.clearActive
 
 clearChanged ::
      Box -- ^
@@ -280,12 +264,6 @@ copyTooltip ::
   -> IO ()
 copyTooltip =
   wrapped Fltk.copyTooltip
-
-deactivate ::
-     Box -- ^
-  -> IO ()
-deactivate =
-  wrapped Fltk.deactivate
 
 destroy ::
      Box -- ^
@@ -476,12 +454,6 @@ resize ::
   -> IO ()
 resize =
   wrapped Fltk.resize
-
-setActive ::
-     Box -- ^
-  -> IO ()
-setActive =
-  wrapped Fltk.setActive
 
 setCallback ::
      Box -- ^

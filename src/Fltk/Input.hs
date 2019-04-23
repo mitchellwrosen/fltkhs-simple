@@ -4,6 +4,7 @@ module Fltk.Input
   , new
     -- * API
     -- ** Properties
+  , active
   , align
   , box
   , color
@@ -19,11 +20,8 @@ module Fltk.Input
   , visibleFocus
   , when
     -- ** Functions
-  , activate
-  , active
   , activeR
   , changed
-  , clearActive
   , clearChanged
   , clearDamage
   , clearDamageThenSet
@@ -36,7 +34,6 @@ module Fltk.Input
   , cut
   , cutFromCursor
   , cutRange
-  , deactivate
   , destroy
   , doCallback
   , drawBackdrop
@@ -87,7 +84,6 @@ module Fltk.Input
   , redrawLabel
   , replace
   , resize
-  , setActive
   , setAlign
   , setCallback
   , setChanged
@@ -157,6 +153,12 @@ wrapped =
 --------------------------------------------------------------------------------
 -- Properties
 --------------------------------------------------------------------------------
+
+active ::
+     Input -- ^
+  -> StateVar Bool
+active =
+  wrapped Widget.active
 
 align ::
      Input -- ^
@@ -248,18 +250,6 @@ when =
 --------------------------------------------------------------------------------
 
 
-activate ::
-     Input -- ^
-  -> IO ()
-activate =
-  wrapped Fltk.activate
-
-active ::
-     Input -- ^
-  -> IO Bool
-active =
-  wrapped Fltk.active
-
 activeR ::
      Input -- ^
   -> IO Bool
@@ -271,12 +261,6 @@ changed ::
   -> IO Bool
 changed =
   wrapped Fltk.changed
-
-clearActive ::
-     Input -- ^
-  -> IO ()
-clearActive =
-  wrapped Fltk.clearActive
 
 clearChanged ::
      Input -- ^
@@ -360,12 +344,6 @@ cutRange ::
   -> IO (Either Fltk.NoChange ())
 cutRange =
   wrapped Fltk.cutRange
-
-deactivate ::
-     Input -- ^
-  -> IO ()
-deactivate =
-  wrapped Fltk.deactivate
 
 destroy ::
      Input -- ^
@@ -683,12 +661,6 @@ resize ::
   -> IO ()
 resize =
   wrapped Fltk.resize
-
-setActive ::
-     Input -- ^
-  -> IO ()
-setActive =
-  wrapped Fltk.setActive
 
 setAlign ::
      Input -- ^

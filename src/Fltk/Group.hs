@@ -5,6 +5,7 @@ module Fltk.Group
   , new
     -- * API
     -- ** Properties
+  , active
   , align
   , box
   , color
@@ -20,8 +21,6 @@ module Fltk.Group
   , visibleFocus
   , when
     -- ** Functions
-  , activate
-  , active
   , activeR
   , add
   , addResizable
@@ -29,7 +28,6 @@ module Fltk.Group
   , changed
   , children
   , clear
-  , clearActive
   , clearChanged
   , clearDamage
   , clearDamageThenSet
@@ -39,7 +37,6 @@ module Fltk.Group
   , contains
   , copyTooltip
   , ddfdesignKludge
-  , deactivate
   , destroy
   , doCallback
   , drawBackdrop
@@ -83,7 +80,6 @@ module Fltk.Group
   , removeIndex
   , removeWidget
   , resize
-  , setActive
   , setCallback
   , setClipChildren
   , setColorWithBgSel
@@ -138,6 +134,12 @@ wrapped =
 --------------------------------------------------------------------------------
 -- Properties
 --------------------------------------------------------------------------------
+
+active ::
+     Group -- ^
+  -> StateVar Bool
+active =
+  wrapped Widget.active
 
 align ::
      Group -- ^
@@ -228,18 +230,6 @@ when =
 -- Functions
 --------------------------------------------------------------------------------
 
-activate ::
-     Group -- ^
-  -> IO ()
-activate =
-  wrapped Fltk.activate
-
-active ::
-     Group -- ^
-  -> IO Bool
-active =
-  wrapped Fltk.active
-
 activeR ::
      Group -- ^
   -> IO Bool
@@ -285,12 +275,6 @@ clear ::
   -> IO ()
 clear =
   wrapped Fltk.clear
-
-clearActive ::
-     Group -- ^
-  -> IO ()
-clearActive =
-  wrapped Fltk.clearActive
 
 clearChanged ::
      Group -- ^
@@ -350,12 +334,6 @@ ddfdesignKludge ::
   -> IO (Maybe Widget)
 ddfdesignKludge =
   coerce (wrapped Fltk.ddfdesignKludge)
-
-deactivate ::
-     Group -- ^
-  -> IO ()
-deactivate =
-  wrapped Fltk.deactivate
 
 destroy ::
      Group -- ^
@@ -643,12 +621,6 @@ resize ::
   -> IO ()
 resize =
   wrapped Fltk.resize
-
-setActive ::
-     Group -- ^
-  -> IO ()
-setActive =
-  wrapped Fltk.setActive
 
 setCallback ::
      Group -- ^

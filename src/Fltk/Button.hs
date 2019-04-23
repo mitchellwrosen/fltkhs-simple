@@ -5,6 +5,7 @@ module Fltk.Button
   , new
     -- * API
     -- ** Properties
+  , active
   , align
   , box
   , color
@@ -20,11 +21,8 @@ module Fltk.Button
   , visibleFocus
   , when
     -- ** Functions
-  , activate
-  , active
   , activeR
   , changed
-  , clearActive
   , clearChanged
   , clearDamage
   , clearDamageThenSet
@@ -32,7 +30,6 @@ module Fltk.Button
   , clearOutput
   , contains
   , copyTooltip
-  , deactivate
   , destroy
   , doCallback
   , drawBackdrop
@@ -67,7 +64,6 @@ module Fltk.Button
   , redraw
   , redrawLabel
   , resize
-  , setActive
   , setCallback
   , setChanged
   , setColorWithBgSel
@@ -166,6 +162,12 @@ prop ::
 prop getter setter button =
   makeStateVar (wrapped getter button) (wrapped setter button)
 
+active ::
+     Button -- ^
+  -> StateVar Bool
+active =
+  wrapped Widget.active
+
 align ::
      Button -- ^
   -> StateVar Fltk.Alignments
@@ -255,18 +257,6 @@ when =
 -- Functions
 --------------------------------------------------------------------------------
 
-activate ::
-     Button -- ^
-  -> IO ()
-activate =
-  wrapped Fltk.activate
-
-active ::
-     Button -- ^
-  -> IO Bool
-active =
-  wrapped Fltk.active
-
 activeR ::
      Button -- ^
   -> IO Bool
@@ -278,12 +268,6 @@ changed ::
   -> IO Bool
 changed =
   wrapped Fltk.changed
-
-clearActive ::
-     Button -- ^
-  -> IO ()
-clearActive =
-  wrapped Fltk.clearActive
 
 clearChanged ::
      Button -- ^
@@ -331,12 +315,6 @@ copyTooltip ::
   -> IO ()
 copyTooltip =
   wrapped Fltk.copyTooltip
-
-deactivate ::
-     Button -- ^
-  -> IO ()
-deactivate =
-  wrapped Fltk.deactivate
 
 destroy ::
      Button -- ^
@@ -551,12 +529,6 @@ resize ::
   -> IO ()
 resize =
   wrapped Fltk.resize
-
-setActive ::
-     Button -- ^
-  -> IO ()
-setActive =
-  wrapped Fltk.setActive
 
 setCallback ::
      Button -- ^
