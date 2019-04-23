@@ -30,8 +30,6 @@ module Fltk.Button
   , clearDamageThenSet
   , clearFlag
   , clearOutput
-  , clearVisible
-  , clearVisibleFocus
   , contains
   , copyTooltip
   , deactivate
@@ -83,7 +81,6 @@ module Fltk.Button
   , setonly
   , setOutput
   , setParent
-  , setSelectionColor
   , setShortcut
   , setValue
   , takeFocus
@@ -319,18 +316,6 @@ clearOutput ::
   -> IO ()
 clearOutput =
   wrapped Fltk.clearOutput
-
-clearVisible ::
-     Button -- ^
-  -> IO ()
-clearVisible =
-  wrapped Fltk.clearVisible
-
-clearVisibleFocus ::
-     Button -- ^
-  -> IO ()
-clearVisibleFocus =
-  wrapped Fltk.clearVisibleFocus
 
 contains ::
      IsWidget widget
@@ -675,13 +660,6 @@ setParent button = \case
     wrapped Fltk.setParent button (Nothing @(Fltk.Ref Fltk.GroupBase))
   Just group ->
     asGroup group (\ref -> wrapped Fltk.setParent button (Just ref))
-
-setSelectionColor ::
-     Button -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setSelectionColor =
-  wrapped Fltk.setSelectionColor
 
 setShortcut ::
      Button -- ^

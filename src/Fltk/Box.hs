@@ -29,7 +29,6 @@ module Fltk.Box
   , clearDamageThenSet
   , clearFlag
   , clearOutput
-  , clearVisible
   , contains
   , copyTooltip
   , deactivate
@@ -266,12 +265,6 @@ clearOutput ::
   -> IO ()
 clearOutput =
   wrapped Fltk.clearOutput
-
-clearVisible ::
-     Box -- ^
-  -> IO ()
-clearVisible =
-  wrapped Fltk.clearVisible
 
 contains ::
      IsWidget widget
