@@ -3,6 +3,22 @@ module Fltk.Window
   , IsWindow
   , new
     -- * API
+    -- ** Properties
+  , align
+  , box
+  , color
+  , damage
+  , label
+  , labelColor
+  , labelFont
+  , labelSize
+  , selectionColor
+  , tooltip
+  , type_
+  , visible
+  , visibleFocus
+  , when
+    -- ** Functions
   , activate
   , active
   , activeR
@@ -19,8 +35,6 @@ module Fltk.Window
   , clearDamageThenSet
   , clearFlag
   , clearOutput
-  , clearVisible
-  , clearVisibleFocus
   , clipChildren
   , contains
   , copyLabel
@@ -44,14 +58,10 @@ module Fltk.Window
   , focus
   , freePosition
   , fullscreenOff
-  , getAlign
   , getArray
   , getBorder
-  , getBox
   , getCallback
   , getChild
-  , getColor
-  , getDamage
   , getDecoratedH
   , getDecoratedW
   , getDeimage
@@ -59,10 +69,6 @@ module Fltk.Window
   , getIcon
   , getIconlabel
   , getImage
-  , getLabel
-  , getLabelcolor
-  , getLabelfont
-  , getLabelsize
   , getLabeltype
   , getMenuWindow
   , getModal
@@ -71,17 +77,11 @@ module Fltk.Window
   , getParent
   , getRectangle
   , getResizable
-  , getSelectionColor
-  , getTooltip
   , getTooltipWindow
   , getTopWindow
   , getTopWindowOffset
-  , getType_
-  , getVisible
-  , getVisibleFocus
   , getVisibleR
   , getW
-  , getWhen
   , getWindow
   , getX
   , getXRoot
@@ -90,7 +90,6 @@ module Fltk.Window
   , getYRoot
   , handle
   , hasCallback
-  , hide
   , hotSpot
   , iconize
   , initSizes
@@ -99,7 +98,6 @@ module Fltk.Window
   , makeCurrent
   , makeFullscreen
   , measureLabel
-  , modifyVisibleFocus
   , nonModal
   , redraw
   , redrawLabel
@@ -107,17 +105,13 @@ module Fltk.Window
   , removeWidget
   , resize
   , setActive
-  , setAlign
   , setBorder
-  , setBox
   , setCallback
   , setChanged
   , setClipChildren
-  , setColor
   , setColorWithBgSel
   , setCursor
   , setCursorWithFgBg
-  , setDamage
   , setDamageInside
   , setDefaultCursor
   , setDefaultCursorWithFgBg
@@ -126,10 +120,6 @@ module Fltk.Window
   , setIcon
   , setIconlabel
   , setImage
-  , setLabel
-  , setLabelcolor
-  , setLabelfont
-  , setLabelsize
   , setLabeltype
   , setLabelWithIconlabel
   , setMenuWindow
@@ -140,16 +130,9 @@ module Fltk.Window
   , setOverride
   , setParent
   , setResizable
-  , setSelectionColor
-  , setTooltip
   , setTooltipWindow
-  , setType
-  , setVisible
-  , setVisibleFocus
-  , setWhen
   , setXclass
   , shown
-  , showWidget
   , sizeRange
   , sizeRangeWithArgs
   , takeFocus
@@ -162,7 +145,10 @@ module Fltk.Window
 import Fltk.Types.Internal (Group(..), Image(..), IsGroup(..), IsImage(..),
                             IsWidget(..), IsWindow(..), Widget(..), Window(..))
 
+import qualified Fltk.Internal.Widget as Widget
+
 import Data.Coerce                          (coerce)
+import Data.StateVar                        (StateVar, makeStateVar)
 import Data.Text                            (Text)
 import Foreign.Ptr                          (FunPtr)
 import Graphics.UI.FLTK.LowLevel.Base.Group ()
@@ -191,6 +177,107 @@ new ::
 new size pos title =
   coerce (Fltk.windowNew size pos (Just title))
 
+
+--------------------------------------------------------------------------------
+-- Properties
+--------------------------------------------------------------------------------
+
+prop ::
+     (Fltk.Ref Fltk.WindowBase -> IO a)
+  -> (Fltk.Ref Fltk.WindowBase -> a -> IO ())
+  -> Window
+  -> StateVar a
+prop getter setter window =
+  makeStateVar (wrapped getter window) (wrapped setter window)
+
+align ::
+     Window -- ^
+  -> StateVar Fltk.Alignments
+align =
+  wrapped Widget.align
+
+box ::
+     Window -- ^
+  -> StateVar Fltk.Boxtype
+box =
+  wrapped Widget.box
+
+color ::
+     Window -- ^
+  -> StateVar Fltk.Color
+color =
+  wrapped Widget.color
+
+damage ::
+     Window -- ^
+  -> StateVar [Fltk.Damage]
+damage =
+  wrapped Widget.damage
+
+label ::
+     Window -- ^
+  -> StateVar Text
+label =
+  wrapped Widget.label
+
+labelColor ::
+     Window -- ^
+  -> StateVar Fltk.Color
+labelColor =
+  wrapped Widget.labelColor
+
+labelFont ::
+     Window -- ^
+  -> StateVar Fltk.Font
+labelFont =
+  wrapped Widget.labelFont
+
+labelSize ::
+     Window -- ^
+  -> StateVar Fltk.FontSize
+labelSize =
+  wrapped Widget.labelSize
+
+selectionColor ::
+     Window -- ^
+  -> StateVar Fltk.Color
+selectionColor =
+  wrapped Widget.selectionColor
+
+tooltip ::
+     Window -- ^
+  -> StateVar Text
+tooltip =
+  wrapped Widget.tooltip
+
+type_ ::
+     Window -- ^
+  -> StateVar Fltk.WindowType
+type_ =
+  prop Fltk.getType_ Fltk.setType
+
+visible ::
+     Window -- ^
+  -> StateVar Bool
+visible =
+  wrapped Widget.visible
+
+visibleFocus ::
+     Window -- ^
+  -> StateVar Bool
+visibleFocus =
+  wrapped Widget.visibleFocus
+
+when ::
+     Window -- ^
+  -> StateVar [Fltk.When]
+when =
+  wrapped Widget.when
+
+
+--------------------------------------------------------------------------------
+-- Functions
+--------------------------------------------------------------------------------
 
 activate ::
      Window -- ^
@@ -293,18 +380,6 @@ clearOutput ::
   -> IO ()
 clearOutput =
   wrapped Fltk.clearOutput
-
-clearVisible ::
-     Window -- ^
-  -> IO ()
-clearVisible =
-  wrapped Fltk.clearVisible
-
-clearVisibleFocus ::
-     Window -- ^
-  -> IO ()
-clearVisibleFocus =
-  wrapped Fltk.clearVisibleFocus
 
 clipChildren ::
      Window -- ^
@@ -462,12 +537,6 @@ fullscreenOff ::
 fullscreenOff =
   wrapped Fltk.fullscreenOff
 
-getAlign ::
-     Window -- ^
-  -> IO Fltk.Alignments
-getAlign =
-  wrapped Fltk.getAlign
-
 getArray ::
      Window -- ^
   -> IO [Widget]
@@ -479,12 +548,6 @@ getBorder ::
   -> IO Bool
 getBorder =
   wrapped Fltk.getBorder
-
-getBox ::
-     Window -- ^
-  -> IO Fltk.Boxtype
-getBox =
-  wrapped Fltk.getBox
 
 getCallback ::
      Window -- ^
@@ -498,18 +561,6 @@ getChild ::
   -> IO (Maybe Widget)
 getChild =
   coerce (wrapped Fltk.getChild)
-
-getColor ::
-     Window -- ^
-  -> IO Fltk.Color
-getColor =
-  wrapped Fltk.getColor
-
-getDamage ::
-     Window -- ^
-  -> IO [Fltk.Damage]
-getDamage =
-  wrapped Fltk.getDamage
 
 getDecoratedH ::
      Window -- ^
@@ -552,30 +603,6 @@ getImage ::
   -> IO (Maybe Image)
 getImage =
   coerce (wrapped Fltk.getImage)
-
-getLabel ::
-     Window -- ^
-  -> IO Text
-getLabel =
-  wrapped Fltk.getLabel
-
-getLabelcolor ::
-     Window -- ^
-  -> IO Fltk.Color
-getLabelcolor =
-  wrapped Fltk.getLabelcolor
-
-getLabelfont ::
-     Window -- ^
-  -> IO Fltk.Font
-getLabelfont =
-  wrapped Fltk.getLabelfont
-
-getLabelsize ::
-     Window -- ^
-  -> IO Fltk.FontSize
-getLabelsize =
-  wrapped Fltk.getLabelsize
 
 getLabeltype ::
      Window -- ^
@@ -625,18 +652,6 @@ getResizable ::
 getResizable =
   coerce (wrapped Fltk.getResizable)
 
-getSelectionColor ::
-     Window -- ^
-  -> IO Fltk.Color
-getSelectionColor =
-  wrapped Fltk.getSelectionColor
-
-getTooltip ::
-     Window -- ^
-  -> IO Text
-getTooltip =
-  wrapped Fltk.getTooltip
-
 getTooltipWindow ::
      Window -- ^
   -> IO Bool
@@ -655,24 +670,6 @@ getTopWindowOffset ::
 getTopWindowOffset =
   wrapped Fltk.getTopWindowOffset
 
-getType_ ::
-     Window -- ^
-  -> IO Fltk.WindowType
-getType_ =
-  wrapped Fltk.getType_
-
-getVisible ::
-     Window -- ^
-  -> IO Bool
-getVisible =
-  wrapped Fltk.getVisible
-
-getVisibleFocus ::
-     Window -- ^
-  -> IO Bool
-getVisibleFocus =
-  wrapped Fltk.getVisibleFocus
-
 getVisibleR ::
      Window -- ^
   -> IO Bool
@@ -684,12 +681,6 @@ getW ::
   -> IO Fltk.Width
 getW =
   wrapped Fltk.getW
-
-getWhen ::
-     Window -- ^
-  -> IO [Fltk.When]
-getWhen =
-  wrapped Fltk.getWhen
 
 getWindow ::
      Window -- ^
@@ -739,12 +730,6 @@ hasCallback ::
   -> IO Bool
 hasCallback =
   wrapped Fltk.hasCallback
-
-hide ::
-     Window -- ^
-  -> IO ()
-hide =
-  wrapped Fltk.hide
 
 hotSpot ::
      Window -- ^
@@ -809,13 +794,6 @@ measureLabel ::
 measureLabel =
   wrapped Fltk.measureLabel
 
-modifyVisibleFocus ::
-     Window -- ^
-  -> Bool -- ^
-  -> IO ()
-modifyVisibleFocus =
-  wrapped Fltk.modifyVisibleFocus
-
 nonModal ::
      Window -- ^
   -> IO Bool
@@ -862,26 +840,12 @@ setActive ::
 setActive =
   wrapped Fltk.setActive
 
-setAlign ::
-     Window -- ^
-  -> Fltk.Alignments -- ^
-  -> IO ()
-setAlign =
-  wrapped Fltk.setAlign
-
 setBorder ::
      Window -- ^
   -> Bool -- ^
   -> IO ()
 setBorder =
   wrapped Fltk.setBorder
-
-setBox ::
-     Window -- ^
-  -> Fltk.Boxtype -- ^
-  -> IO ()
-setBox =
-  wrapped Fltk.setBox
 
 setCallback ::
      Window -- ^
@@ -902,13 +866,6 @@ setClipChildren ::
   -> IO ()
 setClipChildren =
   wrapped Fltk.setClipChildren
-
-setColor ::
-     Window -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setColor =
-  wrapped Fltk.setColor
 
 setColorWithBgSel ::
      Window -- ^
@@ -932,13 +889,6 @@ setCursorWithFgBg ::
   -> IO ()
 setCursorWithFgBg =
   wrapped Fltk.setCursorWithFgBg
-
-setDamage ::
-     Window -- ^
-  -> [Fltk.Damage] -- ^
-  -> IO ()
-setDamage =
-  wrapped Fltk.setDamage
 
 setDamageInside ::
      Window -- ^
@@ -1009,34 +959,6 @@ setImage box = \case
     wrapped Fltk.setImage box (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
     asImage image (\ref -> wrapped Fltk.setImage box (Just ref))
-
-setLabel ::
-     Window -- ^
-  -> Text -- ^
-  -> IO ()
-setLabel =
-  wrapped Fltk.setLabel
-
-setLabelcolor ::
-     Window -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setLabelcolor =
-  wrapped Fltk.setLabelcolor
-
-setLabelfont ::
-     Window -- ^
-  -> Fltk.Font -- ^
-  -> IO ()
-setLabelfont =
-  wrapped Fltk.setLabelfont
-
-setLabelsize ::
-     Window -- ^
-  -> Fltk.FontSize -- ^
-  -> IO ()
-setLabelsize =
-  wrapped Fltk.setLabelsize
 
 setLabeltype ::
      Window -- ^
@@ -1112,51 +1034,11 @@ setResizable window = \case
   Just widget ->
     asWidget widget (\ref -> wrapped Fltk.setResizable window (Just ref))
 
-setSelectionColor ::
-     Window -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setSelectionColor =
-  wrapped Fltk.setSelectionColor
-
-setTooltip ::
-     Window -- ^
-  -> Text -- ^
-  -> IO ()
-setTooltip =
-  wrapped Fltk.setTooltip
-
 setTooltipWindow ::
      Window -- ^
   -> IO ()
 setTooltipWindow =
   wrapped Fltk.setTooltipWindow
-
-setType ::
-     Window -- ^
-  -> Fltk.WindowType -- ^
-  -> IO ()
-setType =
-  wrapped Fltk.setType
-
-setVisible ::
-     Window -- ^
-  -> IO ()
-setVisible =
-  wrapped Fltk.setVisible
-
-setVisibleFocus ::
-     Window -- ^
-  -> IO ()
-setVisibleFocus =
-  wrapped Fltk.setVisibleFocus
-
-setWhen ::
-     Window -- ^
-  -> [Fltk.When] -- ^
-  -> IO ()
-setWhen =
-  wrapped Fltk.setWhen
 
 setXclass ::
      Window -- ^
@@ -1170,12 +1052,6 @@ shown ::
   -> IO Bool
 shown =
   wrapped Fltk.shown
-
-showWidget ::
-     Window -- ^
-  -> IO ()
-showWidget =
-  wrapped Fltk.showWidget
 
 sizeRange ::
      Window -- ^

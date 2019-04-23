@@ -49,6 +49,6 @@ main = do
         "World"
 
   Window.end window
-  Window.showWidget window
+  Window.visible window $= True
 
   run

@@ -55,7 +55,8 @@ executable example
   build-depends:
     base,
     fltkhs,
-    fltkhs-simple
+    fltkhs-simple,
+    StateVar,
 
   default-language:
     Haskell2010
