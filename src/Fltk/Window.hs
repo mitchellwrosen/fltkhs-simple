@@ -16,6 +16,7 @@ module Fltk.Window
   , labelColor
   , labelFont
   , labelSize
+  , labelType
   , output
   , selectionColor
   , tooltip
@@ -61,7 +62,6 @@ module Fltk.Window
   , getH
   , getIcon
   , getIconlabel
-  , getLabeltype
   , getMenuWindow
   , getModal
   , getOverride
@@ -106,7 +106,6 @@ module Fltk.Window
   , setDefaultCursorWithFgBg
   , setIcon
   , setIconlabel
-  , setLabeltype
   , setLabelWithIconlabel
   , setMenuWindow
   , setModal
@@ -251,6 +250,12 @@ labelSize ::
   -> StateVar Fltk.FontSize
 labelSize =
   wrapped Widget.labelSize
+
+labelType ::
+     Window -- ^
+  -> StateVar Fltk.Labeltype
+labelType =
+  wrapped Widget.labelType
 
 output ::
      Window -- ^
@@ -536,12 +541,6 @@ getIconlabel ::
   -> IO Text
 getIconlabel =
   wrapped Fltk.getIconlabel
-
-getLabeltype ::
-     Window -- ^
-  -> IO Fltk.Labeltype
-getLabeltype =
-  wrapped Fltk.getLabeltype
 
 getMenuWindow ::
      Window -- ^
@@ -838,14 +837,6 @@ setIconlabel ::
   -> IO ()
 setIconlabel =
   wrapped Fltk.setIconlabel
-
-setLabeltype ::
-     Window -- ^
-  -> Fltk.Labeltype -- ^
-  -> Fltk.ResolveImageLabelConflict -- ^
-  -> IO ()
-setLabeltype =
-  wrapped Fltk.setLabeltype
 
 setLabelWithIconlabel ::
      Window -- ^

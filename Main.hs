@@ -30,7 +30,7 @@ main = do
 
   Box.labelFont box $= helveticaBoldItalic
   Box.labelSize box $= (FontSize 36)
-  Box.setLabeltype box ShadowLabelType ResolveImageLabelOverwrite
+  Box.labelType box $= ShadowLabelType
 
   _ <-
     Button.new

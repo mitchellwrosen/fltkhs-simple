@@ -17,6 +17,7 @@ module Fltk.Input
   , labelColor
   , labelFont
   , labelSize
+  , labelType
   , output
   , selectionColor
   , tooltip
@@ -45,7 +46,6 @@ module Fltk.Input
   , getCursorColor
   , getH
   , getInputType
-  , getLabeltype
   , getMark
   , getMaximumSize
   , getParent
@@ -85,7 +85,6 @@ module Fltk.Input
   , setCursorColor
   , setDamageInside
   , setInputType
-  , setLabeltype
   , setMark
   , setMaximumSize
   , setParent
@@ -221,6 +220,12 @@ labelSize ::
   -> StateVar Fltk.FontSize
 labelSize =
   wrapped Widget.labelSize
+
+labelType ::
+     Input -- ^
+  -> StateVar Fltk.Labeltype
+labelType =
+  wrapped Widget.labelType
 
 output ::
      Input -- ^
@@ -403,12 +408,6 @@ getInputType ::
   -> IO Fltk.FlInputType
 getInputType =
   wrapped Fltk.getInputType
-
-getLabeltype ::
-     Input -- ^
-  -> IO Fltk.Labeltype
-getLabeltype =
-  wrapped Fltk.getLabeltype
 
 getMark ::
      Input -- ^
@@ -661,14 +660,6 @@ setInputType ::
   -> IO ()
 setInputType =
   wrapped Fltk.setInputType
-
-setLabeltype ::
-     Input -- ^
-  -> Fltk.Labeltype -- ^
-  -> Fltk.ResolveImageLabelConflict -- ^
-  -> IO ()
-setLabeltype =
-  wrapped Fltk.setLabeltype
 
 setMark ::
      Input -- ^

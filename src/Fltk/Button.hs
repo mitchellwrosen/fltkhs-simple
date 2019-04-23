@@ -18,6 +18,7 @@ module Fltk.Button
   , labelColor
   , labelFont
   , labelSize
+  , labelType
   , output
   , selectionColor
   , tooltip
@@ -40,7 +41,6 @@ module Fltk.Button
   , getDownBox
   , getDownColor
   , getH
-  , getLabeltype
   , getParent
   , getRectangle
   , getShortcut
@@ -64,7 +64,6 @@ module Fltk.Button
   , setDamageInside
   , setDownBox
   , setDownColor
-  , setLabeltype
   , setonly
   , setParent
   , setShortcut
@@ -230,6 +229,12 @@ labelSize ::
 labelSize =
   wrapped Widget.labelSize
 
+labelType ::
+     Button -- ^
+  -> StateVar Fltk.Labeltype
+labelType =
+  wrapped Widget.labelType
+
 output ::
      Button -- ^
   -> StateVar Bool
@@ -367,12 +372,6 @@ getH ::
   -> IO Fltk.Height
 getH =
   wrapped Fltk.getH
-
-getLabeltype ::
-     Button -- ^
-  -> IO Fltk.Labeltype
-getLabeltype =
-  wrapped Fltk.getLabeltype
 
 getParent ::
      Button -- ^
@@ -522,14 +521,6 @@ setDownColor ::
   -> IO ()
 setDownColor =
   wrapped Fltk.setDownColor
-
-setLabeltype ::
-     Button -- ^
-  -> Fltk.Labeltype -- ^
-  -> Fltk.ResolveImageLabelConflict -- ^
-  -> IO ()
-setLabeltype =
-  wrapped Fltk.setLabeltype
 
 setonly ::
      Button -- ^

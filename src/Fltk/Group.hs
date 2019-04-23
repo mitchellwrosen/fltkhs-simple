@@ -17,6 +17,7 @@ module Fltk.Group
   , labelColor
   , labelFont
   , labelSize
+  , labelType
   , output
   , selectionColor
   , tooltip
@@ -52,7 +53,6 @@ module Fltk.Group
   , getCallback
   , getChild
   , getH
-  , getLabeltype
   , getParent
   , getRectangle
   , getResizable
@@ -78,7 +78,6 @@ module Fltk.Group
   , setClipChildren
   , setColorWithBgSel
   , setDamageInside
-  , setLabeltype
   , setNotResizable
   , setParent
   , setResizable
@@ -201,6 +200,12 @@ labelSize ::
   -> StateVar Fltk.FontSize
 labelSize =
   wrapped Widget.labelSize
+
+labelType ::
+     Group -- ^
+  -> StateVar Fltk.Labeltype
+labelType =
+  wrapped Widget.labelType
 
 output ::
      Group -- ^
@@ -425,12 +430,6 @@ getH ::
 getH =
   wrapped Fltk.getH
 
-getLabeltype ::
-     Group -- ^
-  -> IO Fltk.Labeltype
-getLabeltype =
-  wrapped Fltk.getLabeltype
-
 getParent ::
      Group -- ^
   -> IO (Maybe Group)
@@ -598,14 +597,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setLabeltype ::
-     Group -- ^
-  -> Fltk.Labeltype -- ^
-  -> Fltk.ResolveImageLabelConflict -- ^
-  -> IO ()
-setLabeltype =
-  wrapped Fltk.setLabeltype
 
 setNotResizable ::
      Group -- ^

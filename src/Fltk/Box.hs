@@ -17,6 +17,7 @@ module Fltk.Box
   , labelColor
   , labelFont
   , labelSize
+  , labelType
   , output
   , selectionColor
   , tooltip
@@ -37,7 +38,6 @@ module Fltk.Box
   , drawLabel
   , getCallback
   , getH
-  , getLabeltype
   , getParent
   , getRectangle
   , getTopWindow
@@ -57,7 +57,6 @@ module Fltk.Box
   , setCallback
   , setColorWithBgSel
   , setDamageInside
-  , setLabeltype
   , setParent
   , takeFocus
   , takesevents
@@ -178,6 +177,12 @@ labelSize ::
   -> StateVar Fltk.FontSize
 labelSize =
   wrapped Widget.labelSize
+
+labelType ::
+     Box -- ^
+  -> StateVar Fltk.Labeltype
+labelType =
+  wrapped Widget.labelType
 
 output ::
      Box -- ^
@@ -306,12 +311,6 @@ getH ::
 getH =
   wrapped Fltk.getH
 
-getLabeltype ::
-     Box -- ^
-  -> IO Fltk.Labeltype
-getLabeltype =
-  wrapped Fltk.getLabeltype
-
 getParent ::
      Box -- ^
   -> IO (Maybe Group)
@@ -434,14 +433,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setLabeltype ::
-     Box -- ^
-  -> Fltk.Labeltype -- ^
-  -> Fltk.ResolveImageLabelConflict -- ^
-  -> IO ()
-setLabeltype =
-  wrapped Fltk.setLabeltype
 
 setParent ::
      Box -- ^
