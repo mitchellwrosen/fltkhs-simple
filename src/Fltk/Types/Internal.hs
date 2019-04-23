@@ -42,6 +42,15 @@ newtype Image
 instance IsImage Image where asImage image f = f (unImage image)
 
 
+-- | An 'Input' is a 'Fltk.Widget.Widget'.
+--
+-- <https://www.fltk.org/doc-1.4/classFl__Input.html>
+newtype Input
+  = Input { unInput :: Fltk.Ref Fltk.InputBase }
+
+instance IsWidget Input where asWidget input f = f (unInput input)
+
+
 -- | <https://www.fltk.org/doc-1.4/classFl__Widget.html>
 newtype Widget
   = Widget { unWidget :: Fltk.Ref Fltk.WidgetBase }

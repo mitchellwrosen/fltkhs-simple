@@ -26,6 +26,7 @@ library
     Fltk.Button
     Fltk.Group
     Fltk.Image
+    Fltk.Input
     Fltk.Widget
     Fltk.Window
 
