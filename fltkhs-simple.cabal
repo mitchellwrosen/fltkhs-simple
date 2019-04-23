@@ -14,6 +14,7 @@ library
     FlexibleContexts
     InstanceSigs
     LambdaCase
+    MultiParamTypeClasses
     RankNTypes
     ScopedTypeVariables
     TypeApplications
@@ -23,6 +24,7 @@ library
     Haskell2010
 
   exposed-modules:
+    Fltk
     Fltk.Box
     Fltk.Button
     Fltk.Group

@@ -64,8 +64,8 @@ module Fltk.Box
   , takesevents
   ) where
 
-import Fltk.Types.Internal (Box(..), Group(..), Image(..), IsGroup(..),
-                            IsImage(..), IsWidget(..), Window(..))
+import Fltk.Types.Internal (Box(..), Group(..), Image(..), Widget(..),
+                            Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
 
@@ -229,12 +229,11 @@ activeR =
   wrapped Fltk.activeR
 
 contains ::
-     IsWidget widget
-  => Box -- ^
-  -> widget -- ^
+     Box -- ^
+  -> Widget -- ^
   -> IO Bool
 contains box widget =
-  asWidget widget (wrapped Fltk.contains box)
+  wrapped Fltk.contains box (unWidget widget)
 
 copyTooltip ::
      Box -- ^
@@ -382,12 +381,11 @@ hasCallback =
   wrapped Fltk.hasCallback
 
 inside ::
-     IsWidget widget
-  => Box -- ^
-  -> widget -- ^
+     Box -- ^
+  -> Widget -- ^
   -> IO Bool
 inside box widget =
-  asWidget widget (wrapped Fltk.inside box)
+  wrapped Fltk.inside box (unWidget widget)
 
 measureLabel ::
      Box -- ^
@@ -439,15 +437,11 @@ setDamageInside =
   wrapped Fltk.setDamageInside
 
 setImage ::
-     IsImage image
-  => Box -- ^
-  -> Maybe image -- ^
+     Box -- ^
+  -> Maybe Image -- ^
   -> IO ()
-setImage box = \case
-  Nothing ->
-    wrapped Fltk.setImage box (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setImage box (Just ref))
+setImage box image =
+  wrapped Fltk.setImage box (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Box -- ^
@@ -458,15 +452,11 @@ setLabeltype =
   wrapped Fltk.setLabeltype
 
 setParent ::
-     IsGroup group
-  => Box -- ^
-  -> Maybe group -- ^
+     Box -- ^
+  -> Maybe Group -- ^
   -> IO ()
-setParent box = \case
-  Nothing ->
-    wrapped Fltk.setParent box (Nothing @(Fltk.Ref Fltk.GroupBase))
-  Just group ->
-    asGroup group (\ref -> wrapped Fltk.setParent box (Just ref))
+setParent box group =
+  wrapped Fltk.setParent box (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 takeFocus ::
      Box -- ^

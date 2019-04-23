@@ -1,7 +1,6 @@
 module Fltk.Group
   ( -- * Group
     Group
-  , IsGroup
   , new
     -- * API
     -- ** Properties
@@ -90,8 +89,7 @@ module Fltk.Group
   , within
   ) where
 
-import Fltk.Types.Internal (Group(..), Image(..), IsGroup(..), IsImage(..),
-                            IsWidget(..), Widget(..), Window(..))
+import Fltk.Types.Internal (Group(..), Image(..), Widget(..), Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
 
@@ -253,20 +251,18 @@ activeR =
   wrapped Fltk.activeR
 
 add ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO ()
 add group widget =
-  asWidget widget (wrapped Fltk.add group)
+  wrapped Fltk.add group (unWidget widget)
 
 addResizable ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO ()
 addResizable group widget =
-  asWidget widget (wrapped Fltk.addResizable group)
+  wrapped Fltk.addResizable group (unWidget widget)
 
 begin ::
      Group -- ^
@@ -293,12 +289,11 @@ clipChildren =
   wrapped Fltk.clipChildren
 
 contains ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO Bool
 contains group widget =
-  asWidget widget (wrapped Fltk.contains group)
+  wrapped Fltk.contains group (unWidget widget)
 
 copyTooltip ::
      Group -- ^
@@ -347,12 +342,11 @@ drawBoxWithBoxtype =
   wrapped Fltk.drawBoxWithBoxtype
 
 drawChild ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO ()
 drawChild group widget =
-  asWidget widget (wrapped Fltk.drawChild group)
+  wrapped Fltk.drawChild group (unWidget widget)
 
 drawChildren ::
      Group -- ^
@@ -375,12 +369,11 @@ drawLabel =
   wrapped Fltk.drawLabel
 
 drawOutsideLabel ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO ()
 drawOutsideLabel group widget =
-  asWidget widget (wrapped Fltk.drawOutsideLabel group)
+  wrapped Fltk.drawOutsideLabel group (unWidget widget)
 
 end ::
      Group -- ^
@@ -389,20 +382,18 @@ end =
   wrapped Fltk.end
 
 find ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO Fltk.AtIndex
 find group widget =
-  asWidget widget (wrapped Fltk.find group)
+  wrapped Fltk.find group (unWidget widget)
 
 focus ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO ()
 focus group widget =
-  asWidget widget (wrapped Fltk.focus group)
+  wrapped Fltk.focus group (unWidget widget)
 
 getArray ::
      Group -- ^
@@ -521,25 +512,23 @@ initSizes =
   wrapped Fltk.initSizes
 
 insert ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> Fltk.AtIndex -- ^
   -> IO ()
-insert group widget index =
-  asWidget widget (\ref -> wrapped Fltk.insert group ref index)
+insert group widget =
+  wrapped Fltk.insert group (unWidget widget)
 
 -- insertBefore :: (Parent a WidgetBase) => Group -> Ref a -> Ref b -> IO ()
 -- insertBefore=
 --   wrapped Fltk.insertBefore
 
 inside ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO Bool
 inside group widget =
-  asWidget widget (wrapped Fltk.inside group)
+  wrapped Fltk.inside group (unWidget widget)
 
 measureLabel ::
      Group -- ^
@@ -568,12 +557,11 @@ removeIndex =
   wrapped Fltk.removeIndex
 
 removeWidget ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO ()
 removeWidget group widget =
-  asWidget widget (wrapped Fltk.removeWidget group)
+  wrapped Fltk.removeWidget group (unWidget widget)
 
 resize ::
      Group -- ^
@@ -613,15 +601,11 @@ setDamageInside =
   wrapped Fltk.setDamageInside
 
 setImage ::
-     IsImage image
-  => Group -- ^
-  -> Maybe image -- ^
+     Group -- ^
+  -> Maybe Image -- ^
   -> IO ()
-setImage group = \case
-  Nothing ->
-    wrapped Fltk.setImage group (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setImage group (Just ref))
+setImage group image =
+  wrapped Fltk.setImage group (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Group -- ^
@@ -638,26 +622,18 @@ setNotResizable =
   wrapped Fltk.setNotResizable
 
 setParent ::
-     IsGroup group
-  => Group -- ^
-  -> Maybe group -- ^
+     Group -- ^
+  -> Maybe Group -- ^
   -> IO ()
-setParent group = \case
-  Nothing ->
-    wrapped Fltk.setParent group (Nothing @(Fltk.Ref Fltk.GroupBase))
-  Just parent ->
-    asGroup parent (\ref -> wrapped Fltk.setParent group (Just ref))
+setParent group parent =
+  wrapped Fltk.setParent group (coerce parent :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setResizable ::
-     IsWidget widget
-  => Group -- ^
-  -> Maybe widget -- ^
+     Group -- ^
+  -> Maybe Widget -- ^
   -> IO ()
-setResizable group = \case
-  Nothing ->
-    wrapped Fltk.setResizable group (Nothing @(Fltk.Ref Fltk.WidgetBase))
-  Just widget ->
-    asWidget widget (\ref -> wrapped Fltk.setResizable group (Just ref))
+setResizable group widget =
+  wrapped Fltk.setResizable group (coerce widget :: Maybe (Fltk.Ref Fltk.WidgetBase))
 
 takeFocus ::
      Group -- ^
@@ -672,12 +648,11 @@ takesevents =
   wrapped Fltk.takesevents
 
 updateChild ::
-     IsWidget widget
-  => Group -- ^
-  -> widget -- ^
+     Group -- ^
+  -> Widget -- ^
   -> IO ()
 updateChild group widget =
-  asWidget widget (wrapped Fltk.updateChild group)
+  wrapped Fltk.updateChild group (unWidget widget)
 
 within ::
      Group -- ^

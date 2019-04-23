@@ -1,6 +1,5 @@
 module Fltk.Window
   ( Window
-  , IsWindow
   , new
     -- * API
     -- ** Properties
@@ -129,8 +128,7 @@ module Fltk.Window
   , within
   ) where
 
-import Fltk.Types.Internal (Group(..), Image(..), IsGroup(..), IsImage(..),
-                            IsWidget(..), IsWindow(..), Widget(..), Window(..))
+import Fltk.Types.Internal (Group(..), Image(..), Widget(..), Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
 
@@ -303,20 +301,18 @@ activeR =
   wrapped Fltk.activeR
 
 add ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO ()
 add window widget =
-  asWidget widget (wrapped Fltk.add window)
+  wrapped Fltk.add window (unWidget widget)
 
 addResizable ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO ()
 addResizable window widget =
-  asWidget widget (wrapped Fltk.addResizable window)
+  wrapped Fltk.addResizable window (unWidget widget)
 
 begin ::
      Window -- ^
@@ -349,12 +345,11 @@ clipChildren =
   wrapped Fltk.clipChildren
 
 contains ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO Bool
-contains box widget =
-  asWidget widget (wrapped Fltk.contains box)
+contains window widget =
+  wrapped Fltk.contains window (unWidget widget)
 
 copyLabel ::
      Window -- ^
@@ -410,12 +405,11 @@ drawBoxWithBoxtype =
   wrapped Fltk.drawBoxWithBoxtype
 
 drawChild ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO ()
 drawChild window widget =
-  asWidget widget (wrapped Fltk.drawChild window)
+  wrapped Fltk.drawChild window (unWidget widget)
 
 drawChildren ::
      Window -- ^
@@ -438,12 +432,11 @@ drawLabel =
   wrapped Fltk.drawLabel
 
 drawOutsideLabel ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO ()
 drawOutsideLabel window widget =
-  asWidget widget (wrapped Fltk.drawOutsideLabel window)
+  wrapped Fltk.drawOutsideLabel window (unWidget widget)
 
 end ::
      Window -- ^
@@ -452,12 +445,11 @@ end =
   wrapped Fltk.end
 
 find ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO Fltk.AtIndex
 find window widget =
-  asWidget widget (wrapped Fltk.find window)
+  wrapped Fltk.find window (unWidget widget)
 
 flush ::
      Window -- ^
@@ -466,12 +458,11 @@ flush =
   wrapped Fltk.flush
 
 focus ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO ()
 focus window widget =
-  asWidget widget (wrapped Fltk.focus window)
+  wrapped Fltk.focus window (unWidget widget)
 
 freePosition ::
      Window -- ^
@@ -689,13 +680,12 @@ initSizes =
   wrapped Fltk.initSizes
 
 insert ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> Fltk.AtIndex -- ^
   -> IO ()
-insert window widget index =
-  asWidget widget (\ref -> wrapped Fltk.insert window ref index)
+insert window widget =
+  wrapped Fltk.insert window (unWidget widget)
 
 -- insertBefore ::
 --      IsWidget widget
@@ -705,12 +695,11 @@ insert window widget index =
 --   -> IO ()
 
 inside ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO Bool
-inside box widget =
-  asWidget widget (wrapped Fltk.inside box)
+inside window widget =
+  wrapped Fltk.inside window (unWidget widget)
 
 makeCurrent ::
      Window -- ^
@@ -757,12 +746,11 @@ removeIndex =
   wrapped Fltk.removeIndex
 
 removeWidget ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO ()
 removeWidget window widget =
-  asWidget widget (wrapped Fltk.removeWidget window)
+  wrapped Fltk.removeWidget window (unWidget widget)
 
 resize ::
      Window -- ^
@@ -839,15 +827,11 @@ setDefaultCursorWithFgBg =
   wrapped Fltk.setDefaultCursorWithFgBg
 
 setIcon ::
-     IsImage image
-  => Window-- ^
-  -> Maybe image-- ^
+     Window-- ^
+  -> Maybe Image-- ^
   -> IO ()
-setIcon window = \case
-  Nothing ->
-    wrapped Fltk.setIcon window (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setIcon window (Just ref))
+setIcon window image =
+  wrapped Fltk.setIcon window (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setIconlabel ::
      Window -- ^
@@ -857,15 +841,11 @@ setIconlabel =
   wrapped Fltk.setIconlabel
 
 setImage ::
-     IsImage image
-  => Window -- ^
-  -> Maybe image -- ^
+     Window -- ^
+  -> Maybe Image -- ^
   -> IO ()
-setImage box = \case
-  Nothing ->
-    wrapped Fltk.setImage box (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setImage box (Just ref))
+setImage window image =
+  wrapped Fltk.setImage window (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Window -- ^
@@ -914,26 +894,18 @@ setOverride =
   wrapped Fltk.setOverride
 
 setParent ::
-     IsGroup group
-  => Window -- ^
-  -> Maybe group -- ^
+     Window -- ^
+  -> Maybe Group -- ^
   -> IO ()
-setParent box = \case
-  Nothing ->
-    wrapped Fltk.setParent box (Nothing @(Fltk.Ref Fltk.GroupBase))
-  Just group ->
-    asGroup group (\ref -> wrapped Fltk.setParent box (Just ref))
+setParent box group =
+  wrapped Fltk.setParent box (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setResizable ::
-     IsWidget widget
-  => Window -- ^
-  -> Maybe widget -- ^
+     Window -- ^
+  -> Maybe Widget -- ^
   -> IO ()
-setResizable window = \case
-  Nothing ->
-    wrapped Fltk.setResizable window (Nothing @(Fltk.Ref Fltk.WidgetBase))
-  Just widget ->
-    asWidget widget (\ref -> wrapped Fltk.setResizable window (Just ref))
+setResizable window widget =
+  wrapped Fltk.setResizable window (coerce widget :: Maybe (Fltk.Ref (Fltk.WidgetBase)))
 
 setTooltipWindow ::
      Window -- ^
@@ -982,12 +954,11 @@ takesevents =
   wrapped Fltk.takesevents
 
 updateChild ::
-     IsWidget widget
-  => Window -- ^
-  -> widget -- ^
+     Window -- ^
+  -> Widget -- ^
   -> IO ()
 updateChild window widget =
-  asWidget widget (wrapped Fltk.updateChild window)
+  wrapped Fltk.updateChild window (unWidget widget)
 
 waitForExpose ::
      Window -- ^

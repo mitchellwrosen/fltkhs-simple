@@ -106,8 +106,8 @@ module Fltk.Input
   , undo
   ) where
 
-import Fltk.Types.Internal (Group(..), Image(..), Input(..), IsGroup(..),
-                            IsImage(..), IsWidget(..), Window(..))
+import Fltk.Types.Internal (Group(..), Image(..), Input(..), Widget(..),
+                            Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
 
@@ -272,12 +272,11 @@ activeR =
   wrapped Fltk.activeR
 
 contains ::
-     IsWidget widget
-  => Input -- ^
-  -> widget -- ^
+     Input -- ^
+  -> Widget -- ^
   -> IO Bool
 contains input widget =
-  asWidget widget (wrapped Fltk.contains input)
+  wrapped Fltk.contains input (unWidget widget)
 
 -- | Put the current selection into the clipboard.
 copy ::
@@ -580,12 +579,11 @@ insertWithLength =
   wrapped Fltk.insertWithLength
 
 inside ::
-     IsWidget widget
-  => Input -- ^
-  -> widget -- ^
+     Input -- ^
+  -> Widget -- ^
   -> IO Bool
 inside input widget =
-  asWidget widget (wrapped Fltk.inside input)
+  wrapped Fltk.inside input (unWidget widget)
 
 measureLabel ::
      Input -- ^
@@ -659,15 +657,11 @@ setDamageInside =
   wrapped Fltk.setDamageInside
 
 setImage ::
-     IsImage image
-  => Input -- ^
-  -> Maybe image -- ^
+     Input -- ^
+  -> Maybe Image -- ^
   -> IO ()
-setImage input = \case
-  Nothing ->
-    wrapped Fltk.setImage input (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setImage input (Just ref))
+setImage input image =
+  wrapped Fltk.setImage input (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setInputType ::
      Input -- ^
@@ -699,15 +693,11 @@ setMaximumSize =
   wrapped Fltk.setMaximumSize
 
 setParent ::
-     IsGroup group
-  => Input -- ^
-  -> Maybe group -- ^
+     Input -- ^
+  -> Maybe Group -- ^
   -> IO ()
-setParent input = \case
-  Nothing ->
-    wrapped Fltk.setParent input (Nothing @(Fltk.Ref Fltk.GroupBase))
-  Just group ->
-    asGroup group (\ref -> wrapped Fltk.setParent input (Just ref))
+setParent input group =
+  wrapped Fltk.setParent input (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setPosition ::
      Input -- ^

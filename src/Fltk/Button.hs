@@ -74,8 +74,8 @@ module Fltk.Button
   , takesevents
   ) where
 
-import Fltk.Types.Internal (Button(..), Group(..), Image(..), IsGroup(..),
-                            IsImage(..), IsWidget(..), Window(..))
+import Fltk.Types.Internal (Button(..), Group(..), Image(..), Widget(..),
+                            Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
 
@@ -279,12 +279,11 @@ activeR =
   wrapped Fltk.activeR
 
 contains ::
-     IsWidget widget
-  => Button -- ^
-  -> widget -- ^
+     Button -- ^
+  -> Widget -- ^
   -> IO Bool
 contains button widget =
-  asWidget widget (wrapped Fltk.contains button)
+  wrapped Fltk.contains button (unWidget widget)
 
 copyTooltip ::
      Button -- ^
@@ -456,12 +455,11 @@ hasCallback =
   wrapped Fltk.hasCallback
 
 inside ::
-     IsWidget widget
-  => Button -- ^
-  -> widget -- ^
+     Button -- ^
+  -> Widget -- ^
   -> IO Bool
 inside button widget =
-  asWidget widget (wrapped Fltk.inside button)
+  wrapped Fltk.inside button (unWidget widget)
 
 measureLabel ::
      Button -- ^
@@ -527,15 +525,11 @@ setDownColor =
   wrapped Fltk.setDownColor
 
 setImage ::
-     IsImage image
-  => Button -- ^
-  -> Maybe image -- ^
+     Button -- ^
+  -> Maybe Image -- ^
   -> IO ()
-setImage button = \case
-  Nothing ->
-    wrapped Fltk.setImage button (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setImage button (Just ref))
+setImage button image =
+  wrapped Fltk.setImage button (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Button -- ^
@@ -552,15 +546,11 @@ setonly =
   wrapped Fltk.setonly
 
 setParent ::
-     IsGroup group
-  => Button -- ^
-  -> Maybe group -- ^
+     Button -- ^
+  -> Maybe Group -- ^
   -> IO ()
-setParent button = \case
-  Nothing ->
-    wrapped Fltk.setParent button (Nothing @(Fltk.Ref Fltk.GroupBase))
-  Just group ->
-    asGroup group (\ref -> wrapped Fltk.setParent button (Just ref))
+setParent button group =
+  wrapped Fltk.setParent button (coerce group :: Maybe (Fltk.Ref Fltk.GroupBase))
 
 setShortcut ::
      Button -- ^
