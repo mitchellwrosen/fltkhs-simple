@@ -15,6 +15,7 @@ module Fltk.Input
   , labelColor
   , labelFont
   , labelSize
+  , output
   , selectionColor
   , tooltip
   , type_
@@ -23,7 +24,6 @@ module Fltk.Input
   , when
     -- ** Functions
   , activeR
-  , clearOutput
   , contains
   , copy
   , copyCuts
@@ -48,7 +48,6 @@ module Fltk.Input
   , getLabeltype
   , getMark
   , getMaximumSize
-  , getOutput
   , getParent
   , getPosition
   , getReadonly
@@ -91,7 +90,6 @@ module Fltk.Input
   , setLabeltype
   , setMark
   , setMaximumSize
-  , setOutput
   , setParent
   , setPosition
   , setReadonly
@@ -214,6 +212,12 @@ labelSize ::
 labelSize =
   wrapped Widget.labelSize
 
+output ::
+     Input -- ^
+  -> StateVar Bool
+output =
+  wrapped Widget.output
+
 selectionColor ::
      Input -- ^
   -> StateVar Fltk.Color
@@ -261,12 +265,6 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
-
-clearOutput ::
-     Input -- ^
-  -> IO ()
-clearOutput =
-  wrapped Fltk.clearOutput
 
 contains ::
      IsWidget widget
@@ -426,12 +424,6 @@ getMaximumSize ::
   -> IO Int
 getMaximumSize =
   wrapped Fltk.getMaximumSize
-
-getOutput ::
-     Input -- ^
-  -> IO Int
-getOutput =
-  wrapped Fltk.getOutput
 
 getParent ::
      Input -- ^
@@ -717,12 +709,6 @@ setMaximumSize ::
   -> IO ()
 setMaximumSize =
   wrapped Fltk.setMaximumSize
-
-setOutput ::
-     Input -- ^
-  -> IO ()
-setOutput =
-  wrapped Fltk.setOutput
 
 setParent ::
      IsGroup group

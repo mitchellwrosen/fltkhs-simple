@@ -16,6 +16,7 @@ module Fltk.Button
   , labelColor
   , labelFont
   , labelSize
+  , output
   , selectionColor
   , tooltip
   , type_
@@ -24,7 +25,6 @@ module Fltk.Button
   , when
     -- ** Functions
   , activeR
-  , clearOutput
   , contains
   , copyTooltip
   , destroy
@@ -41,7 +41,6 @@ module Fltk.Button
   , getH
   , getImage
   , getLabeltype
-  , getOutput
   , getParent
   , getRectangle
   , getShortcut
@@ -69,7 +68,6 @@ module Fltk.Button
   , setImage
   , setLabeltype
   , setonly
-  , setOutput
   , setParent
   , setShortcut
   , setValue
@@ -222,6 +220,12 @@ labelSize ::
 labelSize =
   wrapped Widget.labelSize
 
+output ::
+     Button -- ^
+  -> StateVar Bool
+output =
+  wrapped Widget.output
+
 selectionColor ::
      Button -- ^
   -> StateVar Fltk.Color
@@ -268,12 +272,6 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
-
-clearOutput ::
-     Button -- ^
-  -> IO ()
-clearOutput =
-  wrapped Fltk.clearOutput
 
 contains ::
      IsWidget widget
@@ -378,12 +376,6 @@ getLabeltype ::
   -> IO Fltk.Labeltype
 getLabeltype =
   wrapped Fltk.getLabeltype
-
-getOutput ::
-     Button -- ^
-  -> IO Int
-getOutput =
-  wrapped Fltk.getOutput
 
 getParent ::
      Button -- ^
@@ -570,12 +562,6 @@ setonly ::
   -> IO ()
 setonly =
   wrapped Fltk.setonly
-
-setOutput ::
-     Button -- ^
-  -> IO ()
-setOutput =
-  wrapped Fltk.setOutput
 
 setParent ::
      IsGroup group

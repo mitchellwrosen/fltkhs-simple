@@ -15,6 +15,7 @@ module Fltk.Window
   , labelColor
   , labelFont
   , labelSize
+  , output
   , selectionColor
   , tooltip
   , type_
@@ -29,7 +30,6 @@ module Fltk.Window
   , children
   , clear
   , clearBorder
-  , clearOutput
   , clipChildren
   , contains
   , copyLabel
@@ -65,7 +65,6 @@ module Fltk.Window
   , getLabeltype
   , getMenuWindow
   , getModal
-  , getOutput
   , getOverride
   , getParent
   , getRectangle
@@ -116,7 +115,6 @@ module Fltk.Window
   , setModal
   , setNonModal
   , setNotResizable
-  , setOutput
   , setOverride
   , setParent
   , setResizable
@@ -246,6 +244,12 @@ labelSize ::
 labelSize =
   wrapped Widget.labelSize
 
+output ::
+     Window -- ^
+  -> StateVar Bool
+output =
+  wrapped Widget.output
+
 selectionColor ::
      Window -- ^
   -> StateVar Fltk.Color
@@ -332,12 +336,6 @@ clearBorder ::
   -> IO ()
 clearBorder =
   wrapped Fltk.clearBorder
-
-clearOutput ::
-     Window -- ^
-  -> IO ()
-clearOutput =
-  wrapped Fltk.clearOutput
 
 clipChildren ::
      Window -- ^
@@ -567,12 +565,6 @@ getModal ::
   -> IO Bool
 getModal =
   wrapped Fltk.getModal
-
-getOutput ::
-     Window -- ^
-  -> IO Int
-getOutput =
-  wrapped Fltk.getOutput
 
 getOverride ::
      Window -- ^
@@ -926,12 +918,6 @@ setNotResizable ::
   -> IO ()
 setNotResizable =
   wrapped Fltk.setNotResizable
-
-setOutput ::
-     Window -- ^
-  -> IO ()
-setOutput =
-  wrapped Fltk.setOutput
 
 setOverride ::
      Window -- ^

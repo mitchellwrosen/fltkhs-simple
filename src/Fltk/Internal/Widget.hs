@@ -10,6 +10,7 @@ module Fltk.Internal.Widget
   , labelColor
   , labelFont
   , labelSize
+  , output
   , selectionColor
   , tooltip
   , type_
@@ -169,6 +170,23 @@ labelSize ::
   -> StateVar Fltk.FontSize
 labelSize x =
   makeStateVar (Fltk.getLabelsize x) (Fltk.setLabelsize x)
+
+output ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetOutput ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetOutput ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.ClearOutput ())
+     , Fltk.Op (Fltk.GetOutput ()) r a (IO Int)
+     , Fltk.Op (Fltk.SetOutput ()) s a (IO ())
+     , Fltk.Op (Fltk.ClearOutput ()) t a (IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+output x =
+  makeStateVar
+    ((/= (0::Int)) <$> Fltk.getOutput x)
+    (\case
+      False -> Fltk.clearOutput x
+      True -> Fltk.setOutput x)
 
 selectionColor ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetSelectionColor ())

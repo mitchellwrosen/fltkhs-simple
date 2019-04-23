@@ -29,7 +29,6 @@ module Fltk.Group
   , begin
   , children
   , clear
-  , clearOutput
   , clipChildren
   , contains
   , copyTooltip
@@ -54,7 +53,6 @@ module Fltk.Group
   , getH
   , getImage
   , getLabeltype
-  , getOutput
   , getParent
   , getRectangle
   , getResizable
@@ -84,7 +82,6 @@ module Fltk.Group
   , setImage
   , setLabeltype
   , setNotResizable
-  , setOutput
   , setParent
   , setResizable
   , takeFocus
@@ -196,6 +193,12 @@ labelSize ::
 labelSize =
   wrapped Widget.labelSize
 
+output ::
+     Group -- ^
+  -> StateVar Bool
+output =
+  wrapped Widget.output
+
 selectionColor ::
      Group -- ^
   -> StateVar Fltk.Color
@@ -276,12 +279,6 @@ clear ::
   -> IO ()
 clear =
   wrapped Fltk.clear
-
-clearOutput ::
-     Group -- ^
-  -> IO ()
-clearOutput =
-  wrapped Fltk.clearOutput
 
 clipChildren ::
      Group -- ^
@@ -443,12 +440,6 @@ getLabeltype ::
   -> IO Fltk.Labeltype
 getLabeltype =
   wrapped Fltk.getLabeltype
-
-getOutput ::
-     Group -- ^
-  -> IO Int
-getOutput =
-  wrapped Fltk.getOutput
 
 getParent ::
      Group -- ^
@@ -656,12 +647,6 @@ setNotResizable ::
   -> IO ()
 setNotResizable =
   wrapped Fltk.setNotResizable
-
-setOutput ::
-     Group -- ^
-  -> IO ()
-setOutput =
-  wrapped Fltk.setOutput
 
 setParent ::
      IsGroup group

@@ -15,6 +15,7 @@ module Fltk.Box
   , labelColor
   , labelFont
   , labelSize
+  , output
   , selectionColor
   , tooltip
   , type_
@@ -23,7 +24,6 @@ module Fltk.Box
   , when
     -- ** Functions
   , activeR
-  , clearOutput
   , contains
   , copyTooltip
   , destroy
@@ -38,7 +38,6 @@ module Fltk.Box
   , getH
   , getImage
   , getLabeltype
-  , getOutput
   , getParent
   , getRectangle
   , getTopWindow
@@ -61,7 +60,6 @@ module Fltk.Box
   , setDeimage
   , setImage
   , setLabeltype
-  , setOutput
   , setParent
   , takeFocus
   , takesevents
@@ -171,6 +169,13 @@ labelSize ::
 labelSize =
   wrapped Widget.labelSize
 
+output ::
+     Box -- ^
+  -> StateVar Bool
+output =
+  wrapped Widget.output
+
+
 selectionColor ::
      Box -- ^
   -> StateVar Fltk.Color
@@ -217,12 +222,6 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
-
-clearOutput ::
-     Box -- ^
-  -> IO ()
-clearOutput =
-  wrapped Fltk.clearOutput
 
 contains ::
      IsWidget widget
@@ -315,12 +314,6 @@ getLabeltype ::
   -> IO Fltk.Labeltype
 getLabeltype =
   wrapped Fltk.getLabeltype
-
-getOutput ::
-     Box -- ^
-  -> IO Int
-getOutput =
-  wrapped Fltk.getOutput
 
 getParent ::
      Box -- ^
@@ -475,12 +468,6 @@ setLabeltype ::
   -> IO ()
 setLabeltype =
   wrapped Fltk.setLabeltype
-
-setOutput ::
-     Box -- ^
-  -> IO ()
-setOutput =
-  wrapped Fltk.setOutput
 
 setParent ::
      IsGroup group
