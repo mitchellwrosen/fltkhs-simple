@@ -1,7 +1,6 @@
-{-# OPTIONS_GHC -fno-warn-orphans #-}
-
 module Fltk.Button
-  ( Button
+  ( -- * Button
+    Button
   , new
     -- * API
   , activate
@@ -120,14 +119,6 @@ import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 
-
-instance IsWidget Button where
-  asWidget ::
-       Button
-    -> (forall x. Fltk.Parent x Fltk.WidgetBase => Fltk.Ref x -> r)
-    -> r
-  asWidget button f =
-    wrapped f button
 
 wrapped ::
      (Fltk.Ref Fltk.ButtonBase -> a)
