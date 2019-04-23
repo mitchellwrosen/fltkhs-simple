@@ -20,6 +20,7 @@ module Fltk.Group
   , labelType
   , output
   , parent
+  -- , resizable
   , selectionColor
   , tooltip
   , type_
@@ -55,7 +56,6 @@ module Fltk.Group
   , getChild
   , getH
   , getRectangle
-  , getResizable
   , getTopWindow
   , getTopWindowOffset
   , getVisibleR
@@ -78,8 +78,6 @@ module Fltk.Group
   , setClipChildren
   , setColorWithBgSel
   , setDamageInside
-  , setNotResizable
-  , setResizable
   , takeFocus
   , takesevents
   , updateChild
@@ -88,6 +86,7 @@ module Fltk.Group
 
 import Fltk.Internal.Types (Group(..), Image(..), Widget(..), Window(..))
 
+-- import qualified Fltk.Internal.Group  as Group
 import qualified Fltk.Internal.Widget as Widget
 
 import Data.Coerce   (coerce)
@@ -217,6 +216,16 @@ parent ::
   -> StateVar (Maybe Group)
 parent =
   wrapped Widget.parent
+
+{-
+https://github.com/deech/fltkhs/issues/119
+
+resizable ::
+     Group -- ^
+  -> StateVar (Maybe Widget)
+resizable =
+  wrapped Group.resizable
+-}
 
 selectionColor ::
      Group -- ^
@@ -441,12 +450,6 @@ getRectangle ::
 getRectangle =
   wrapped Fltk.getRectangle
 
-getResizable ::
-     Group -- ^
-  -> IO (Maybe Widget)
-getResizable =
-  coerce (wrapped Fltk.getResizable)
-
 getTopWindow ::
      Group -- ^
   -> IO (Maybe Window)
@@ -596,19 +599,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setNotResizable ::
-     Group -- ^
-  -> IO ()
-setNotResizable =
-  wrapped Fltk.setNotResizable
-
-setResizable ::
-     Group -- ^
-  -> Maybe Widget -- ^
-  -> IO ()
-setResizable group widget =
-  wrapped Fltk.setResizable group (coerce widget :: Maybe (Fltk.Ref Fltk.WidgetBase))
 
 takeFocus ::
      Group -- ^
