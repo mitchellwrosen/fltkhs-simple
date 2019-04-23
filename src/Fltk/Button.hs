@@ -13,6 +13,7 @@ module Fltk.Button
   , damage
   , deimage
   , flags
+  , image
   , label
   , labelColor
   , labelFont
@@ -39,7 +40,6 @@ module Fltk.Button
   , getDownBox
   , getDownColor
   , getH
-  , getImage
   , getLabeltype
   , getParent
   , getRectangle
@@ -64,7 +64,6 @@ module Fltk.Button
   , setDamageInside
   , setDownBox
   , setDownColor
-  , setImage
   , setLabeltype
   , setonly
   , setParent
@@ -74,7 +73,7 @@ module Fltk.Button
   , takesevents
   ) where
 
-import Fltk.Types.Internal (Button(..), Group(..), Image(..), Widget(..),
+import Fltk.Internal.Types (Button(..), Group(..), Image(..), Widget(..),
                             Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
@@ -200,6 +199,12 @@ flags ::
   -> StateVar [Fltk.WidgetFlag]
 flags =
   wrapped Widget.flags
+
+image ::
+     Button -- ^
+  -> StateVar (Maybe Image)
+image =
+  wrapped Widget.image
 
 label ::
      Button -- ^
@@ -363,12 +368,6 @@ getH ::
 getH =
   wrapped Fltk.getH
 
-getImage ::
-     Button -- ^
-  -> IO (Maybe Image)
-getImage =
-  coerce (wrapped Fltk.getImage)
-
 getLabeltype ::
      Button -- ^
   -> IO Fltk.Labeltype
@@ -523,13 +522,6 @@ setDownColor ::
   -> IO ()
 setDownColor =
   wrapped Fltk.setDownColor
-
-setImage ::
-     Button -- ^
-  -> Maybe Image -- ^
-  -> IO ()
-setImage button image =
-  wrapped Fltk.setImage button (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Button -- ^

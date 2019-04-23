@@ -2,4 +2,4 @@ module Fltk.Widget
   ( Widget
   ) where
 
-import Fltk.Types.Internal
+import Fltk.Internal.Types

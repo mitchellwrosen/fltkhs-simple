@@ -12,6 +12,7 @@ module Fltk.Group
   , damage
   , deimage
   , flags
+  , image
   , label
   , labelColor
   , labelFont
@@ -51,7 +52,6 @@ module Fltk.Group
   , getCallback
   , getChild
   , getH
-  , getImage
   , getLabeltype
   , getParent
   , getRectangle
@@ -78,7 +78,6 @@ module Fltk.Group
   , setClipChildren
   , setColorWithBgSel
   , setDamageInside
-  , setImage
   , setLabeltype
   , setNotResizable
   , setParent
@@ -89,7 +88,7 @@ module Fltk.Group
   , within
   ) where
 
-import Fltk.Types.Internal (Group(..), Image(..), Widget(..), Window(..))
+import Fltk.Internal.Types (Group(..), Image(..), Widget(..), Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
 
@@ -172,6 +171,12 @@ flags ::
   -> StateVar [Fltk.WidgetFlag]
 flags =
   wrapped Widget.flags
+
+image ::
+     Group -- ^
+  -> StateVar (Maybe Image)
+image =
+  wrapped Widget.image
 
 label ::
      Group -- ^
@@ -420,12 +425,6 @@ getH ::
 getH =
   wrapped Fltk.getH
 
-getImage ::
-     Group -- ^
-  -> IO (Maybe Image)
-getImage =
-  coerce (wrapped Fltk.getImage)
-
 getLabeltype ::
      Group -- ^
   -> IO Fltk.Labeltype
@@ -599,13 +598,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setImage ::
-     Group -- ^
-  -> Maybe Image -- ^
-  -> IO ()
-setImage group image =
-  wrapped Fltk.setImage group (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Group -- ^

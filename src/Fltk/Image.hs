@@ -2,4 +2,4 @@ module Fltk.Image
   ( Image
   ) where
 
-import Fltk.Types.Internal (Image)
+import Fltk.Internal.Types (Image)

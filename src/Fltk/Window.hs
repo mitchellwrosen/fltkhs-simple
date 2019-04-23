@@ -11,6 +11,7 @@ module Fltk.Window
   , damage
   , deimage
   , flags
+  , image
   , label
   , labelColor
   , labelFont
@@ -60,7 +61,6 @@ module Fltk.Window
   , getH
   , getIcon
   , getIconlabel
-  , getImage
   , getLabeltype
   , getMenuWindow
   , getModal
@@ -106,7 +106,6 @@ module Fltk.Window
   , setDefaultCursorWithFgBg
   , setIcon
   , setIconlabel
-  , setImage
   , setLabeltype
   , setLabelWithIconlabel
   , setMenuWindow
@@ -128,7 +127,7 @@ module Fltk.Window
   , within
   ) where
 
-import Fltk.Types.Internal (Group(..), Image(..), Widget(..), Window(..))
+import Fltk.Internal.Types (Group(..), Image(..), Widget(..), Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
 
@@ -222,6 +221,12 @@ flags ::
   -> StateVar [Fltk.WidgetFlag]
 flags =
   wrapped Widget.flags
+
+image ::
+     Window -- ^
+  -> StateVar (Maybe Image)
+image =
+  wrapped Widget.image
 
 label ::
      Window -- ^
@@ -532,12 +537,6 @@ getIconlabel ::
 getIconlabel =
   wrapped Fltk.getIconlabel
 
-getImage ::
-     Window -- ^
-  -> IO (Maybe Image)
-getImage =
-  coerce (wrapped Fltk.getImage)
-
 getLabeltype ::
      Window -- ^
   -> IO Fltk.Labeltype
@@ -839,13 +838,6 @@ setIconlabel ::
   -> IO ()
 setIconlabel =
   wrapped Fltk.setIconlabel
-
-setImage ::
-     Window -- ^
-  -> Maybe Image -- ^
-  -> IO ()
-setImage window image =
-  wrapped Fltk.setImage window (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Window -- ^

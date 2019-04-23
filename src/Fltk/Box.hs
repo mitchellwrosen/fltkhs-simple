@@ -12,6 +12,7 @@ module Fltk.Box
   , damage
   , deimage
   , flags
+  , image
   , label
   , labelColor
   , labelFont
@@ -36,7 +37,6 @@ module Fltk.Box
   , drawLabel
   , getCallback
   , getH
-  , getImage
   , getLabeltype
   , getParent
   , getRectangle
@@ -57,14 +57,13 @@ module Fltk.Box
   , setCallback
   , setColorWithBgSel
   , setDamageInside
-  , setImage
   , setLabeltype
   , setParent
   , takeFocus
   , takesevents
   ) where
 
-import Fltk.Types.Internal (Box(..), Group(..), Image(..), Widget(..),
+import Fltk.Internal.Types (Box(..), Group(..), Image(..), Widget(..),
                             Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
@@ -149,6 +148,12 @@ flags ::
   -> StateVar [Fltk.WidgetFlag]
 flags =
   wrapped Widget.flags
+
+image ::
+     Box -- ^
+  -> StateVar (Maybe Image)
+image =
+  wrapped Widget.image
 
 label ::
      Box -- ^
@@ -301,12 +306,6 @@ getH ::
 getH =
   wrapped Fltk.getH
 
-getImage ::
-     Box -- ^
-  -> IO (Maybe Image)
-getImage =
-  coerce (wrapped Fltk.getImage)
-
 getLabeltype ::
      Box -- ^
   -> IO Fltk.Labeltype
@@ -435,13 +434,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setImage ::
-     Box -- ^
-  -> Maybe Image -- ^
-  -> IO ()
-setImage box image =
-  wrapped Fltk.setImage box (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setLabeltype ::
      Box -- ^

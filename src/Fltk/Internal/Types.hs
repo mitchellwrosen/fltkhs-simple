@@ -2,9 +2,9 @@
 
 {-# OPTIONS_GHC -fno-warn-missing-export-lists #-}
 
-module Fltk.Types.Internal where
+module Fltk.Internal.Types where
 
-import Fltk
+import Fltk.Internal.Upcast (Upcast(..))
 
 import Data.Coerce (coerce)
 

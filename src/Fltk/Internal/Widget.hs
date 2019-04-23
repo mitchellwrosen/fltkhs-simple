@@ -7,6 +7,7 @@ module Fltk.Internal.Widget
   , damage
   , deimage
   , flags
+  , image
   , label
   , labelColor
   , labelFont
@@ -20,7 +21,7 @@ module Fltk.Internal.Widget
   , when
   ) where
 
-import Fltk.Types.Internal (Image(..))
+import Fltk.Internal.Types (Image(..))
 
 import Data.Coerce   (coerce)
 import Data.Foldable (traverse_)
@@ -142,6 +143,19 @@ flags x =
       oldFlags :: [Fltk.WidgetFlag] <- Fltk.flags x
       traverse_ (Fltk.clearFlag x :: Fltk.WidgetFlag -> IO ()) oldFlags
       traverse_ (Fltk.setFlag x :: Fltk.WidgetFlag -> IO ()) newFlags)
+
+image ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetImage ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetImage ())
+     , Fltk.Op (Fltk.GetImage ()) r a (IO (Maybe (Fltk.Ref Fltk.Image)))
+     , Fltk.Op (Fltk.SetImage ()) s a (Maybe (Fltk.Ref Fltk.Image) -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar (Maybe Image)
+image x =
+  makeStateVar
+    (coerce @(IO (Maybe (Fltk.Ref Fltk.Image))) (Fltk.getImage x))
+    (coerce @(Maybe (Fltk.Ref Fltk.Image) -> IO ()) (Fltk.setImage x))
 
 label ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabel ())

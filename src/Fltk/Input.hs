@@ -12,6 +12,7 @@ module Fltk.Input
   , damage
   , deimage
   , flags
+  , image
   , label
   , labelColor
   , labelFont
@@ -43,7 +44,6 @@ module Fltk.Input
   , getCallback
   , getCursorColor
   , getH
-  , getImage
   , getInputType
   , getLabeltype
   , getMark
@@ -84,7 +84,6 @@ module Fltk.Input
   , setColorWithBgSel
   , setCursorColor
   , setDamageInside
-  , setImage
   , setInputType
   , setLabeltype
   , setMark
@@ -106,7 +105,7 @@ module Fltk.Input
   , undo
   ) where
 
-import Fltk.Types.Internal (Group(..), Image(..), Input(..), Widget(..),
+import Fltk.Internal.Types (Group(..), Image(..), Input(..), Widget(..),
                             Window(..))
 
 import qualified Fltk.Internal.Widget as Widget
@@ -192,6 +191,12 @@ flags ::
   -> StateVar [Fltk.WidgetFlag]
 flags =
   wrapped Widget.flags
+
+image ::
+     Input -- ^
+  -> StateVar (Maybe Image)
+image =
+  wrapped Widget.image
 
 label ::
      Input -- ^
@@ -392,12 +397,6 @@ getH ::
   -> IO Fltk.Height
 getH =
   wrapped Fltk.getH
-
-getImage ::
-     Input -- ^
-  -> IO (Maybe Image)
-getImage =
-  coerce (wrapped Fltk.getImage)
 
 getInputType ::
      Input -- ^
@@ -655,13 +654,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setImage ::
-     Input -- ^
-  -> Maybe Image -- ^
-  -> IO ()
-setImage input image =
-  wrapped Fltk.setImage input (coerce image :: Maybe (Fltk.Ref Fltk.Image))
 
 setInputType ::
      Input -- ^
