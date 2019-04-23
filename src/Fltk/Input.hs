@@ -10,6 +10,7 @@ module Fltk.Input
   , changed
   , color
   , damage
+  , flags
   , label
   , labelColor
   , labelFont
@@ -22,9 +23,6 @@ module Fltk.Input
   , when
     -- ** Functions
   , activeR
-  , clearDamage
-  , clearDamageThenSet
-  , clearFlag
   , clearOutput
   , contains
   , copy
@@ -41,7 +39,6 @@ module Fltk.Input
   , drawFocus
   , drawLabel
   , drawText
-  , flags
   , getCallback
   , getCursorColor
   , getDeimage
@@ -89,7 +86,6 @@ module Fltk.Input
   , setCursorColor
   , setDamageInside
   , setDeimage
-  , setFlag
   , setImage
   , setInputType
   , setLabeltype
@@ -188,6 +184,12 @@ damage ::
 damage =
   wrapped Widget.damage
 
+flags ::
+     Input -- ^
+  -> StateVar [Fltk.WidgetFlag]
+flags =
+  wrapped Widget.flags
+
 label ::
      Input -- ^
   -> StateVar Text
@@ -259,26 +261,6 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
-
-clearDamage ::
-     Input -- ^
-  -> IO ()
-clearDamage =
-  wrapped Fltk.clearDamage
-
-clearDamageThenSet ::
-     Input -- ^
-  -> [Fltk.Damage]
-  -> IO ()
-clearDamageThenSet =
-  wrapped Fltk.clearDamageThenSet
-
-clearFlag ::
-     Input -- ^
-  -> Fltk.WidgetFlag
-  -> IO ()
-clearFlag =
-  wrapped Fltk.clearFlag
 
 clearOutput ::
      Input -- ^
@@ -390,12 +372,6 @@ drawLabel ::
   -> IO ()
 drawLabel =
   wrapped Fltk.drawLabel
-
-flags ::
-     Input -- ^
-  -> IO [Fltk.WidgetFlag]
-flags =
-  wrapped Fltk.flags
 
 getCallback ::
      Input -- ^
@@ -701,13 +677,6 @@ setDeimage input = \case
     wrapped Fltk.setDeimage input (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
     asImage image (\ref -> wrapped Fltk.setDeimage input (Just ref))
-
-setFlag ::
-     Input -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-setFlag =
-  wrapped Fltk.setFlag
 
 setImage ::
      IsImage image

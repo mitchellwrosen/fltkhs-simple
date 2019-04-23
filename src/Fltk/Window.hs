@@ -10,6 +10,7 @@ module Fltk.Window
   , changed
   , color
   , damage
+  , flags
   , label
   , labelColor
   , labelFont
@@ -28,9 +29,6 @@ module Fltk.Window
   , children
   , clear
   , clearBorder
-  , clearDamage
-  , clearDamageThenSet
-  , clearFlag
   , clearOutput
   , clipChildren
   , contains
@@ -49,7 +47,6 @@ module Fltk.Window
   , drawOutsideLabel
   , end
   , find
-  , flags
   , flush
   , focus
   , freePosition
@@ -110,7 +107,6 @@ module Fltk.Window
   , setDefaultCursor
   , setDefaultCursorWithFgBg
   , setDeimage
-  , setFlag
   , setIcon
   , setIconlabel
   , setImage
@@ -219,6 +215,12 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Widget.damage
+
+flags ::
+     Window -- ^
+  -> StateVar [Fltk.WidgetFlag]
+flags =
+  wrapped Widget.flags
 
 label ::
      Window -- ^
@@ -330,26 +332,6 @@ clearBorder ::
   -> IO ()
 clearBorder =
   wrapped Fltk.clearBorder
-
-clearDamage ::
-     Window -- ^
-  -> IO ()
-clearDamage =
-  wrapped Fltk.clearDamage
-
-clearDamageThenSet ::
-     Window -- ^
-  -> [Fltk.Damage] -- ^
-  -> IO ()
-clearDamageThenSet =
-  wrapped Fltk.clearDamageThenSet
-
-clearFlag ::
-     Window -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-clearFlag =
-  wrapped Fltk.clearFlag
 
 clearOutput ::
      Window -- ^
@@ -473,12 +455,6 @@ find ::
   -> IO Fltk.AtIndex
 find window widget =
   asWidget widget (wrapped Fltk.find window)
-
-flags ::
-     Window -- ^
-  -> IO [Fltk.WidgetFlag]
-flags =
-  wrapped Fltk.flags
 
 flush ::
      Window -- ^
@@ -881,13 +857,6 @@ setDeimage box = \case
     wrapped Fltk.setDeimage box (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
     asImage image (\ref -> wrapped Fltk.setDeimage box (Just ref))
-
-setFlag ::
-     Window -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-setFlag =
-  wrapped Fltk.setFlag
 
 setIcon ::
      IsImage image

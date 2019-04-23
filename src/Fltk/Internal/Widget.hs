@@ -5,6 +5,7 @@ module Fltk.Internal.Widget
   , changed
   , color
   , damage
+  , flags
   , label
   , labelColor
   , labelFont
@@ -17,10 +18,12 @@ module Fltk.Internal.Widget
   , when
   ) where
 
+import Data.Foldable (traverse_)
 import Data.StateVar (StateVar, makeStateVar)
 import Data.Text     (Text)
 import Data.Word     (Word8)
 
+import qualified Graphics.UI.FLTK.LowLevel.Base.Widget     as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
@@ -96,14 +99,32 @@ color x =
 
 damage ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetDamage ())
-     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetDamage ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.ClearDamageThenSet ())
      , Fltk.Op (Fltk.GetDamage ()) r a (IO [Fltk.Damage])
-     , Fltk.Op (Fltk.SetDamage ()) s a ([Fltk.Damage] -> IO ())
+     , Fltk.Op (Fltk.ClearDamageThenSet ()) s a ([Fltk.Damage] -> IO ())
      )
   => Fltk.Ref a
   -> StateVar [Fltk.Damage]
 damage x =
-  makeStateVar (Fltk.getDamage x) (Fltk.setDamage x)
+  makeStateVar (Fltk.getDamage x) (Fltk.clearDamageThenSet x)
+
+flags ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.Flags ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.ClearFlag ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.SetFlag ())
+     , Fltk.Op (Fltk.Flags ()) r a (IO [Fltk.WidgetFlag])
+     , Fltk.Op (Fltk.ClearFlag ()) s a (Fltk.WidgetFlag -> IO ())
+     , Fltk.Op (Fltk.SetFlag ()) t a (Fltk.WidgetFlag -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar [Fltk.WidgetFlag]
+flags x =
+  makeStateVar
+    (Fltk.flags x)
+    (\newFlags -> do
+      oldFlags :: [Fltk.WidgetFlag] <- Fltk.flags x
+      traverse_ (Fltk.clearFlag x :: Fltk.WidgetFlag -> IO ()) oldFlags
+      traverse_ (Fltk.setFlag x :: Fltk.WidgetFlag -> IO ()) newFlags)
 
 label ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabel ())

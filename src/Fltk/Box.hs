@@ -10,6 +10,7 @@ module Fltk.Box
   , changed
   , color
   , damage
+  , flags
   , label
   , labelColor
   , labelFont
@@ -22,9 +23,6 @@ module Fltk.Box
   , when
     -- ** Functions
   , activeR
-  , clearDamage
-  , clearDamageThenSet
-  , clearFlag
   , clearOutput
   , contains
   , copyTooltip
@@ -35,7 +33,6 @@ module Fltk.Box
   , drawBoxWithBoxtype
   , drawFocus
   , drawLabel
-  , flags
   , getCallback
   , getDeimage
   , getH
@@ -62,7 +59,6 @@ module Fltk.Box
   , setColorWithBgSel
   , setDamageInside
   , setDeimage
-  , setFlag
   , setImage
   , setLabeltype
   , setOutput
@@ -145,6 +141,12 @@ damage ::
 damage =
   wrapped Widget.damage
 
+flags ::
+     Box -- ^
+  -> StateVar [Fltk.WidgetFlag]
+flags =
+  wrapped Widget.flags
+
 label ::
      Box -- ^
   -> StateVar Text
@@ -216,26 +218,6 @@ activeR ::
 activeR =
   wrapped Fltk.activeR
 
-clearDamage ::
-     Box -- ^
-  -> IO ()
-clearDamage =
-  wrapped Fltk.clearDamage
-
-clearDamageThenSet ::
-     Box -- ^
-  -> [Fltk.Damage] -- ^
-  -> IO ()
-clearDamageThenSet =
-  wrapped Fltk.clearDamageThenSet
-
-clearFlag ::
-     Box -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-clearFlag =
-  wrapped Fltk.clearFlag
-
 clearOutput ::
      Box -- ^
   -> IO ()
@@ -303,12 +285,6 @@ drawLabel ::
   -> IO ()
 drawLabel =
   wrapped Fltk.drawLabel
-
-flags ::
-     Box -- ^
-  -> IO [Fltk.WidgetFlag]
-flags =
-  wrapped Fltk.flags
 
 getCallback ::
      Box -- ^
@@ -480,13 +456,6 @@ setDeimage box = \case
     wrapped Fltk.setDeimage box (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
     asImage image (\ref -> wrapped Fltk.setDeimage box (Just ref))
-
-setFlag ::
-     Box -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-setFlag =
-  wrapped Fltk.setFlag
 
 setImage ::
      IsImage image

@@ -11,6 +11,7 @@ module Fltk.Group
   , changed
   , color
   , damage
+  , flags
   , label
   , labelColor
   , labelFont
@@ -28,9 +29,6 @@ module Fltk.Group
   , begin
   , children
   , clear
-  , clearDamage
-  , clearDamageThenSet
-  , clearFlag
   , clearOutput
   , clipChildren
   , contains
@@ -48,7 +46,6 @@ module Fltk.Group
   , drawOutsideLabel
   , end
   , find
-  , flags
   , focus
   , getArray
   , getCallback
@@ -84,7 +81,6 @@ module Fltk.Group
   , setColorWithBgSel
   , setDamageInside
   , setDeimage
-  , setFlag
   , setImage
   , setLabeltype
   , setNotResizable
@@ -169,6 +165,12 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Widget.damage
+
+flags ::
+     Group -- ^
+  -> StateVar [Fltk.WidgetFlag]
+flags =
+  wrapped Widget.flags
 
 label ::
      Group -- ^
@@ -274,26 +276,6 @@ clear ::
   -> IO ()
 clear =
   wrapped Fltk.clear
-
-clearDamage ::
-     Group -- ^
-  -> IO ()
-clearDamage =
-  wrapped Fltk.clearDamage
-
-clearDamageThenSet ::
-     Group -- ^
-  -> [Fltk.Damage] -- ^
-  -> IO ()
-clearDamageThenSet =
-  wrapped Fltk.clearDamageThenSet
-
-clearFlag ::
-     Group -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-clearFlag =
-  wrapped Fltk.clearFlag
 
 clearOutput ::
      Group -- ^
@@ -410,12 +392,6 @@ find ::
   -> IO Fltk.AtIndex
 find group widget =
   asWidget widget (wrapped Fltk.find group)
-
-flags ::
-     Group -- ^
-  -> IO [Fltk.WidgetFlag]
-flags =
-  wrapped Fltk.flags
 
 focus ::
      IsWidget widget
@@ -655,13 +631,6 @@ setDeimage group = \case
     wrapped Fltk.setDeimage group (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
     asImage image (\ref -> wrapped Fltk.setDeimage group (Just ref))
-
-setFlag ::
-     Group -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-setFlag =
-  wrapped Fltk.setFlag
 
 setImage ::
      IsImage image

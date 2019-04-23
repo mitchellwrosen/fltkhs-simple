@@ -11,6 +11,7 @@ module Fltk.Button
   , changed
   , color
   , damage
+  , flags
   , label
   , labelColor
   , labelFont
@@ -23,9 +24,6 @@ module Fltk.Button
   , when
     -- ** Functions
   , activeR
-  , clearDamage
-  , clearDamageThenSet
-  , clearFlag
   , clearOutput
   , contains
   , copyTooltip
@@ -36,7 +34,6 @@ module Fltk.Button
   , drawBoxWithBoxtype
   , drawFocus
   , drawLabel
-  , flags
   , getCallback
   , getDeimage
   , getDownBox
@@ -69,7 +66,6 @@ module Fltk.Button
   , setDeimage
   , setDownBox
   , setDownColor
-  , setFlag
   , setImage
   , setLabeltype
   , setonly
@@ -196,6 +192,12 @@ damage ::
 damage =
   wrapped Widget.damage
 
+flags ::
+     Button -- ^
+  -> StateVar [Fltk.WidgetFlag]
+flags =
+  wrapped Widget.flags
+
 label ::
      Button -- ^
   -> StateVar Text
@@ -267,26 +269,6 @@ activeR ::
 activeR =
   wrapped Fltk.activeR
 
-clearDamage ::
-     Button -- ^
-  -> IO ()
-clearDamage =
-  wrapped Fltk.clearDamage
-
-clearDamageThenSet ::
-     Button -- ^
-  -> [Fltk.Damage]
-  -> IO ()
-clearDamageThenSet =
-  wrapped Fltk.clearDamageThenSet
-
-clearFlag ::
-     Button -- ^
-  -> Fltk.WidgetFlag
-  -> IO ()
-clearFlag =
-  wrapped Fltk.clearFlag
-
 clearOutput ::
      Button -- ^
   -> IO ()
@@ -354,12 +336,6 @@ drawLabel ::
   -> IO ()
 drawLabel =
   wrapped Fltk.drawLabel
-
-flags ::
-     Button -- ^
-  -> IO [Fltk.WidgetFlag]
-flags =
-  wrapped Fltk.flags
 
 getCallback ::
      Button -- ^
@@ -569,13 +545,6 @@ setDownColor ::
   -> IO ()
 setDownColor =
   wrapped Fltk.setDownColor
-
-setFlag ::
-     Button -- ^
-  -> Fltk.WidgetFlag -- ^
-  -> IO ()
-setFlag =
-  wrapped Fltk.setFlag
 
 setImage ::
      IsImage image

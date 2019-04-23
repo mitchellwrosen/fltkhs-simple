@@ -15,6 +15,7 @@ library
     InstanceSigs
     LambdaCase
     RankNTypes
+    ScopedTypeVariables
     TypeApplications
     TypeFamilies
 
