@@ -104,10 +104,8 @@ module Fltk.Button
   , takesevents
   ) where
 
-import Fltk.Group.Internal  (Group(..), IsGroup(..))
-import Fltk.Image.Internal  (Image(..), IsImage(..))
-import Fltk.Widget.Internal (IsWidget(..))
-import Fltk.Window.Internal (Window(..))
+import Fltk.Types.Internal (Group(..), Image(..), IsGroup(..), IsImage(..),
+                            IsWidget(..), Window(..))
 
 import Data.Coerce (coerce)
 import Data.Text   (Text)
@@ -123,7 +121,7 @@ import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 
 
 newtype Button
-  = Button { unButton :: Fltk.Ref Fltk.Button }
+  = Button { unButton :: Fltk.Ref Fltk.ButtonBase }
 
 instance IsWidget Button where
   asWidget ::
@@ -131,10 +129,10 @@ instance IsWidget Button where
     -> (forall x. Fltk.Parent x Fltk.WidgetBase => Fltk.Ref x -> r)
     -> r
   asWidget button f =
-    f (unButton button)
+    wrapped f button
 
 wrapped ::
-     (Fltk.Ref Fltk.Button -> a)
+     (Fltk.Ref Fltk.ButtonBase -> a)
   -> Button
   -> a
 wrapped =
@@ -145,7 +143,7 @@ new ::
   -> Text -- ^
   -> IO Button
 new bounds label =
-  Button <$> Fltk.buttonNew bounds (Just label)
+  Button . Fltk.safeCast <$> Fltk.buttonNew bounds (Just label)
 
 activate ::
      Button -- ^
@@ -233,7 +231,7 @@ contains ::
   -> widget -- ^
   -> IO Bool
 contains button widget =
-  asWidget widget (Fltk.contains (unButton button))
+  asWidget widget (wrapped Fltk.contains button)
 
 copyTooltip ::
      Button -- ^
@@ -530,7 +528,7 @@ inside ::
   -> widget -- ^
   -> IO Bool
 inside button widget =
-  asWidget widget (Fltk.inside (unButton button))
+  asWidget widget (wrapped Fltk.inside button)
 
 measureLabel ::
      Button -- ^
@@ -596,7 +594,7 @@ setCallback ::
   -> (Button -> IO ()) -- ^
   -> IO ()
 setCallback button callback =
-  Fltk.setCallback (unButton button) (coerce callback)
+  wrapped Fltk.setCallback button (coerce callback)
 
 setChanged ::
      Button  -- ^
@@ -641,9 +639,9 @@ setDeimage ::
   -> IO ()
 setDeimage button = \case
   Nothing ->
-    Fltk.setDeimage (unButton button) (Nothing @(Fltk.Ref Fltk.Image))
+    wrapped Fltk.setDeimage button (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
-    asImage image (\ref -> Fltk.setDeimage (unButton button) (Just ref))
+    asImage image (\ref -> wrapped Fltk.setDeimage button (Just ref))
 
 setDownBox ::
      Button -- ^
@@ -673,9 +671,9 @@ setImage ::
   -> IO ()
 setImage button = \case
   Nothing ->
-    Fltk.setImage (unButton button) (Nothing @(Fltk.Ref Fltk.Image))
+    wrapped Fltk.setImage button (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
-    asImage image (\ref -> Fltk.setImage (unButton button) (Just ref))
+    asImage image (\ref -> wrapped Fltk.setImage button (Just ref))
 
 setLabel ::
      Button -- ^
@@ -732,9 +730,9 @@ setParent ::
   -> IO ()
 setParent button = \case
   Nothing ->
-    Fltk.setParent (unButton button) (Nothing @(Fltk.Ref Fltk.GroupBase))
+    wrapped Fltk.setParent button (Nothing @(Fltk.Ref Fltk.GroupBase))
   Just group ->
-    asGroup group (\ref -> Fltk.setParent (unButton button) (Just ref))
+    asGroup group (\ref -> wrapped Fltk.setParent button (Just ref))
 
 setSelectionColor ::
      Button -- ^

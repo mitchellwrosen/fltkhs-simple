@@ -29,6 +29,20 @@ library
     Fltk.Widget
     Fltk.Window
 
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wmissing-export-lists
+    -Wpartial-fields
+    -Wredundant-constraints
+    -fhide-source-paths
+    -fno-warn-name-shadowing
+    -fprint-explicit-foralls
+    -fprint-unicode-syntax
+
   hs-source-dirs:
     src
 
@@ -36,6 +50,7 @@ library
     Fltk.Box.Internal
     Fltk.Group.Internal
     Fltk.Image.Internal
+    Fltk.Types.Internal
     Fltk.Widget.Internal
     Fltk.Window.Internal
 

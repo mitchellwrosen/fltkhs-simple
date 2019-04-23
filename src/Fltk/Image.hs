@@ -3,4 +3,4 @@ module Fltk.Image
   , IsImage
   ) where
 
-import Fltk.Image.Internal
+import Fltk.Types.Internal (Image, IsImage)

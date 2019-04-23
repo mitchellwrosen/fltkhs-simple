@@ -1,9 +1,7 @@
 module Fltk.Box.Internal where
 
-import Fltk.Group.Internal  (Group(..), IsGroup(..))
-import Fltk.Image.Internal  (Image(..), IsImage(..))
-import Fltk.Widget.Internal (IsWidget(..))
-import Fltk.Window.Internal (Window(..))
+import Fltk.Types.Internal (Box(..), Group(..), Image(..), IsGroup(..),
+                            IsImage(..), IsWidget(..), Window(..))
 
 import Data.Coerce (coerce)
 import Data.Text   (Text)
@@ -16,9 +14,6 @@ import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 
-
-newtype Box
-  = Box { unBox :: Fltk.Ref Fltk.Box }
 
 new ::
      Fltk.Boxtype
@@ -115,7 +110,7 @@ contains ::
   -> widget
   -> IO Bool
 contains box widget =
-  asWidget widget (Fltk.contains (unBox box))
+  asWidget widget (wrapped Fltk.contains box)
 
 copyTooltip ::
      Box
@@ -388,7 +383,7 @@ inside ::
   -> widget
   -> IO Bool
 inside box widget =
-  asWidget widget (Fltk.inside (unBox box))
+  asWidget widget (wrapped Fltk.inside box)
 
 measureLabel ::
      Box
@@ -448,7 +443,7 @@ setCallback ::
   -> (Box -> IO ())
   -> IO ()
 setCallback box callback =
-  Fltk.setCallback (unBox box) (coerce callback)
+  wrapped Fltk.setCallback box (coerce callback)
 
 setChanged ::
      Box
@@ -493,9 +488,9 @@ setDeimage ::
   -> IO ()
 setDeimage box = \case
   Nothing ->
-    Fltk.setDeimage (unBox box) (Nothing @(Fltk.Ref Fltk.Image))
+    wrapped Fltk.setDeimage box (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
-    asImage image (\ref -> Fltk.setDeimage (unBox box) (Just ref))
+    asImage image (\ref -> wrapped Fltk.setDeimage box (Just ref))
 
 setFlag ::
      Box
@@ -511,9 +506,9 @@ setImage ::
   -> IO ()
 setImage box = \case
   Nothing ->
-    Fltk.setImage (unBox box) (Nothing @(Fltk.Ref Fltk.Image))
+    wrapped Fltk.setImage box (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
-    asImage image (\ref -> Fltk.setImage (unBox box) (Just ref))
+    asImage image (\ref -> wrapped Fltk.setImage box (Just ref))
 
 setLabel ::
      Box
@@ -564,9 +559,9 @@ setParent ::
   -> IO ()
 setParent box = \case
   Nothing ->
-    Fltk.setParent (unBox box) (Nothing @(Fltk.Ref Fltk.GroupBase))
+    wrapped Fltk.setParent box (Nothing @(Fltk.Ref Fltk.GroupBase))
   Just group ->
-    asGroup group (\ref -> Fltk.setParent (unBox box) (Just ref))
+    asGroup group (\ref -> wrapped Fltk.setParent box (Just ref))
 
 setSelectionColor ::
      Box

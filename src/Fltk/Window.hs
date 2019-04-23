@@ -160,4 +160,5 @@ module Fltk.Window
   , within
   ) where
 
+import Fltk.Types.Internal  (Window)
 import Fltk.Window.Internal

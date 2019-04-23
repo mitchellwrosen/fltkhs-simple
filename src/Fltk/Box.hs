@@ -94,3 +94,4 @@ module Fltk.Box
   ) where
 
 import Fltk.Box.Internal
+import Fltk.Types.Internal (Box)
