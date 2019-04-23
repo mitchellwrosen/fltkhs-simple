@@ -7,6 +7,7 @@ module Fltk.Window
   , active
   , align
   , box
+  , changed
   , color
   , damage
   , label
@@ -24,11 +25,9 @@ module Fltk.Window
   , add
   , addResizable
   , begin
-  , changed
   , children
   , clear
   , clearBorder
-  , clearChanged
   , clearDamage
   , clearDamageThenSet
   , clearFlag
@@ -103,7 +102,6 @@ module Fltk.Window
   , resize
   , setBorder
   , setCallback
-  , setChanged
   , setClipChildren
   , setColorWithBgSel
   , setCursor
@@ -203,6 +201,12 @@ box ::
   -> StateVar Fltk.Boxtype
 box =
   wrapped Widget.box
+
+changed ::
+     Window -- ^
+  -> StateVar Bool
+changed =
+  wrapped Widget.changed
 
 color ::
      Window -- ^
@@ -309,12 +313,6 @@ begin ::
 begin =
   wrapped Fltk.begin
 
-changed ::
-     Window -- ^
-  -> IO Bool
-changed =
-  wrapped Fltk.changed
-
 children ::
      Window -- ^
   -> IO Int
@@ -332,12 +330,6 @@ clearBorder ::
   -> IO ()
 clearBorder =
   wrapped Fltk.clearBorder
-
-clearChanged ::
-     Window -- ^
-  -> IO ()
-clearChanged =
-  wrapped Fltk.clearChanged
 
 clearDamage ::
      Window -- ^
@@ -825,12 +817,6 @@ setCallback ::
   -> IO ()
 setCallback box callback =
   wrapped Fltk.setCallback box (coerce callback)
-
-setChanged ::
-     Window -- ^
-  -> IO ()
-setChanged =
-  wrapped Fltk.setChanged
 
 setClipChildren ::
      Window -- ^

@@ -7,6 +7,7 @@ module Fltk.Box
   , active
   , align
   , box
+  , changed
   , color
   , damage
   , label
@@ -21,8 +22,6 @@ module Fltk.Box
   , when
     -- ** Functions
   , activeR
-  , changed
-  , clearChanged
   , clearDamage
   , clearDamageThenSet
   , clearFlag
@@ -60,7 +59,6 @@ module Fltk.Box
   , redrawLabel
   , resize
   , setCallback
-  , setChanged
   , setColorWithBgSel
   , setDamageInside
   , setDeimage
@@ -128,6 +126,12 @@ box ::
   -> StateVar Fltk.Boxtype
 box =
   wrapped Widget.box
+
+changed ::
+     Box -- ^
+  -> StateVar Bool
+changed =
+  wrapped Widget.changed
 
 color ::
      Box -- ^
@@ -211,18 +215,6 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
-
-changed ::
-     Box -- ^
-  -> IO Bool
-changed =
-  wrapped Fltk.changed
-
-clearChanged ::
-     Box -- ^
-  -> IO ()
-clearChanged =
-  wrapped Fltk.clearChanged
 
 clearDamage ::
      Box -- ^
@@ -461,12 +453,6 @@ setCallback ::
   -> IO ()
 setCallback box callback =
   wrapped Fltk.setCallback box (coerce callback)
-
-setChanged ::
-     Box -- ^
-  -> IO ()
-setChanged =
-  wrapped Fltk.setChanged
 
 setColorWithBgSel ::
      Box -- ^

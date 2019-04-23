@@ -7,6 +7,7 @@ module Fltk.Input
   , active
   , align
   , box
+  , changed
   , color
   , damage
   , label
@@ -21,8 +22,6 @@ module Fltk.Input
   , when
     -- ** Functions
   , activeR
-  , changed
-  , clearChanged
   , clearDamage
   , clearDamageThenSet
   , clearFlag
@@ -86,7 +85,6 @@ module Fltk.Input
   , resize
   , setAlign
   , setCallback
-  , setChanged
   , setColorWithBgSel
   , setCursorColor
   , setDamageInside
@@ -172,6 +170,12 @@ box ::
 box =
   wrapped Widget.box
 
+changed ::
+     Input -- ^
+  -> StateVar Bool
+changed =
+  wrapped Widget.changed
+
 color ::
      Input -- ^
   -> StateVar Fltk.Color
@@ -255,18 +259,6 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
-
-changed ::
-     Input -- ^
-  -> IO Bool
-changed =
-  wrapped Fltk.changed
-
-clearChanged ::
-     Input -- ^
-  -> IO ()
-clearChanged =
-  wrapped Fltk.clearChanged
 
 clearDamage ::
      Input -- ^
@@ -675,12 +667,6 @@ setCallback ::
   -> IO ()
 setCallback input callback =
   wrapped Fltk.setCallback input (coerce callback)
-
-setChanged ::
-     Input  -- ^
-  -> IO ()
-setChanged =
-  wrapped Fltk.setChanged
 
 setColorWithBgSel ::
      Input -- ^

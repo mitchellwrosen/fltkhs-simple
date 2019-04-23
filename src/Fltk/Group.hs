@@ -8,6 +8,7 @@ module Fltk.Group
   , active
   , align
   , box
+  , changed
   , color
   , damage
   , label
@@ -25,10 +26,8 @@ module Fltk.Group
   , add
   , addResizable
   , begin
-  , changed
   , children
   , clear
-  , clearChanged
   , clearDamage
   , clearDamageThenSet
   , clearFlag
@@ -153,6 +152,12 @@ box ::
 box =
   wrapped Widget.box
 
+changed ::
+     Group -- ^
+  -> StateVar Bool
+changed =
+  wrapped Widget.changed
+
 color ::
      Group -- ^
   -> StateVar Fltk.Color
@@ -258,12 +263,6 @@ begin ::
 begin =
   wrapped Fltk.begin
 
-changed ::
-     Group -- ^
-  -> IO Bool
-changed =
-  wrapped Fltk.changed
-
 children ::
      Group -- ^
   -> IO Int
@@ -275,12 +274,6 @@ clear ::
   -> IO ()
 clear =
   wrapped Fltk.clear
-
-clearChanged ::
-     Group -- ^
-  -> IO ()
-clearChanged =
-  wrapped Fltk.clearChanged
 
 clearDamage ::
      Group -- ^

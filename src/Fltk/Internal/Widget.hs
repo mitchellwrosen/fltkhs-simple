@@ -2,6 +2,7 @@ module Fltk.Internal.Widget
   ( active
   , align
   , box
+  , changed
   , color
   , damage
   , label
@@ -64,6 +65,23 @@ box ::
   -> StateVar Fltk.Boxtype
 box x =
   makeStateVar (Fltk.getBox x) (Fltk.setBox x)
+
+changed ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.Changed ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetChanged ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.ClearChanged ())
+     , Fltk.Op (Fltk.Changed ()) r a (IO Bool)
+     , Fltk.Op (Fltk.SetChanged ()) s a (IO ())
+     , Fltk.Op (Fltk.ClearChanged ()) t a (IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+changed x =
+  makeStateVar
+    (Fltk.changed x)
+    (\case
+      False -> Fltk.clearChanged x
+      True -> Fltk.setChanged x)
 
 color ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetColor ())

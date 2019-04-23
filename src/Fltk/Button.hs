@@ -8,6 +8,7 @@ module Fltk.Button
   , active
   , align
   , box
+  , changed
   , color
   , damage
   , label
@@ -22,8 +23,6 @@ module Fltk.Button
   , when
     -- ** Functions
   , activeR
-  , changed
-  , clearChanged
   , clearDamage
   , clearDamageThenSet
   , clearFlag
@@ -65,7 +64,6 @@ module Fltk.Button
   , redrawLabel
   , resize
   , setCallback
-  , setChanged
   , setColorWithBgSel
   , setDamageInside
   , setDeimage
@@ -180,6 +178,12 @@ box ::
 box =
   wrapped Widget.box
 
+changed ::
+     Button -- ^
+  -> StateVar Bool
+changed =
+  wrapped Widget.changed
+
 color ::
      Button -- ^
   -> StateVar Fltk.Color
@@ -262,18 +266,6 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
-
-changed ::
-     Button -- ^
-  -> IO Bool
-changed =
-  wrapped Fltk.changed
-
-clearChanged ::
-     Button -- ^
-  -> IO ()
-clearChanged =
-  wrapped Fltk.clearChanged
 
 clearDamage ::
      Button -- ^
@@ -536,12 +528,6 @@ setCallback ::
   -> IO ()
 setCallback button callback =
   wrapped Fltk.setCallback button (coerce callback)
-
-setChanged ::
-     Button  -- ^
-  -> IO ()
-setChanged =
-  wrapped Fltk.setChanged
 
 setColorWithBgSel ::
      Button -- ^
