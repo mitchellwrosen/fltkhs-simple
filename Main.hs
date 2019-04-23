@@ -2,6 +2,7 @@
 
 module Main (main) where
 
+import Data.StateVar                             (($=))
 import Graphics.UI.FLTK.LowLevel.FL              (run)
 import Graphics.UI.FLTK.LowLevel.Fl_Enumerations
 import Graphics.UI.FLTK.LowLevel.Fl_Types
@@ -27,8 +28,8 @@ main = do
         (Size (Width 300) (Height 100)))
       "Hello, world!"
 
-  Box.setLabelfont box helveticaBoldItalic
-  Box.setLabelsize box (FontSize 36)
+  Box.labelFont box $= helveticaBoldItalic
+  Box.labelSize box $= (FontSize 36)
   Box.setLabeltype box ShadowLabelType ResolveImageLabelOverwrite
 
   _ <-
