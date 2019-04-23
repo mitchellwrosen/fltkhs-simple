@@ -1,6 +1,7 @@
 module Fltk.Button
   ( -- * Button
     Button
+  , Style(..)
   , new
     -- * API
   , activate
@@ -112,13 +113,30 @@ import Data.Coerce (coerce)
 import Data.Text   (Text)
 import Foreign.Ptr (FunPtr)
 
-import qualified Graphics.UI.FLTK.LowLevel.Base.Button     as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Base.Widget     as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.Button           as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.CheckButton      as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.LightButton      as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.RadioLightButton as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.RepeatButton     as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.ReturnButton     as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.RoundButton      as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.ToggleButton     as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.Widget           as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Dispatch              as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations       as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Fl_Types              as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Hierarchy             as Fltk
 
+
+data Style
+  = Check
+  | Light
+  | Plain
+  | RadioLight
+  | Repeat
+  | Return
+  | Round
+  | Toggle
 
 wrapped ::
      (Fltk.Ref Fltk.ButtonBase -> a)
@@ -128,11 +146,28 @@ wrapped =
   coerce
 
 new ::
-     Fltk.Rectangle -- ^
+     Style -- ^
+  -> Fltk.Rectangle -- ^
   -> Text -- ^
   -> IO Button
-new bounds label =
-  Button . Fltk.safeCast <$> Fltk.buttonNew bounds (Just label)
+new style bounds label =
+  case style of
+    Check      -> go Fltk.checkButtonNew
+    Light      -> go Fltk.lightButtonNew
+    Plain      -> go Fltk.buttonNew
+    RadioLight -> go Fltk.radioLightButtonNew
+    Repeat     -> go Fltk.repeatButtonNew
+    Return     -> go Fltk.returnButtonNew
+    Round      -> go Fltk.roundButtonNew
+    Toggle     -> go Fltk.toggleButtonNew
+
+  where
+    go ::
+         Fltk.Parent button Fltk.ButtonBase
+      => (Fltk.Rectangle -> Maybe Text -> IO (Fltk.Ref button))
+      -> IO Button
+    go f =
+      Button . Fltk.safeCast <$> f bounds (Just label)
 
 activate ::
      Button -- ^
