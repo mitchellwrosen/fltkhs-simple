@@ -11,11 +11,13 @@ module Fltk.Group
   , changed
   , color
   , damage
+  , deimage
   , flags
   , label
   , labelColor
   , labelFont
   , labelSize
+  , output
   , selectionColor
   , tooltip
   , type_
@@ -49,7 +51,6 @@ module Fltk.Group
   , getArray
   , getCallback
   , getChild
-  , getDeimage
   , getH
   , getImage
   , getLabeltype
@@ -78,7 +79,6 @@ module Fltk.Group
   , setClipChildren
   , setColorWithBgSel
   , setDamageInside
-  , setDeimage
   , setImage
   , setLabeltype
   , setNotResizable
@@ -162,6 +162,12 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Widget.damage
+
+deimage ::
+     Group -- ^
+  -> StateVar (Maybe Image)
+deimage =
+  wrapped Widget.deimage
 
 flags ::
      Group -- ^
@@ -417,12 +423,6 @@ getChild ::
 getChild =
   coerce (wrapped Fltk.getChild)
 
-getDeimage ::
-     Group -- ^
-  -> IO (Maybe Image)
-getDeimage =
-  coerce (wrapped Fltk.getDeimage)
-
 getH ::
      Group -- ^
   -> IO Fltk.Height
@@ -611,17 +611,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setDeimage ::
-     IsImage image
-  => Group -- ^
-  -> Maybe image -- ^
-  -> IO ()
-setDeimage group = \case
-  Nothing ->
-    wrapped Fltk.setDeimage group (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setDeimage group (Just ref))
 
 setImage ::
      IsImage image

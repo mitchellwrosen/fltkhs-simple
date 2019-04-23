@@ -5,6 +5,7 @@ module Fltk.Internal.Widget
   , changed
   , color
   , damage
+  , deimage
   , flags
   , label
   , labelColor
@@ -19,6 +20,9 @@ module Fltk.Internal.Widget
   , when
   ) where
 
+import Fltk.Types.Internal (Image(..))
+
+import Data.Coerce   (coerce)
 import Data.Foldable (traverse_)
 import Data.StateVar (StateVar, makeStateVar)
 import Data.Text     (Text)
@@ -29,7 +33,6 @@ import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
-
 
 active ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.Active ())
@@ -108,6 +111,19 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage x =
   makeStateVar (Fltk.getDamage x) (Fltk.clearDamageThenSet x)
+
+deimage ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetDeimage ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetDeimage ())
+     , Fltk.Op (Fltk.GetDeimage ()) r a (IO (Maybe (Fltk.Ref Fltk.Image)))
+     , Fltk.Op (Fltk.SetDeimage ()) s a (Maybe (Fltk.Ref Fltk.Image) -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar (Maybe Image)
+deimage x =
+  makeStateVar
+    (coerce @(IO (Maybe (Fltk.Ref Fltk.Image))) (Fltk.getDeimage x))
+    (coerce @(Maybe (Fltk.Ref Fltk.Image) -> IO ()) (Fltk.setDeimage x))
 
 flags ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.Flags ())

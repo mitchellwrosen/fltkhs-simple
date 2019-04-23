@@ -10,6 +10,7 @@ module Fltk.Window
   , changed
   , color
   , damage
+  , deimage
   , flags
   , label
   , labelColor
@@ -57,7 +58,6 @@ module Fltk.Window
   , getChild
   , getDecoratedH
   , getDecoratedW
-  , getDeimage
   , getH
   , getIcon
   , getIconlabel
@@ -105,7 +105,6 @@ module Fltk.Window
   , setDamageInside
   , setDefaultCursor
   , setDefaultCursorWithFgBg
-  , setDeimage
   , setIcon
   , setIconlabel
   , setImage
@@ -213,6 +212,12 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Widget.damage
+
+deimage ::
+     Window -- ^
+  -> StateVar (Maybe Image)
+deimage =
+  wrapped Widget.deimage
 
 flags ::
      Window -- ^
@@ -517,12 +522,6 @@ getDecoratedW ::
   -> IO Int
 getDecoratedW =
   wrapped Fltk.getDecoratedW
-
-getDeimage ::
-     Window -- ^
-  -> IO (Maybe Image)
-getDeimage =
-  coerce (wrapped Fltk.getDeimage)
 
 getH ::
      Window -- ^
@@ -838,17 +837,6 @@ setDefaultCursorWithFgBg ::
   -> IO ()
 setDefaultCursorWithFgBg =
   wrapped Fltk.setDefaultCursorWithFgBg
-
-setDeimage ::
-     IsImage image
-  => Window -- ^
-  -> Maybe image -- ^
-  -> IO ()
-setDeimage box = \case
-  Nothing ->
-    wrapped Fltk.setDeimage box (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setDeimage box (Just ref))
 
 setIcon ::
      IsImage image

@@ -10,6 +10,7 @@ module Fltk.Box
   , changed
   , color
   , damage
+  , deimage
   , flags
   , label
   , labelColor
@@ -34,7 +35,6 @@ module Fltk.Box
   , drawFocus
   , drawLabel
   , getCallback
-  , getDeimage
   , getH
   , getImage
   , getLabeltype
@@ -57,7 +57,6 @@ module Fltk.Box
   , setCallback
   , setColorWithBgSel
   , setDamageInside
-  , setDeimage
   , setImage
   , setLabeltype
   , setParent
@@ -138,6 +137,12 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Widget.damage
+
+deimage ::
+     Box -- ^
+  -> StateVar (Maybe Image)
+deimage =
+  wrapped Widget.deimage
 
 flags ::
      Box -- ^
@@ -291,12 +296,6 @@ getCallback ::
 getCallback =
   wrapped Fltk.getCallback
 
-getDeimage ::
-     Box -- ^
-  -> IO (Maybe Image)
-getDeimage =
-  coerce (wrapped Fltk.getDeimage)
-
 getH ::
      Box -- ^
   -> IO Fltk.Height
@@ -438,17 +437,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setDeimage ::
-     IsImage image
-  => Box -- ^
-  -> Maybe image -- ^
-  -> IO ()
-setDeimage box = \case
-  Nothing ->
-    wrapped Fltk.setDeimage box (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setDeimage box (Just ref))
 
 setImage ::
      IsImage image

@@ -11,6 +11,7 @@ module Fltk.Button
   , changed
   , color
   , damage
+  , deimage
   , flags
   , label
   , labelColor
@@ -35,7 +36,6 @@ module Fltk.Button
   , drawFocus
   , drawLabel
   , getCallback
-  , getDeimage
   , getDownBox
   , getDownColor
   , getH
@@ -62,7 +62,6 @@ module Fltk.Button
   , setCallback
   , setColorWithBgSel
   , setDamageInside
-  , setDeimage
   , setDownBox
   , setDownColor
   , setImage
@@ -189,6 +188,12 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Widget.damage
+
+deimage ::
+     Button -- ^
+  -> StateVar (Maybe Image)
+deimage =
+  wrapped Widget.deimage
 
 flags ::
      Button -- ^
@@ -340,12 +345,6 @@ getCallback ::
   -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
 getCallback =
   wrapped Fltk.getCallback
-
-getDeimage ::
-     Button -- ^
-  -> IO (Maybe Image)
-getDeimage =
-  coerce (wrapped Fltk.getDeimage)
 
 getDownBox ::
      Button -- ^
@@ -512,17 +511,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setDeimage ::
-     IsImage image
-  => Button -- ^
-  -> Maybe image -- ^
-  -> IO ()
-setDeimage button = \case
-  Nothing ->
-    wrapped Fltk.setDeimage button (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setDeimage button (Just ref))
 
 setDownBox ::
      Button -- ^

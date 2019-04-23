@@ -10,6 +10,7 @@ module Fltk.Input
   , changed
   , color
   , damage
+  , deimage
   , flags
   , label
   , labelColor
@@ -41,7 +42,6 @@ module Fltk.Input
   , drawText
   , getCallback
   , getCursorColor
-  , getDeimage
   , getH
   , getImage
   , getInputType
@@ -84,7 +84,6 @@ module Fltk.Input
   , setColorWithBgSel
   , setCursorColor
   , setDamageInside
-  , setDeimage
   , setImage
   , setInputType
   , setLabeltype
@@ -181,6 +180,12 @@ damage ::
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Widget.damage
+
+deimage ::
+     Input -- ^
+  -> StateVar (Maybe Image)
+deimage =
+  wrapped Widget.deimage
 
 flags ::
      Input -- ^
@@ -382,12 +387,6 @@ getCursorColor ::
   -> IO Fltk.Color
 getCursorColor =
   wrapped Fltk.getCursorColor
-
-getDeimage ::
-     Input -- ^
-  -> IO (Maybe Image)
-getDeimage =
-  coerce (wrapped Fltk.getDeimage)
 
 getH ::
      Input -- ^
@@ -658,17 +657,6 @@ setDamageInside ::
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
-
-setDeimage ::
-     IsImage image
-  => Input -- ^
-  -> Maybe image -- ^
-  -> IO ()
-setDeimage input = \case
-  Nothing ->
-    wrapped Fltk.setDeimage input (Nothing @(Fltk.Ref Fltk.Image))
-  Just image ->
-    asImage image (\ref -> wrapped Fltk.setDeimage input (Just ref))
 
 setImage ::
      IsImage image
