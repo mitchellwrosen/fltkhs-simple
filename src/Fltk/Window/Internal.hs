@@ -1,10 +1,8 @@
 module Fltk.Window.Internal where
 
-import Fltk.GroupBase.Internal  (GroupBase(..), IsGroupBase(..))
-import Fltk.Image.Internal      (Image(..), IsImage(..))
-import Fltk.Widget.Internal     (Widget(..))
-import Fltk.WidgetBase.Internal (IsWidgetBase(..), WidgetBase(..))
-import Fltk.WindowBase.Internal (IsWindowBase(..), WindowBase(..))
+import Fltk.Group.Internal  (Group(..), IsGroup(..))
+import Fltk.Image.Internal  (Image(..), IsImage(..))
+import Fltk.Widget.Internal (IsWidget(..), Widget(..))
 
 import Data.Coerce                          (coerce)
 import Data.Text                            (Text)
@@ -15,22 +13,26 @@ import Graphics.UI.FLTK.LowLevel.Window     ()
 
 import qualified Graphics.UI.FLTK.LowLevel.Base.Widget     as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Base.Window     as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 
 
 newtype Window
-  = Window { unWindow :: Fltk.Ref Fltk.Window }
+  = Window { unWindow :: Fltk.Ref Fltk.WindowBase }
 
-instance IsGroupBase Window where
-  asGroupBase _ _ = undefined
+instance IsGroup Window where
+  asGroup _ _ = undefined
 
-instance IsWidgetBase Window where
-  asWidgetBase _ _ = undefined
+instance IsWidget Window where
+  asWidget _ _ = undefined
 
-instance IsWindowBase Window where
-  asWindowBase _ _ = undefined
+class IsWindow a where
+  asWindow ::
+       a
+    -> (forall b. Fltk.Parent b Fltk.WindowBase => Fltk.Ref b -> r)
+    -> r
 
 wrapped ::
      (Fltk.Ref Fltk.Window -> a)
@@ -67,20 +69,20 @@ activeR =
   wrapped Fltk.activeR
 
 add ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO ()
 add window widget =
-  asWidgetBase widget (Fltk.add (unWindow window))
+  asWidget widget (Fltk.add (unWindow window))
 
 addResizable ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO ()
 addResizable window widget =
-  asWidgetBase widget (Fltk.addResizable (unWindow window))
+  asWidget widget (Fltk.addResizable (unWindow window))
 
 begin ::
      Window
@@ -165,12 +167,12 @@ clipChildren =
   wrapped Fltk.clipChildren
 
 contains ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO Bool
 contains box widget =
-  asWidgetBase widget (Fltk.contains (unWindow box))
+  asWidget widget (Fltk.contains (unWindow box))
 
 -- copyLabel :: Ref WindowBase -> Text -> IO ()
 
@@ -183,7 +185,7 @@ copyTooltip =
 
 ddfdesignKludge ::
      Window
-  -> IO (Maybe WidgetBase)
+  -> IO (Maybe Widget)
 ddfdesignKludge =
   coerce (wrapped Fltk.ddfdesignKludge)
 
@@ -233,12 +235,12 @@ drawBoxWithBoxtype =
   wrapped Fltk.drawBoxWithBoxtype
 
 drawChild ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO ()
 drawChild window widget =
-  asWidgetBase widget (Fltk.drawChild (unWindow window))
+  asWidget widget (Fltk.drawChild (unWindow window))
 
 drawChildren ::
      Window
@@ -261,12 +263,12 @@ drawLabel =
   wrapped Fltk.drawLabel
 
 drawOutsideLabel ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO ()
 drawOutsideLabel window widget =
-  asWidgetBase widget (Fltk.drawOutsideLabel (unWindow window))
+  asWidget widget (Fltk.drawOutsideLabel (unWindow window))
 
 end ::
      Window
@@ -275,12 +277,12 @@ end =
   wrapped Fltk.end
 
 find ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO Fltk.AtIndex
 find window widget =
-  asWidgetBase widget (Fltk.find (unWindow window))
+  asWidget widget (Fltk.find (unWindow window))
 
 flags ::
      Window
@@ -291,12 +293,12 @@ flags =
 -- flush :: Ref WindowBase -> IO ()
 
 focus ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO ()
 focus window widget =
-  asWidgetBase widget (Fltk.focus (unWindow window))
+  asWidget widget (Fltk.focus (unWindow window))
 
 -- freePosition :: Ref WindowBase -> IO ()
 
@@ -310,7 +312,7 @@ getAlign =
 
 getArray ::
      Window
-  -> IO [WidgetBase]
+  -> IO [Widget]
 getArray =
   coerce (wrapped Fltk.getArray)
 
@@ -331,7 +333,7 @@ getCallback =
 getChild ::
      Window
   -> Fltk.AtIndex
-  -> IO (Maybe WidgetBase)
+  -> IO (Maybe Widget)
 getChild =
   coerce (wrapped Fltk.getChild)
 
@@ -417,7 +419,7 @@ getOutput =
 
 getParent ::
      Window
-  -> IO (Maybe GroupBase)
+  -> IO (Maybe Group)
 getParent =
   coerce (wrapped Fltk.getParent)
 
@@ -449,7 +451,7 @@ getTooltip =
 
 getTopWindow ::
      Window
-  -> IO (Maybe WindowBase)
+  -> IO (Maybe Window)
 getTopWindow =
   coerce (wrapped Fltk.getTopWindow)
 
@@ -497,7 +499,7 @@ getWhen =
 
 getWindow ::
      Window
-  -> IO (Maybe WindowBase)
+  -> IO (Maybe Window)
 getWindow =
   coerce (wrapped Fltk.getWindow)
 
@@ -549,28 +551,28 @@ initSizes =
   wrapped Fltk.initSizes
 
 insert ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> Fltk.AtIndex
   -> IO ()
 insert window widget index =
-  asWidgetBase widget (\ref -> Fltk.insert (unWindow window) ref index)
+  asWidget widget (\ref -> Fltk.insert (unWindow window) ref index)
 
 -- insertBefore ::
---      IsWidgetBase widget
---   => Window GroupBase
+--      IsWidget widget
+--   => Window Group
 --   -> widget
 --   -> Ref b
 --   -> IO ()
 
 inside ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO Bool
 inside box widget =
-  asWidgetBase widget (Fltk.inside (unWindow box))
+  asWidget widget (Fltk.inside (unWindow box))
 
 -- makeCurrent :: Ref WindowBase -> IO ()
 
@@ -612,12 +614,12 @@ removeIndex =
   wrapped Fltk.removeIndex
 
 removeWidget ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO ()
 removeWidget window widget =
-  asWidgetBase widget (Fltk.removeWidget (unWindow window))
+  asWidget widget (Fltk.removeWidget (unWindow window))
 
 resize ::
      Window
@@ -798,7 +800,7 @@ setOutput =
 -- setOverride :: Ref WindowBase -> IO ()
 
 setParent ::
-     IsGroupBase group
+     IsGroup group
   => Window
   -> Maybe group
   -> IO ()
@@ -806,10 +808,10 @@ setParent box = \case
   Nothing ->
     Fltk.setParent (unWindow box) (Nothing @(Fltk.Ref Fltk.GroupBase))
   Just group ->
-    asGroupBase group (\ref -> Fltk.setParent (unWindow box) (Just ref))
+    asGroup group (\ref -> Fltk.setParent (unWindow box) (Just ref))
 
 setResizable ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> Maybe widget
   -> IO ()
@@ -817,7 +819,7 @@ setResizable window = \case
   Nothing ->
     Fltk.setResizable (unWindow window) (Nothing @(Fltk.Ref Fltk.WidgetBase))
   Just widget ->
-    asWidgetBase widget (\ref -> Fltk.setResizable (unWindow window) (Just ref))
+    asWidget widget (\ref -> Fltk.setResizable (unWindow window) (Just ref))
 
 setSelectionColor ::
      Window
@@ -888,12 +890,12 @@ takesevents =
   wrapped Fltk.takesevents
 
 updateChild ::
-     IsWidgetBase widget
+     IsWidget widget
   => Window
   -> widget
   -> IO ()
 updateChild window widget =
-  asWidgetBase widget (Fltk.updateChild (unWindow window))
+  asWidget widget (Fltk.updateChild (unWindow window))
 
 -- waitForExpose :: Ref WindowBase -> IO ()
 
@@ -903,9 +905,3 @@ within ::
   -> IO a
 within =
   wrapped Fltk.within
-
-
-
-
-
-

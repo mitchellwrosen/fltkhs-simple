@@ -27,9 +27,7 @@ library
     Fltk.Group
     Fltk.Image
     Fltk.Widget
-    Fltk.WidgetBase
     Fltk.Window
-    Fltk.WindowBase
 
   hs-source-dirs:
     src
@@ -37,12 +35,9 @@ library
   other-modules:
     Fltk.Box.Internal
     Fltk.Group.Internal
-    Fltk.GroupBase.Internal
     Fltk.Image.Internal
     Fltk.Widget.Internal
-    Fltk.WidgetBase.Internal
     Fltk.Window.Internal
-    Fltk.WindowBase.Internal
 
 executable blah
   build-depends:

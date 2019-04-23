@@ -104,10 +104,10 @@ module Fltk.Button
   , takesevents
   ) where
 
-import Fltk.GroupBase.Internal  (GroupBase(..), IsGroupBase(..))
-import Fltk.Image.Internal      (Image(..), IsImage(..))
-import Fltk.WidgetBase.Internal (IsWidgetBase(..))
-import Fltk.WindowBase.Internal (WindowBase(..))
+import Fltk.Group.Internal  (Group(..), IsGroup(..))
+import Fltk.Image.Internal  (Image(..), IsImage(..))
+import Fltk.Widget.Internal (IsWidget(..))
+import Fltk.Window.Internal (Window(..))
 
 import Data.Coerce (coerce)
 import Data.Text   (Text)
@@ -125,12 +125,12 @@ import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 newtype Button
   = Button { unButton :: Fltk.Ref Fltk.Button }
 
-instance IsWidgetBase Button where
-  asWidgetBase ::
+instance IsWidget Button where
+  asWidget ::
        Button
     -> (forall x. Fltk.Parent x Fltk.WidgetBase => Fltk.Ref x -> r)
     -> r
-  asWidgetBase button f =
+  asWidget button f =
     f (unButton button)
 
 wrapped ::
@@ -228,12 +228,12 @@ clearVisibleFocus =
   wrapped Fltk.clearVisibleFocus
 
 contains ::
-     IsWidgetBase widget
+     IsWidget widget
   => Button -- ^
   -> widget -- ^
   -> IO Bool
 contains button widget =
-  asWidgetBase widget (Fltk.contains (unButton button))
+  asWidget widget (Fltk.contains (unButton button))
 
 copyTooltip ::
      Button -- ^
@@ -405,7 +405,7 @@ getOutput =
 
 getParent ::
      Button -- ^
-  -> IO (Maybe GroupBase)
+  -> IO (Maybe Group)
 getParent =
   coerce (wrapped Fltk.getParent)
 
@@ -435,7 +435,7 @@ getTooltip =
 
 getTopWindow ::
      Button -- ^
-  -> IO (Maybe WindowBase)
+  -> IO (Maybe Window)
 getTopWindow =
   coerce (wrapped Fltk.getTopWindow)
 
@@ -489,7 +489,7 @@ getWhen =
 
 getWindow ::
      Button -- ^
-  -> IO (Maybe WindowBase)
+  -> IO (Maybe Window)
 getWindow =
   coerce (wrapped Fltk.getWindow)
 
@@ -525,12 +525,12 @@ hide =
   wrapped Fltk.hide
 
 inside ::
-     IsWidgetBase widget
+     IsWidget widget
   => Button -- ^
   -> widget -- ^
   -> IO Bool
 inside button widget =
-  asWidgetBase widget (Fltk.inside (unButton button))
+  asWidget widget (Fltk.inside (unButton button))
 
 measureLabel ::
      Button -- ^
@@ -726,7 +726,7 @@ setOutput =
   wrapped Fltk.setOutput
 
 setParent ::
-     IsGroupBase group
+     IsGroup group
   => Button -- ^
   -> Maybe group -- ^
   -> IO ()
@@ -734,7 +734,7 @@ setParent button = \case
   Nothing ->
     Fltk.setParent (unButton button) (Nothing @(Fltk.Ref Fltk.GroupBase))
   Just group ->
-    asGroupBase group (\ref -> Fltk.setParent (unButton button) (Just ref))
+    asGroup group (\ref -> Fltk.setParent (unButton button) (Just ref))
 
 setSelectionColor ::
      Button -- ^

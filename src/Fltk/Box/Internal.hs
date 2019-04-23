@@ -1,9 +1,9 @@
 module Fltk.Box.Internal where
 
-import Fltk.GroupBase.Internal  (GroupBase(..), IsGroupBase(..))
-import Fltk.Image.Internal      (Image(..), IsImage(..))
-import Fltk.WidgetBase.Internal (IsWidgetBase(..))
-import Fltk.WindowBase.Internal (WindowBase(..))
+import Fltk.Group.Internal  (Group(..), IsGroup(..))
+import Fltk.Image.Internal  (Image(..), IsImage(..))
+import Fltk.Widget.Internal (IsWidget(..))
+import Fltk.Window.Internal (Window(..))
 
 import Data.Coerce (coerce)
 import Data.Text   (Text)
@@ -110,12 +110,12 @@ clearVisibleFocus =
   wrapped Fltk.clearVisibleFocus
 
 contains ::
-     IsWidgetBase widget
+     IsWidget widget
   => Box
   -> widget
   -> IO Bool
 contains box widget =
-  asWidgetBase widget (Fltk.contains (unBox box))
+  asWidget widget (Fltk.contains (unBox box))
 
 copyTooltip ::
      Box
@@ -275,7 +275,7 @@ getOutput =
 
 getParent ::
      Box
-  -> IO (Maybe GroupBase)
+  -> IO (Maybe Group)
 getParent =
   coerce (wrapped Fltk.getParent)
 
@@ -299,7 +299,7 @@ getTooltip =
 
 getTopWindow ::
      Box
-  -> IO (Maybe WindowBase)
+  -> IO (Maybe Window)
 getTopWindow =
   coerce (wrapped Fltk.getTopWindow)
 
@@ -347,7 +347,7 @@ getWhen =
 
 getWindow ::
      Box
-  -> IO (Maybe WindowBase)
+  -> IO (Maybe Window)
 getWindow =
   coerce (wrapped Fltk.getWindow)
 
@@ -383,12 +383,12 @@ hide =
   wrapped Fltk.hide
 
 inside ::
-     IsWidgetBase widget
+     IsWidget widget
   => Box
   -> widget
   -> IO Bool
 inside box widget =
-  asWidgetBase widget (Fltk.inside (unBox box))
+  asWidget widget (Fltk.inside (unBox box))
 
 measureLabel ::
      Box
@@ -558,7 +558,7 @@ setOutput =
   wrapped Fltk.setOutput
 
 setParent ::
-     IsGroupBase group
+     IsGroup group
   => Box
   -> Maybe group
   -> IO ()
@@ -566,7 +566,7 @@ setParent box = \case
   Nothing ->
     Fltk.setParent (unBox box) (Nothing @(Fltk.Ref Fltk.GroupBase))
   Just group ->
-    asGroupBase group (\ref -> Fltk.setParent (unBox box) (Just ref))
+    asGroup group (\ref -> Fltk.setParent (unBox box) (Just ref))
 
 setSelectionColor ::
      Box
