@@ -14,10 +14,9 @@ library
     FlexibleContexts
     InstanceSigs
     LambdaCase
-    MonoLocalBinds
-    -- MonoLocalBinds implied by GADTs/TypeFamilies
     RankNTypes
     TypeApplications
+    TypeFamilies
 
   default-language:
     Haskell2010
@@ -49,6 +48,7 @@ library
     src
 
   other-modules:
+    Fltk.Internal.Widget
     Fltk.Types.Internal
 
 executable example

@@ -5,7 +5,7 @@ module Fltk.Box
     -- * API
     -- ** Properties
   , align
-  , boxtype
+  , box
   , color
   , damage
   , label
@@ -81,8 +81,10 @@ module Fltk.Box
 import Fltk.Types.Internal (Box(..), Group(..), Image(..), IsGroup(..),
                             IsImage(..), IsWidget(..), Window(..))
 
+import qualified Fltk.Internal.Widget as Widget
+
 import Data.Coerce   (coerce)
-import Data.StateVar (StateVar, makeStateVar)
+import Data.StateVar (StateVar)
 import Data.Text     (Text)
 import Data.Word     (Word8)
 import Foreign.Ptr   (FunPtr)
@@ -114,101 +116,89 @@ wrapped =
 -- Properties
 --------------------------------------------------------------------------------
 
-prop ::
-     (Fltk.Ref Fltk.Box -> IO a)
-  -> (Fltk.Ref Fltk.Box -> a -> IO ())
-  -> Box
-  -> StateVar a
-prop getter setter box =
-  makeStateVar (wrapped getter box) (wrapped setter box)
-
 align ::
      Box -- ^
   -> StateVar Fltk.Alignments
 align =
-  prop Fltk.getAlign Fltk.setAlign
+  wrapped Widget.align
 
-boxtype ::
+box ::
      Box -- ^
   -> StateVar Fltk.Boxtype
-boxtype =
-  prop Fltk.getBox Fltk.setBox
+box =
+  wrapped Widget.box
 
 color ::
      Box -- ^
   -> StateVar Fltk.Color
 color =
-  prop Fltk.getColor Fltk.setColor
+  wrapped Widget.color
 
 damage ::
      Box -- ^
   -> StateVar [Fltk.Damage]
 damage =
-  prop Fltk.getDamage Fltk.setDamage
+  wrapped Widget.damage
 
 label ::
      Box -- ^
   -> StateVar Text
 label =
-  prop Fltk.getLabel Fltk.setLabel
+  wrapped Widget.label
 
 labelColor ::
      Box -- ^
   -> StateVar Fltk.Color
 labelColor =
-  prop Fltk.getLabelcolor Fltk.setLabelcolor
+  wrapped Widget.labelColor
 
 labelFont ::
      Box -- ^
   -> StateVar Fltk.Font
 labelFont =
-  prop Fltk.getLabelfont Fltk.setLabelfont
+  wrapped Widget.labelFont
 
 labelSize ::
      Box -- ^
   -> StateVar Fltk.FontSize
 labelSize =
-  prop Fltk.getLabelsize Fltk.setLabelsize
+  wrapped Widget.labelSize
 
 selectionColor ::
      Box -- ^
   -> StateVar Fltk.Color
 selectionColor =
-  prop Fltk.getSelectionColor Fltk.setSelectionColor
+  wrapped Widget.selectionColor
 
 tooltip ::
      Box -- ^
   -> StateVar Text
 tooltip =
-  prop Fltk.getTooltip Fltk.setTooltip
+  wrapped Widget.tooltip
 
 type_ ::
      Box -- ^
   -> StateVar Word8
 type_ =
-  prop Fltk.getType_ Fltk.setType
+  wrapped Widget.type_
 
 visible ::
      Box -- ^
   -> StateVar Bool
-visible box =
-  makeStateVar
-    (wrapped Fltk.getVisible box)
-    (\case
-      False -> wrapped Fltk.hide box
-      True -> wrapped Fltk.showWidget box)
+visible =
+  wrapped Widget.visible
 
 visibleFocus ::
      Box -- ^
   -> StateVar Bool
 visibleFocus =
-  prop Fltk.getVisibleFocus Fltk.modifyVisibleFocus
+  wrapped Widget.visibleFocus
 
 when ::
      Box -- ^
   -> StateVar [Fltk.When]
 when =
-  prop Fltk.getWhen Fltk.setWhen
+  wrapped Widget.when
 
 
 --------------------------------------------------------------------------------

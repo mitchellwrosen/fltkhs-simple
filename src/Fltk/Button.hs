@@ -4,6 +4,22 @@ module Fltk.Button
   , Style(..)
   , new
     -- * API
+    -- ** Properties
+  , align
+  , box
+  , color
+  , damage
+  , label
+  , labelColor
+  , labelFont
+  , labelSize
+  , selectionColor
+  , tooltip
+  , type_
+  , visible
+  , visibleFocus
+  , when
+    -- ** Functions
   , activate
   , active
   , activeR
@@ -27,79 +43,49 @@ module Fltk.Button
   , drawFocus
   , drawLabel
   , flags
-  , getAlign
-  , getBox
   , getCallback
-  , getColor
-  , getDamage
   , getDeimage
   , getDownBox
   , getDownColor
   , getH
   , getImage
-  , getLabel
-  , getLabelcolor
-  , getLabelfont
-  , getLabelsize
   , getLabeltype
   , getOutput
   , getParent
   , getRectangle
-  , getSelectionColor
   , getShortcut
-  , getTooltip
   , getTopWindow
   , getTopWindowOffset
-  , getType_
   , getValue
-  , getVisible
-  , getVisibleFocus
   , getVisibleR
   , getW
-  , getWhen
   , getWindow
   , getX
   , getY
   , handle
   , hasCallback
-  , hide
   , inside
   , measureLabel
-  , modifyVisibleFocus
   , redraw
   , redrawLabel
   , resize
   , setActive
-  , setAlign
-  , setBox
   , setCallback
   , setChanged
-  , setColor
   , setColorWithBgSel
-  , setDamage
   , setDamageInside
   , setDeimage
   , setDownBox
   , setDownColor
   , setFlag
   , setImage
-  , setLabel
-  , setLabelcolor
-  , setLabelfont
-  , setLabelsize
   , setLabeltype
   , setonly
   , setOutput
   , setParent
   , setSelectionColor
   , setShortcut
-  , setTooltip
-  , setType
   , setValue
-  , setVisible
-  , setVisibleFocus
-  , setWhen
-  , showWidget
   , takeFocus
   , takesevents
   ) where
@@ -107,9 +93,12 @@ module Fltk.Button
 import Fltk.Types.Internal (Button(..), Group(..), Image(..), IsGroup(..),
                             IsImage(..), IsWidget(..), Window(..))
 
-import Data.Coerce (coerce)
-import Data.Text   (Text)
-import Foreign.Ptr (FunPtr)
+import qualified Fltk.Internal.Widget as Widget
+
+import Data.Coerce   (coerce)
+import Data.StateVar (StateVar, makeStateVar)
+import Data.Text     (Text)
+import Foreign.Ptr   (FunPtr)
 
 import qualified Graphics.UI.FLTK.LowLevel.Base.Button           as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Base.CheckButton      as Fltk
@@ -166,6 +155,108 @@ new style bounds label =
       -> IO Button
     go f =
       Button . Fltk.safeCast <$> f bounds (Just label)
+
+
+--------------------------------------------------------------------------------
+-- Properties
+--------------------------------------------------------------------------------
+
+prop ::
+     (Fltk.Ref Fltk.ButtonBase -> IO a)
+  -> (Fltk.Ref Fltk.ButtonBase -> a -> IO ())
+  -> Button
+  -> StateVar a
+prop getter setter button =
+  makeStateVar (wrapped getter button) (wrapped setter button)
+
+align ::
+     Button -- ^
+  -> StateVar Fltk.Alignments
+align =
+  wrapped Widget.align
+
+box ::
+     Button -- ^
+  -> StateVar Fltk.Boxtype
+box =
+  wrapped Widget.box
+
+color ::
+     Button -- ^
+  -> StateVar Fltk.Color
+color =
+  wrapped Widget.color
+
+damage ::
+     Button -- ^
+  -> StateVar [Fltk.Damage]
+damage =
+  wrapped Widget.damage
+
+label ::
+     Button -- ^
+  -> StateVar Text
+label =
+  wrapped Widget.label
+
+labelColor ::
+     Button -- ^
+  -> StateVar Fltk.Color
+labelColor =
+  wrapped Widget.labelColor
+
+labelFont ::
+     Button -- ^
+  -> StateVar Fltk.Font
+labelFont =
+  wrapped Widget.labelFont
+
+labelSize ::
+     Button -- ^
+  -> StateVar Fltk.FontSize
+labelSize =
+  wrapped Widget.labelSize
+
+selectionColor ::
+     Button -- ^
+  -> StateVar Fltk.Color
+selectionColor =
+  wrapped Widget.selectionColor
+
+tooltip ::
+     Button -- ^
+  -> StateVar Text
+tooltip =
+  wrapped Widget.tooltip
+
+type_ ::
+     Button -- ^
+  -> StateVar Fltk.ButtonType
+type_ =
+  prop Fltk.getType_ Fltk.setType
+
+visible ::
+     Button -- ^
+  -> StateVar Bool
+visible =
+  wrapped Widget.visible
+
+visibleFocus ::
+     Button -- ^
+  -> StateVar Bool
+visibleFocus =
+  wrapped Widget.visibleFocus
+
+when ::
+     Button -- ^
+  -> StateVar [Fltk.When]
+when =
+  wrapped Widget.when
+
+
+--------------------------------------------------------------------------------
+-- Functions
+--------------------------------------------------------------------------------
 
 activate ::
      Button -- ^
@@ -315,35 +406,11 @@ flags ::
 flags =
   wrapped Fltk.flags
 
-getAlign ::
-     Button -- ^
-  -> IO Fltk.Alignments
-getAlign =
-  wrapped Fltk.getAlign
-
-getBox ::
-     Button -- ^
-  -> IO Fltk.Boxtype
-getBox =
-  wrapped Fltk.getBox
-
 getCallback ::
      Button -- ^
   -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
 getCallback =
   wrapped Fltk.getCallback
-
-getColor ::
-     Button -- ^
-  -> IO Fltk.Color
-getColor =
-  wrapped Fltk.getColor
-
-getDamage ::
-     Button -- ^
-  -> IO [Fltk.Damage]
-getDamage =
-  wrapped Fltk.getDamage
 
 getDeimage ::
      Button -- ^
@@ -375,30 +442,6 @@ getImage ::
 getImage =
   coerce (wrapped Fltk.getImage)
 
-getLabel ::
-     Button -- ^
-  -> IO Text
-getLabel =
-  wrapped Fltk.getLabel
-
-getLabelcolor ::
-     Button -- ^
-  -> IO Fltk.Color
-getLabelcolor =
-  wrapped Fltk.getLabelcolor
-
-getLabelfont ::
-     Button -- ^
-  -> IO Fltk.Font
-getLabelfont =
-  wrapped Fltk.getLabelfont
-
-getLabelsize ::
-     Button -- ^
-  -> IO Fltk.FontSize
-getLabelsize =
-  wrapped Fltk.getLabelsize
-
 getLabeltype ::
      Button -- ^
   -> IO Fltk.Labeltype
@@ -423,23 +466,11 @@ getRectangle ::
 getRectangle =
   wrapped Fltk.getRectangle
 
-getSelectionColor ::
-     Button -- ^
-  -> IO Fltk.Color
-getSelectionColor =
-  wrapped Fltk.getSelectionColor
-
 getShortcut ::
      Button -- ^
   -> IO (Maybe Fltk.ShortcutKeySequence)
 getShortcut =
   wrapped Fltk.getShortcut
-
-getTooltip ::
-     Button -- ^
-  -> IO Text
-getTooltip =
-  wrapped Fltk.getTooltip
 
 getTopWindow ::
      Button -- ^
@@ -453,29 +484,11 @@ getTopWindowOffset ::
 getTopWindowOffset =
   wrapped Fltk.getTopWindowOffset
 
-getType_ ::
-     Button -- ^
-  -> IO Fltk.ButtonType
-getType_ =
-  wrapped Fltk.getType_
-
 getValue ::
      Button -- ^
   -> IO Bool
 getValue =
   wrapped Fltk.getValue
-
-getVisible ::
-     Button -- ^
-  -> IO Bool
-getVisible =
-  wrapped Fltk.getVisible
-
-getVisibleFocus ::
-     Button -- ^
-  -> IO Bool
-getVisibleFocus =
-  wrapped Fltk.getVisibleFocus
 
 getVisibleR ::
      Button -- ^
@@ -488,12 +501,6 @@ getW ::
   -> IO Fltk.Width
 getW =
   wrapped Fltk.getW
-
-getWhen ::
-     Button -- ^
-  -> IO [Fltk.When]
-getWhen =
-  wrapped Fltk.getWhen
 
 getWindow ::
      Button -- ^
@@ -526,12 +533,6 @@ hasCallback ::
 hasCallback =
   wrapped Fltk.hasCallback
 
-hide ::
-     Button -- ^
-  -> IO ()
-hide =
-  wrapped Fltk.hide
-
 inside ::
      IsWidget widget
   => Button -- ^
@@ -546,13 +547,6 @@ measureLabel ::
   -> IO Fltk.Size
 measureLabel =
   wrapped Fltk.measureLabel
-
-modifyVisibleFocus ::
-     Button -- ^
-  -> Bool -- ^
-  -> IO ()
-modifyVisibleFocus =
-  wrapped Fltk.modifyVisibleFocus
 
 redraw ::
      Button -- ^
@@ -579,20 +573,6 @@ setActive ::
 setActive =
   wrapped Fltk.setActive
 
-setAlign ::
-     Button -- ^
-  -> Fltk.Alignments
-  -> IO ()
-setAlign =
-  wrapped Fltk.setAlign
-
-setBox ::
-     Button -- ^
-  -> Fltk.Boxtype -- ^
-  -> IO ()
-setBox =
-  wrapped Fltk.setBox
-
 setCallback ::
      Button -- ^
   -> (Button -> IO ()) -- ^
@@ -606,13 +586,6 @@ setChanged ::
 setChanged =
   wrapped Fltk.setChanged
 
-setColor ::
-     Button -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setColor =
-  wrapped Fltk.setColor
-
 setColorWithBgSel ::
      Button -- ^
   -> Fltk.Color -- ^
@@ -620,13 +593,6 @@ setColorWithBgSel ::
   -> IO ()
 setColorWithBgSel =
   wrapped Fltk.setColorWithBgSel
-
-setDamage ::
-     Button -- ^
-  -> [Fltk.Damage] -- ^
-  -> IO ()
-setDamage =
-  wrapped Fltk.setDamage
 
 setDamageInside ::
      Button -- ^
@@ -679,34 +645,6 @@ setImage button = \case
   Just image ->
     asImage image (\ref -> wrapped Fltk.setImage button (Just ref))
 
-setLabel ::
-     Button -- ^
-  -> Text -- ^
-  -> IO ()
-setLabel =
-  wrapped Fltk.setLabel
-
-setLabelcolor ::
-     Button -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setLabelcolor =
-  wrapped Fltk.setLabelcolor
-
-setLabelfont ::
-     Button -- ^
-  -> Fltk.Font -- ^
-  -> IO ()
-setLabelfont =
-  wrapped Fltk.setLabelfont
-
-setLabelsize ::
-     Button -- ^
-  -> Fltk.FontSize -- ^
-  -> IO ()
-setLabelsize =
-  wrapped Fltk.setLabelsize
-
 setLabeltype ::
      Button -- ^
   -> Fltk.Labeltype -- ^
@@ -752,51 +690,12 @@ setShortcut ::
 setShortcut =
   wrapped Fltk.setShortcut
 
-setTooltip ::
-     Button -- ^
-  -> Text -- ^
-  -> IO ()
-setTooltip =
-  wrapped Fltk.setTooltip
-
-setType ::
-     Button -- ^
-  -> Fltk.ButtonType -- ^
-  -> IO ()
-setType =
-  wrapped Fltk.setType
-
 setValue ::
      Button -- ^
   -> Bool -- ^
   -> IO Bool
 setValue =
   wrapped Fltk.setValue
-
-setVisible ::
-     Button -- ^
-  -> IO ()
-setVisible =
-  wrapped Fltk.setVisible
-
-setVisibleFocus ::
-     Button -- ^
-  -> IO ()
-setVisibleFocus =
-  wrapped Fltk.setVisibleFocus
-
-setWhen ::
-     Button -- ^
-  -> [Fltk.When] -- ^
-  -> IO ()
-setWhen =
-  wrapped Fltk.setWhen
-
-showWidget ::
-     Button -- ^
-  -> IO ()
-showWidget =
-  wrapped Fltk.showWidget
 
 takeFocus ::
      Button -- ^
