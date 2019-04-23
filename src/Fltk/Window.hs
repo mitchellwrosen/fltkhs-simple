@@ -13,7 +13,7 @@ module Fltk.Window
   , children
   , clear
   , clearActive
-    -- clearBorder
+  , clearBorder
   , clearChanged
   , clearDamage
   , clearDamageThenSet
@@ -23,13 +23,12 @@ module Fltk.Window
   , clearVisibleFocus
   , clipChildren
   , contains
-    -- copyLabel
+  , copyLabel
   , copyTooltip
   , ddfdesignKludge
   , deactivate
   , destroy
   , doCallback
-    -- draw
   , drawBackdrop
   , drawBox
   , drawBoxWithBoxtype
@@ -41,40 +40,40 @@ module Fltk.Window
   , end
   , find
   , flags
-    -- flush
+  , flush
   , focus
-    -- freePosition
-    -- fullscreenOff
+  , freePosition
+  , fullscreenOff
   , getAlign
   , getArray
-    -- getBorder
+  , getBorder
   , getBox
   , getCallback
   , getChild
   , getColor
   , getDamage
-    -- getDecoratedH
-    -- getDecoratedW
+  , getDecoratedH
+  , getDecoratedW
   , getDeimage
   , getH
-    -- getIcon
-    -- getIconlabel
+  , getIcon
+  , getIconlabel
   , getImage
   , getLabel
   , getLabelcolor
   , getLabelfont
   , getLabelsize
   , getLabeltype
-    -- getMenuWindow
-    -- getModal
+  , getMenuWindow
+  , getModal
   , getOutput
-    -- getOverride
+  , getOverride
   , getParent
   , getRectangle
   , getResizable
   , getSelectionColor
   , getTooltip
-    -- getTooltipWindow
+  , getTooltipWindow
   , getTopWindow
   , getTopWindowOffset
   , getType_
@@ -85,24 +84,23 @@ module Fltk.Window
   , getWhen
   , getWindow
   , getX
-    -- getXRoot
-    -- getXclass
+  , getXRoot
+  , getXclass
   , getY
-    -- getYRoot
+  , getYRoot
   , handle
   , hasCallback
   , hide
-    -- hotSpot
-    -- iconize
+  , hotSpot
+  , iconize
   , initSizes
   , insert
-    -- insertBefore
   , inside
-    -- makeCurrent
-    -- makeFullscreen
+  , makeCurrent
+  , makeFullscreen
   , measureLabel
   , modifyVisibleFocus
-    -- nonModal
+  , nonModal
   , redraw
   , redrawLabel
   , removeIndex
@@ -110,54 +108,54 @@ module Fltk.Window
   , resize
   , setActive
   , setAlign
-    -- setBorder
+  , setBorder
   , setBox
   , setCallback
   , setChanged
   , setClipChildren
   , setColor
   , setColorWithBgSel
-    -- setCursor
-    -- setCursorWithFgBg
+  , setCursor
+  , setCursorWithFgBg
   , setDamage
   , setDamageInside
-    -- setDefaultCursor
-    -- setDefaultCursorWithFgBg
+  , setDefaultCursor
+  , setDefaultCursorWithFgBg
   , setDeimage
   , setFlag
-    -- setIcon
-    -- setIconlabel
+  , setIcon
+  , setIconlabel
   , setImage
   , setLabel
   , setLabelcolor
   , setLabelfont
   , setLabelsize
   , setLabeltype
-    -- setLabelWithIconlabel
-    -- setMenuWindow
-    -- setModal
-    -- setNonModal
+  , setLabelWithIconlabel
+  , setMenuWindow
+  , setModal
+  , setNonModal
   , setNotResizable
   , setOutput
-    -- setOverride
+  , setOverride
   , setParent
   , setResizable
   , setSelectionColor
   , setTooltip
-    -- setTooltipWindow
+  , setTooltipWindow
   , setType
   , setVisible
   , setVisibleFocus
   , setWhen
-    -- setXclass
-    -- shown
+  , setXclass
+  , shown
   , showWidget
-    -- sizeRange
-    -- sizeRangeWithArgs
+  , sizeRange
+  , sizeRangeWithArgs
   , takeFocus
   , takesevents
   , updateChild
-    -- waitForExpose
+  , waitForExpose
   , within
   ) where
 
@@ -258,7 +256,11 @@ clearActive ::
 clearActive =
   wrapped Fltk.clearActive
 
--- clearBorder :: Ref WindowBase -> IO ()
+clearBorder ::
+     Window -- ^
+  -> IO ()
+clearBorder =
+  wrapped Fltk.clearBorder
 
 clearChanged ::
      Window -- ^
@@ -318,7 +320,12 @@ contains ::
 contains box widget =
   asWidget widget (wrapped Fltk.contains box)
 
--- copyLabel :: Ref WindowBase -> Text -> IO ()
+copyLabel ::
+     Window -- ^
+  -> Text -- ^
+  -> IO ()
+copyLabel =
+  wrapped Fltk.copyLabel
 
 copyTooltip ::
      Window -- ^
@@ -434,7 +441,11 @@ flags ::
 flags =
   wrapped Fltk.flags
 
--- flush :: Ref WindowBase -> IO ()
+flush ::
+     Window -- ^
+  -> IO ()
+flush =
+  wrapped Fltk.flush
 
 focus ::
      IsWidget widget
@@ -444,9 +455,18 @@ focus ::
 focus window widget =
   asWidget widget (wrapped Fltk.focus window)
 
--- freePosition :: Ref WindowBase -> IO ()
+freePosition ::
+     Window -- ^
+  -> IO ()
+freePosition =
+  wrapped Fltk.freePosition
 
--- fullscreenOff :: Ref WindowBase -> Maybe Rectangle -> IO ()
+fullscreenOff ::
+     Window -- ^
+  -> Maybe Fltk.Rectangle -- ^
+  -> IO ()
+fullscreenOff =
+  wrapped Fltk.fullscreenOff
 
 getAlign ::
      Window -- ^
@@ -460,7 +480,11 @@ getArray ::
 getArray =
   coerce (wrapped Fltk.getArray)
 
--- getBorder :: Ref WindowBase -> IO (Bool)
+getBorder ::
+     Window -- ^
+  -> IO Bool
+getBorder =
+  wrapped Fltk.getBorder
 
 getBox ::
      Window -- ^
@@ -493,9 +517,17 @@ getDamage ::
 getDamage =
   wrapped Fltk.getDamage
 
--- getDecoratedH :: Ref WindowBase -> IO (Int)
+getDecoratedH ::
+     Window -- ^
+  -> IO Int
+getDecoratedH =
+  wrapped Fltk.getDecoratedH
 
--- getDecoratedW :: Ref WindowBase -> IO (Int)
+getDecoratedW ::
+     Window -- ^
+  -> IO Int
+getDecoratedW =
+  wrapped Fltk.getDecoratedW
 
 getDeimage ::
      Window -- ^
@@ -509,9 +541,17 @@ getH ::
 getH =
   wrapped Fltk.getH
 
--- getIcon :: Ref WindowBase -> IO (Maybe (Ref Image))
+getIcon ::
+     Window -- ^
+  -> IO (Maybe Image)
+getIcon =
+  coerce (wrapped Fltk.getIcon)
 
--- getIconlabel :: Ref WindowBase -> IO Text
+getIconlabel ::
+     Window -- ^
+  -> IO Text
+getIconlabel =
+  wrapped Fltk.getIconlabel
 
 getImage ::
      Window -- ^
@@ -549,9 +589,17 @@ getLabeltype ::
 getLabeltype =
   wrapped Fltk.getLabeltype
 
--- getMenuWindow :: Ref WindowBase -> IO (Bool)
+getMenuWindow ::
+     Window -- ^
+  -> IO Bool
+getMenuWindow =
+  wrapped Fltk.getMenuWindow
 
--- getModal :: Ref WindowBase -> IO (Bool)
+getModal ::
+     Window -- ^
+  -> IO Bool
+getModal =
+  wrapped Fltk.getModal
 
 getOutput ::
      Window -- ^
@@ -559,7 +607,11 @@ getOutput ::
 getOutput =
   wrapped Fltk.getOutput
 
--- getOverride :: Ref WindowBase -> IO (Bool)
+getOverride ::
+     Window -- ^
+  -> IO Bool
+getOverride =
+  wrapped Fltk.getOverride
 
 getParent ::
      Window -- ^
@@ -591,7 +643,11 @@ getTooltip ::
 getTooltip =
   wrapped Fltk.getTooltip
 
--- getTooltipWindow :: Ref WindowBase -> IO (Bool)
+getTooltipWindow ::
+     Window -- ^
+  -> IO Bool
+getTooltipWindow =
+  wrapped Fltk.getTooltipWindow
 
 getTopWindow ::
      Window -- ^
@@ -653,9 +709,17 @@ getX ::
 getX =
   wrapped Fltk.getX
 
--- getXRoot :: Ref WindowBase -> IO (Int)
+getXRoot ::
+     Window -- ^
+  -> IO Int
+getXRoot =
+  wrapped Fltk.getXRoot
 
--- getXclass :: Ref WindowBase -> IO Text
+getXclass ::
+     Window -- ^
+  -> IO Text
+getXclass =
+  wrapped Fltk.getXclass
 
 getY ::
      Window -- ^
@@ -663,7 +727,11 @@ getY ::
 getY =
   wrapped Fltk.getY
 
--- getYRoot :: Ref WindowBase -> IO (Int)
+getYRoot ::
+     Window -- ^
+  -> IO Int
+getYRoot =
+  wrapped Fltk.getYRoot
 
 handle ::
      Window -- ^
@@ -684,9 +752,19 @@ hide ::
 hide =
   wrapped Fltk.hide
 
--- hotSpot :: Ref WindowBase -> PositionSpec -> Maybe Bool -> IO ()
+hotSpot ::
+     Window -- ^
+  -> Fltk.PositionSpec -- ^
+  -> Maybe Bool -- ^
+  -> IO ()
+hotSpot =
+  wrapped Fltk.hotSpot
 
--- iconize :: Ref WindowBase -> IO ()
+iconize ::
+     Window -- ^
+  -> IO ()
+iconize =
+  wrapped Fltk.iconize
 
 initSizes ::
      Window -- ^
@@ -718,9 +796,17 @@ inside ::
 inside box widget =
   asWidget widget (wrapped Fltk.inside box)
 
--- makeCurrent :: Ref WindowBase -> IO ()
+makeCurrent ::
+     Window -- ^
+  -> IO ()
+makeCurrent =
+  wrapped Fltk.makeCurrent
 
--- makeFullscreen :: Ref WindowBase -> IO ()
+makeFullscreen ::
+     Window -- ^
+  -> IO ()
+makeFullscreen =
+  wrapped Fltk.makeFullscreen
 
 measureLabel ::
      Window -- ^
@@ -736,7 +822,11 @@ modifyVisibleFocus ::
 modifyVisibleFocus =
   wrapped Fltk.modifyVisibleFocus
 
--- nonModal :: Ref WindowBase -> IO (Bool)
+nonModal ::
+     Window -- ^
+  -> IO Bool
+nonModal =
+  wrapped Fltk.nonModal
 
 redraw ::
      Window -- ^
@@ -785,7 +875,12 @@ setAlign ::
 setAlign =
   wrapped Fltk.setAlign
 
--- setBorder :: Ref WindowBase -> Bool -> IO ()
+setBorder ::
+     Window -- ^
+  -> Bool -- ^
+  -> IO ()
+setBorder =
+  wrapped Fltk.setBorder
 
 setBox ::
      Window -- ^
@@ -829,9 +924,20 @@ setColorWithBgSel ::
 setColorWithBgSel =
   wrapped Fltk.setColorWithBgSel
 
--- setCursor :: Ref WindowBase -> Cursor -> IO ()
+setCursor ::
+     Window -- ^
+  -> Fltk.Cursor -- ^
+  -> IO ()
+setCursor =
+  wrapped Fltk.setCursor
 
--- setCursorWithFgBg :: Ref WindowBase -> Cursor -> (Maybe Color, Maybe Color) -> IO ()
+setCursorWithFgBg ::
+     Window -- ^
+  -> Fltk.Cursor -- ^
+  -> (Maybe Fltk.Color, Maybe Fltk.Color) -- ^
+  -> IO ()
+setCursorWithFgBg =
+  wrapped Fltk.setCursorWithFgBg
 
 setDamage ::
      Window -- ^
@@ -848,9 +954,20 @@ setDamageInside ::
 setDamageInside =
   wrapped Fltk.setDamageInside
 
--- setDefaultCursor :: Ref WindowBase -> CursorType -> IO ()
+setDefaultCursor ::
+     Window -- ^
+  -> Fltk.CursorType -- ^
+  -> IO ()
+setDefaultCursor =
+  wrapped Fltk.setDefaultCursor
 
--- setDefaultCursorWithFgBg :: Ref WindowBase -> CursorType -> (Maybe Color, Maybe Color) -> IO ()
+setDefaultCursorWithFgBg ::
+     Window -- ^
+  -> Fltk.CursorType -- ^
+  -> (Maybe Fltk.Color, Maybe Fltk.Color) -- ^
+  -> IO ()
+setDefaultCursorWithFgBg =
+  wrapped Fltk.setDefaultCursorWithFgBg
 
 setDeimage ::
      IsImage image
@@ -870,9 +987,23 @@ setFlag ::
 setFlag =
   wrapped Fltk.setFlag
 
--- setIcon:: (Parent a Image) => Ref WindowBase -> Maybe( Ref a ) -> IO ()
+setIcon ::
+     IsImage image
+  => Window-- ^
+  -> Maybe image-- ^
+  -> IO ()
+setIcon window = \case
+  Nothing ->
+    wrapped Fltk.setIcon window (Nothing @(Fltk.Ref Fltk.Image))
+  Just image ->
+    asImage image (\ref -> wrapped Fltk.setIcon window (Just ref))
 
--- setIconlabel :: Ref WindowBase -> Text -> IO ()
+setIconlabel ::
+     Window -- ^
+  -> Text -- ^
+  -> IO ()
+setIconlabel =
+  wrapped Fltk.setIconlabel
 
 setImage ::
      IsImage image
@@ -921,13 +1052,31 @@ setLabeltype ::
 setLabeltype =
   wrapped Fltk.setLabeltype
 
--- setLabelWithIconlabel :: Ref WindowBase -> Text -> Text -> IO ()
+setLabelWithIconlabel ::
+     Window -- ^
+  -> Text -- ^
+  -> Text -- ^
+  -> IO ()
+setLabelWithIconlabel =
+  wrapped Fltk.setLabelWithIconlabel
 
--- setMenuWindow :: Ref WindowBase -> IO ()
+setMenuWindow ::
+     Window -- ^
+  -> IO ()
+setMenuWindow =
+  wrapped Fltk.setMenuWindow
 
--- setModal :: Ref WindowBase -> IO ()
+setModal ::
+     Window -- ^
+  -> IO ()
+setModal =
+  wrapped Fltk.setModal
 
--- setNonModal :: Ref WindowBase -> IO ()
+setNonModal ::
+     Window -- ^
+  -> IO ()
+setNonModal =
+  wrapped Fltk.setNonModal
 
 setNotResizable ::
      Window -- ^
@@ -941,7 +1090,11 @@ setOutput ::
 setOutput =
   wrapped Fltk.setOutput
 
--- setOverride :: Ref WindowBase -> IO ()
+setOverride ::
+     Window -- ^
+  -> IO ()
+setOverride =
+  wrapped Fltk.setOverride
 
 setParent ::
      IsGroup group
@@ -979,7 +1132,11 @@ setTooltip ::
 setTooltip =
   wrapped Fltk.setTooltip
 
--- setTooltipWindow :: Ref WindowBase -> IO ()
+setTooltipWindow ::
+     Window -- ^
+  -> IO ()
+setTooltipWindow =
+  wrapped Fltk.setTooltipWindow
 
 setType ::
      Window -- ^
@@ -1007,9 +1164,18 @@ setWhen ::
 setWhen =
   wrapped Fltk.setWhen
 
--- setXclass :: Ref WindowBase -> Text -> IO ()
+setXclass ::
+     Window -- ^
+  -> Text -- ^
+  -> IO ()
+setXclass =
+  wrapped Fltk.setXclass
 
--- shown :: Ref WindowBase -> IO (Bool)
+shown ::
+     Window -- ^
+  -> IO Bool
+shown =
+  wrapped Fltk.shown
 
 showWidget ::
      Window -- ^
@@ -1017,9 +1183,20 @@ showWidget ::
 showWidget =
   wrapped Fltk.showWidget
 
--- sizeRange :: Ref WindowBase -> Size -> IO ()
+sizeRange ::
+     Window -- ^
+  -> Fltk.Size -- ^
+  -> IO ()
+sizeRange =
+  wrapped Fltk.sizeRange
 
--- sizeRangeWithArgs :: Ref WindowBase -> Size -> OptionalSizeRangeArgs -> IO ()
+sizeRangeWithArgs ::
+     Window -- ^
+  -> Fltk.Size -- ^
+  -> Fltk.OptionalSizeRangeArgs -- ^
+  -> IO ()
+sizeRangeWithArgs =
+  wrapped Fltk.sizeRangeWithArgs
 
 takeFocus ::
      Window -- ^
@@ -1041,7 +1218,11 @@ updateChild ::
 updateChild window widget =
   asWidget widget (wrapped Fltk.updateChild window)
 
--- waitForExpose :: Ref WindowBase -> IO ()
+waitForExpose ::
+     Window -- ^
+  -> IO ()
+waitForExpose =
+  wrapped Fltk.waitForExpose
 
 within ::
      Window -- ^
