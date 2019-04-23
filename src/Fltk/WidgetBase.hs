@@ -1,5 +1,6 @@
 module Fltk.WidgetBase
-  ( IsWidgetBase
+  ( WidgetBase
+  , IsWidgetBase
   ) where
 
 import Fltk.WidgetBase.Internal

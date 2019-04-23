@@ -1,108 +1,4 @@
-module Fltk.Button
-  ( Button
-  , new
-    -- * API
-  , activate
-  , active
-  , activeR
-  , changed
-  , clear
-  , clearActive
-  , clearChanged
-  , clearDamage
-  , clearDamageThenSet
-  , clearFlag
-  , clearOutput
-  , clearVisible
-  , clearVisibleFocus
-  , contains
-  , copyTooltip
-  , deactivate
-  , destroy
-  , doCallback
-  , drawBackdrop
-  , drawBox
-  , drawBoxWithBoxtype
-  , drawFocus
-  , drawLabel
-  , flags
-  , getAlign
-  , getBox
-  , getCallback
-  , getColor
-  , getDamage
-  , getDeimage
-  , getDownBox
-  , getDownColor
-  , getH
-  , getImage
-  , getLabel
-  , getLabelcolor
-  , getLabelfont
-  , getLabelsize
-  , getLabeltype
-  , getOutput
-  , getParent
-  , getRectangle
-  , getSelectionColor
-  , getShortcut
-  , getTooltip
-  , getTopWindow
-  , getTopWindowOffset
-  , getType_
-  , getValue
-  , getVisible
-  , getVisibleFocus
-  , getVisibleR
-  , getW
-  , getWhen
-  , getWindow
-  , getX
-  , getY
-  , handle
-  , hasCallback
-  , hide
-  , inside
-  , measureLabel
-  , modifyVisibleFocus
-  , redraw
-  , redrawLabel
-  , resize
-  , set
-  , setActive
-  , setAlign
-  , setBox
-  , setCallback
-  , setChanged
-  , setColor
-  , setColorWithBgSel
-  , setDamage
-  , setDamageInside
-  , setDeimage
-  , setDownBox
-  , setDownColor
-  , setFlag
-  , setImage
-  , setLabel
-  , setLabelcolor
-  , setLabelfont
-  , setLabelsize
-  , setLabeltype
-  , setonly
-  , setOutput
-  , setParent
-  , setSelectionColor
-  , setShortcut
-  , setTooltip
-  , setType
-  , setValue
-  , setVisible
-  , setVisibleFocus
-  , setWhen
-  , showWidget
-  , takeFocus
-  , takesevents
-  ) where
+module Fltk.Box.Internal where
 
 import Fltk.GroupBase.Internal  (GroupBase(..), IsGroupBase(..))
 import Fltk.Image.Internal      (Image(..), IsImage(..))
@@ -111,699 +7,621 @@ import Fltk.WindowBase.Internal (WindowBase(..))
 
 import Data.Coerce (coerce)
 import Data.Text   (Text)
+import Data.Word   (Word8)
 import Foreign.Ptr (FunPtr)
 
-import qualified Graphics.UI.FLTK.LowLevel.Base.Button     as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Base.Widget     as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Button          as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Box             as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 
 
-newtype Button
-  = Button { unButton :: Fltk.Ref Fltk.Button }
+newtype Box
+  = Box { unBox :: Fltk.Ref Fltk.Box }
 
-instance IsWidgetBase Button where
-  asWidgetBase ::
-       Button
-    -> (forall x. Fltk.Parent x Fltk.WidgetBase => Fltk.Ref x -> r)
-    -> r
-  asWidgetBase button f =
-    f (unButton button)
+new ::
+     Fltk.Boxtype
+  -> Fltk.Rectangle
+  -> Text
+  -> IO Box
+new boxtype rect title =
+  coerce (Fltk.boxCustomWithBoxtype boxtype rect title Nothing Nothing)
 
 wrapped ::
-     (Fltk.Ref Fltk.Button -> a)
-  -> Button
+     (Fltk.Ref Fltk.Box -> a)
+  -> Box
   -> a
 wrapped =
   coerce
 
-new ::
-     Fltk.Rectangle -- ^
-  -> Text -- ^
-  -> IO Button
-new bounds label =
-  Button <$> Fltk.buttonNew bounds (Just label)
-
 activate ::
-     Button -- ^
+     Box
   -> IO ()
 activate =
   wrapped Fltk.activate
 
 active ::
-     Button -- ^
+     Box
   -> IO Bool
 active =
   wrapped Fltk.active
 
 activeR ::
-     Button -- ^
+     Box
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
 
 changed ::
-     Button -- ^
+     Box
   -> IO Bool
 changed =
   wrapped Fltk.changed
 
-clear ::
-     Button -- ^
-  -> IO Bool
-clear =
-  wrapped Fltk.clear
-
 clearActive ::
-     Button -- ^
+     Box
   -> IO ()
 clearActive =
   wrapped Fltk.clearActive
 
 clearChanged ::
-     Button -- ^
+     Box
   -> IO ()
 clearChanged =
   wrapped Fltk.clearChanged
 
 clearDamage ::
-     Button -- ^
+     Box
   -> IO ()
 clearDamage =
   wrapped Fltk.clearDamage
 
 clearDamageThenSet ::
-     Button -- ^
+     Box
   -> [Fltk.Damage]
   -> IO ()
 clearDamageThenSet =
   wrapped Fltk.clearDamageThenSet
 
 clearFlag ::
-     Button -- ^
+     Box
   -> Fltk.WidgetFlag
   -> IO ()
 clearFlag =
   wrapped Fltk.clearFlag
 
 clearOutput ::
-     Button -- ^
+     Box
   -> IO ()
 clearOutput =
   wrapped Fltk.clearOutput
 
 clearVisible ::
-     Button -- ^
+     Box
   -> IO ()
 clearVisible =
   wrapped Fltk.clearVisible
 
 clearVisibleFocus ::
-     Button -- ^
+     Box
   -> IO ()
 clearVisibleFocus =
   wrapped Fltk.clearVisibleFocus
 
 contains ::
      IsWidgetBase widget
-  => Button -- ^
-  -> widget -- ^
+  => Box
+  -> widget
   -> IO Bool
-contains button widget =
-  asWidgetBase widget (Fltk.contains (unButton button))
+contains box widget =
+  asWidgetBase widget (Fltk.contains (unBox box))
 
 copyTooltip ::
-     Button -- ^
-  -> Text -- ^
+     Box
+  -> Text
   -> IO ()
 copyTooltip =
   wrapped Fltk.copyTooltip
 
 deactivate ::
-     Button -- ^
+     Box
   -> IO ()
 deactivate =
   wrapped Fltk.deactivate
 
 destroy ::
-     Button -- ^
+     Box
   -> IO ()
 destroy =
   wrapped Fltk.destroy
 
 doCallback ::
-     Button -- ^
+     Box
   -> IO ()
 doCallback =
   wrapped Fltk.doCallback
 
 -- draw ::
---      Button
+--      Box
 --   -> IO ()
--- draw button =
---   Fltk.draw (unButton button)
+-- draw =
+--   wrapped Fltk.draw
 
 drawBackdrop ::
-     Button -- ^
+     Box
   -> IO ()
 drawBackdrop =
   wrapped Fltk.drawBackdrop
 
 drawBox ::
-     Button -- ^
+     Box
   -> IO ()
 drawBox =
   wrapped Fltk.drawBox
 
 drawBoxWithBoxtype ::
-     Button -- ^
-  -> Fltk.Boxtype -- ^
-  -> Fltk.Color -- ^
-  -> Maybe Fltk.Rectangle -- ^
+     Box
+  -> Fltk.Boxtype
+  -> Fltk.Color
+  -> Maybe Fltk.Rectangle
   -> IO ()
 drawBoxWithBoxtype =
   wrapped Fltk.drawBoxWithBoxtype
 
 drawFocus ::
-     Button -- ^
+     Box
   -> Maybe (Fltk.Boxtype, Fltk.Rectangle)
   -> IO ()
 drawFocus =
   wrapped Fltk.drawFocus
 
 drawLabel ::
-     Button -- ^
+     Box
   -> Maybe (Fltk.Rectangle, Fltk.Alignments)
   -> IO ()
 drawLabel =
   wrapped Fltk.drawLabel
 
 flags ::
-     Button -- ^
+     Box
   -> IO [Fltk.WidgetFlag]
 flags =
   wrapped Fltk.flags
 
 getAlign ::
-     Button -- ^
+     Box
   -> IO Fltk.Alignments
 getAlign =
   wrapped Fltk.getAlign
 
 getBox ::
-     Button -- ^
+     Box
   -> IO Fltk.Boxtype
 getBox =
   wrapped Fltk.getBox
 
 getCallback ::
-     Button -- ^
+     Box
   -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
 getCallback =
   wrapped Fltk.getCallback
 
 getColor ::
-     Button -- ^
+     Box
   -> IO Fltk.Color
 getColor =
   wrapped Fltk.getColor
 
 getDamage ::
-     Button -- ^
+     Box
   -> IO [Fltk.Damage]
 getDamage =
   wrapped Fltk.getDamage
 
 getDeimage ::
-     Button -- ^
+     Box
   -> IO (Maybe Image)
 getDeimage =
   coerce (wrapped Fltk.getDeimage)
 
-getDownBox ::
-     Button -- ^
-  -> IO Fltk.Boxtype
-getDownBox =
-  wrapped Fltk.getDownBox
-
-getDownColor ::
-     Button -- ^
-  -> IO Fltk.Color
-getDownColor =
-  wrapped Fltk.getDownColor
-
 getH ::
-     Button -- ^
+     Box
   -> IO Fltk.Height
 getH =
   wrapped Fltk.getH
 
 getImage ::
-     Button -- ^
+     Box
   -> IO (Maybe Image)
 getImage =
   coerce (wrapped Fltk.getImage)
 
 getLabel ::
-     Button -- ^
+     Box
   -> IO Text
 getLabel =
   wrapped Fltk.getLabel
 
 getLabelcolor ::
-     Button -- ^
+     Box
   -> IO Fltk.Color
 getLabelcolor =
   wrapped Fltk.getLabelcolor
 
 getLabelfont ::
-     Button -- ^
-  -> IO Fltk.Font
+     Box
+  -> IO (Fltk.Font)
 getLabelfont =
   wrapped Fltk.getLabelfont
 
 getLabelsize ::
-     Button -- ^
-  -> IO Fltk.FontSize
+     Box
+  -> IO (Fltk.FontSize)
 getLabelsize =
   wrapped Fltk.getLabelsize
 
 getLabeltype ::
-     Button -- ^
-  -> IO Fltk.Labeltype
+     Box
+  -> IO (Fltk.Labeltype)
 getLabeltype =
   wrapped Fltk.getLabeltype
 
 getOutput ::
-     Button -- ^
+     Box
   -> IO Int
 getOutput =
   wrapped Fltk.getOutput
 
 getParent ::
-     Button -- ^
+     Box
   -> IO (Maybe GroupBase)
 getParent =
   coerce (wrapped Fltk.getParent)
 
 getRectangle ::
-     Button -- ^
+     Box
   -> IO Fltk.Rectangle
 getRectangle =
-  wrapped Fltk.getRectangle
+ wrapped Fltk.getRectangle
 
 getSelectionColor ::
-     Button -- ^
+     Box
   -> IO Fltk.Color
 getSelectionColor =
   wrapped Fltk.getSelectionColor
 
-getShortcut ::
-     Button -- ^
-  -> IO (Maybe Fltk.ShortcutKeySequence)
-getShortcut =
-  wrapped Fltk.getShortcut
-
 getTooltip ::
-     Button -- ^
+     Box
   -> IO Text
 getTooltip =
   wrapped Fltk.getTooltip
 
 getTopWindow ::
-     Button -- ^
+     Box
   -> IO (Maybe WindowBase)
 getTopWindow =
   coerce (wrapped Fltk.getTopWindow)
 
 getTopWindowOffset ::
-     Button -- ^
+     Box
   -> IO Fltk.Position
 getTopWindowOffset =
   wrapped Fltk.getTopWindowOffset
 
 getType_ ::
-     Button -- ^
-  -> IO Fltk.ButtonType
+     Box
+  -> IO Word8
 getType_ =
   wrapped Fltk.getType_
 
-getValue ::
-     Button -- ^
-  -> IO Bool
-getValue =
-  wrapped Fltk.getValue
-
 getVisible ::
-     Button -- ^
+     Box
   -> IO Bool
 getVisible =
   wrapped Fltk.getVisible
 
 getVisibleFocus ::
-     Button -- ^
+     Box
   -> IO Bool
 getVisibleFocus =
   wrapped Fltk.getVisibleFocus
 
 getVisibleR ::
-     Button -- ^
+     Box
   -> IO Bool
 getVisibleR =
   wrapped Fltk.getVisibleR
 
 getW ::
-     Button -- ^
+     Box
   -> IO Fltk.Width
 getW =
   wrapped Fltk.getW
 
 getWhen ::
-     Button -- ^
+     Box
   -> IO [Fltk.When]
 getWhen =
   wrapped Fltk.getWhen
 
 getWindow ::
-     Button -- ^
+     Box
   -> IO (Maybe WindowBase)
 getWindow =
   coerce (wrapped Fltk.getWindow)
 
 getX ::
-     Button -- ^
+     Box
   -> IO Fltk.X
 getX =
   wrapped Fltk.getX
 
 getY ::
-     Button -- ^
+     Box
   -> IO Fltk.Y
 getY =
   wrapped Fltk.getY
 
 handle ::
-     Button -- ^
-  -> Fltk.Event -- ^
+     Box
+  -> Fltk.Event
   -> IO (Either Fltk.UnknownEvent ())
 handle =
   wrapped Fltk.handle
 
 hasCallback ::
-     Button -- ^
+     Box
   -> IO Bool
 hasCallback =
   wrapped Fltk.hasCallback
 
 hide ::
-     Button -- ^
+     Box
   -> IO ()
 hide =
   wrapped Fltk.hide
 
 inside ::
      IsWidgetBase widget
-  => Button -- ^
-  -> widget -- ^
+  => Box
+  -> widget
   -> IO Bool
-inside button widget =
-  asWidgetBase widget (Fltk.inside (unButton button))
+inside box widget =
+  asWidgetBase widget (Fltk.inside (unBox box))
 
 measureLabel ::
-     Button -- ^
-  -> Maybe Fltk.Width -- ^
+     Box
+  -> Maybe Fltk.Width
   -> IO Fltk.Size
 measureLabel =
   wrapped Fltk.measureLabel
 
 modifyVisibleFocus ::
-     Button -- ^
-  -> Bool -- ^
+     Box
+  -> Bool
   -> IO ()
 modifyVisibleFocus =
   wrapped Fltk.modifyVisibleFocus
 
 redraw ::
-     Button -- ^
+     Box
   -> IO ()
 redraw =
   wrapped Fltk.redraw
 
 redrawLabel ::
-     Button -- ^
+     Box
   -> IO ()
 redrawLabel =
   wrapped Fltk.redrawLabel
 
 resize ::
-     Button -- ^
-  -> Fltk.Rectangle -- ^
+     Box
+  -> Fltk.Rectangle
   -> IO ()
 resize =
   wrapped Fltk.resize
 
-set ::
-     Button -- ^
-  -> IO Bool
-set =
-  wrapped Fltk.set
-
 setActive ::
-     Button -- ^
+     Box
   -> IO ()
 setActive =
   wrapped Fltk.setActive
 
 setAlign ::
-     Button -- ^
+     Box
   -> Fltk.Alignments
   -> IO ()
 setAlign =
   wrapped Fltk.setAlign
 
 setBox ::
-     Button -- ^
-  -> Fltk.Boxtype -- ^
+     Box
+  -> Fltk.Boxtype
   -> IO ()
 setBox =
   wrapped Fltk.setBox
 
 setCallback ::
-     Button -- ^
-  -> (Button -> IO ()) -- ^
+     Box
+  -> (Box -> IO ())
   -> IO ()
-setCallback button callback =
-  Fltk.setCallback (unButton button) (coerce callback)
+setCallback box callback =
+  Fltk.setCallback (unBox box) (coerce callback)
 
 setChanged ::
-     Button  -- ^
+     Box
   -> IO ()
 setChanged =
   wrapped Fltk.setChanged
 
 setColor ::
-     Button -- ^
-  -> Fltk.Color -- ^
+     Box
+  -> Fltk.Color
   -> IO ()
 setColor =
   wrapped Fltk.setColor
 
 setColorWithBgSel ::
-     Button -- ^
-  -> Fltk.Color -- ^
-  -> Fltk.Color -- ^
+     Box
+  -> Fltk.Color
+  -> Fltk.Color
   -> IO ()
 setColorWithBgSel =
   wrapped Fltk.setColorWithBgSel
 
 setDamage ::
-     Button -- ^
-  -> [Fltk.Damage] -- ^
+     Box
+  -> [Fltk.Damage]
   -> IO ()
 setDamage =
   wrapped Fltk.setDamage
 
 setDamageInside ::
-     Button -- ^
-  -> [Fltk.Damage] -- ^
-  -> Fltk.Rectangle -- ^
+     Box
+  -> [Fltk.Damage]
+  -> Fltk.Rectangle
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
 
 setDeimage ::
      IsImage image
-  => Button -- ^
-  -> Maybe image -- ^
+  => Box
+  -> Maybe image
   -> IO ()
-setDeimage button = \case
+setDeimage box = \case
   Nothing ->
-    Fltk.setDeimage (unButton button) (Nothing @(Fltk.Ref Fltk.Image))
+    Fltk.setDeimage (unBox box) (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
-    asImage image (\ref -> Fltk.setDeimage (unButton button) (Just ref))
-
-setDownBox ::
-     Button -- ^
-  -> Fltk.Boxtype -- ^
-  -> IO ()
-setDownBox =
-  wrapped Fltk.setDownBox
-
-setDownColor ::
-     Button -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setDownColor =
-  wrapped Fltk.setDownColor
+    asImage image (\ref -> Fltk.setDeimage (unBox box) (Just ref))
 
 setFlag ::
-     Button -- ^
-  -> Fltk.WidgetFlag -- ^
+     Box
+  -> Fltk.WidgetFlag
   -> IO ()
 setFlag =
   wrapped Fltk.setFlag
 
 setImage ::
      IsImage image
-  => Button -- ^
-  -> Maybe image -- ^
+  => Box
+  -> Maybe image
   -> IO ()
-setImage button = \case
+setImage box = \case
   Nothing ->
-    Fltk.setImage (unButton button) (Nothing @(Fltk.Ref Fltk.Image))
+    Fltk.setImage (unBox box) (Nothing @(Fltk.Ref Fltk.Image))
   Just image ->
-    asImage image (\ref -> Fltk.setImage (unButton button) (Just ref))
+    asImage image (\ref -> Fltk.setImage (unBox box) (Just ref))
 
 setLabel ::
-     Button -- ^
-  -> Text -- ^
+     Box
+  -> Text
   -> IO ()
 setLabel =
   wrapped Fltk.setLabel
 
 setLabelcolor ::
-     Button -- ^
-  -> Fltk.Color -- ^
+     Box
+  -> Fltk.Color
   -> IO ()
 setLabelcolor =
   wrapped Fltk.setLabelcolor
 
 setLabelfont ::
-     Button -- ^
-  -> Fltk.Font -- ^
+     Box
+  -> Fltk.Font
   -> IO ()
 setLabelfont =
   wrapped Fltk.setLabelfont
 
 setLabelsize ::
-     Button -- ^
-  -> Fltk.FontSize -- ^
+     Box
+  -> Fltk.FontSize
   -> IO ()
 setLabelsize =
   wrapped Fltk.setLabelsize
 
 setLabeltype ::
-     Button -- ^
-  -> Fltk.Labeltype -- ^
-  -> Fltk.ResolveImageLabelConflict -- ^
+     Box
+  -> Fltk.Labeltype
+  -> Fltk.ResolveImageLabelConflict
   -> IO ()
 setLabeltype =
   wrapped Fltk.setLabeltype
 
-setonly ::
-     Button -- ^
-  -> IO ()
-setonly =
-  wrapped Fltk.setonly
-
 setOutput ::
-     Button -- ^
+     Box
   -> IO ()
 setOutput =
   wrapped Fltk.setOutput
 
 setParent ::
      IsGroupBase group
-  => Button -- ^
-  -> Maybe group -- ^
+  => Box
+  -> Maybe group
   -> IO ()
-setParent button = \case
+setParent box = \case
   Nothing ->
-    Fltk.setParent (unButton button) (Nothing @(Fltk.Ref Fltk.GroupBase))
+    Fltk.setParent (unBox box) (Nothing @(Fltk.Ref Fltk.GroupBase))
   Just group ->
-    asGroupBase group (\ref -> Fltk.setParent (unButton button) (Just ref))
+    asGroupBase group (\ref -> Fltk.setParent (unBox box) (Just ref))
 
 setSelectionColor ::
-     Button -- ^
-  -> Fltk.Color -- ^
+     Box
+  -> Fltk.Color
   -> IO ()
 setSelectionColor =
   wrapped Fltk.setSelectionColor
 
-setShortcut ::
-     Button -- ^
-  -> Fltk.ShortcutKeySequence -- ^
-  -> IO ()
-setShortcut =
-  wrapped Fltk.setShortcut
-
 setTooltip ::
-     Button -- ^
-  -> Text -- ^
+     Box
+  -> Text
   -> IO ()
 setTooltip =
   wrapped Fltk.setTooltip
 
 setType ::
-     Button -- ^
-  -> Fltk.ButtonType -- ^
+     Box
+  -> Word8
   -> IO ()
 setType =
   wrapped Fltk.setType
 
-setValue ::
-     Button -- ^
-  -> Bool -- ^
-  -> IO Bool
-setValue =
-  wrapped Fltk.setValue
-
 setVisible ::
-     Button -- ^
+     Box
   -> IO ()
 setVisible =
   wrapped Fltk.setVisible
 
 setVisibleFocus ::
-     Button -- ^
+     Box
   -> IO ()
 setVisibleFocus =
   wrapped Fltk.setVisibleFocus
 
 setWhen ::
-     Button -- ^
-  -> [Fltk.When] -- ^
+     Box
+  -> [Fltk.When]
   -> IO ()
 setWhen =
   wrapped Fltk.setWhen
 
 showWidget ::
-     Button -- ^
+     Box
   -> IO ()
 showWidget =
   wrapped Fltk.showWidget
 
 takeFocus ::
-     Button -- ^
+     Box
   -> IO (Either Fltk.NoChange ())
 takeFocus =
   wrapped Fltk.takeFocus
 
 takesevents ::
-     Button -- ^
+     Box
   -> IO Bool
 takesevents =
   wrapped Fltk.takesevents

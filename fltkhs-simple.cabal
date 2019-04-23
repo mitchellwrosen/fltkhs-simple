@@ -18,19 +18,50 @@ library
     RankNTypes
     TypeApplications
 
+  default-language:
+    Haskell2010
+
   exposed-modules:
+    Fltk.Box
     Fltk.Button
     Fltk.Group
     Fltk.Image
+    Fltk.Widget
     Fltk.WidgetBase
+    Fltk.Window
     Fltk.WindowBase
 
   hs-source-dirs:
     src
 
   other-modules:
+    Fltk.Box.Internal
     Fltk.Group.Internal
     Fltk.GroupBase.Internal
     Fltk.Image.Internal
+    Fltk.Widget.Internal
     Fltk.WidgetBase.Internal
+    Fltk.Window.Internal
     Fltk.WindowBase.Internal
+
+executable blah
+  build-depends:
+    base,
+    fltkhs,
+    fltkhs-simple
+
+  default-language:
+    Haskell2010
+
+  ghc-options:
+    -threaded
+    -pgml g++
+    "-optl-Wl,--allow-multiple-definition"
+    "-optl-Wl,--whole-archive"
+    "-optl-Wl,-Bstatic"
+    "-optl-Wl,-lfltkc"
+    "-optl-Wl,-Bdynamic"
+    "-optl-Wl,--no-whole-archive"
+
+  main-is:
+    Main.hs

@@ -4,6 +4,9 @@ import qualified Graphics.UI.FLTK.LowLevel.Dispatch  as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types  as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy as Fltk
 
+newtype WidgetBase
+  = WidgetBase { unWidgetBase :: Fltk.Ref Fltk.WidgetBase }
+
 class IsWidgetBase a where
   asWidgetBase ::
        a
