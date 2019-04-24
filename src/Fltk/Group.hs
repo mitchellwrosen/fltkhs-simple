@@ -2,7 +2,6 @@ module Fltk.Group
   ( -- * Group
     Group
   , new
-    -- * API
     -- ** Read-write properties
   , active
   , align

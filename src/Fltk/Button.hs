@@ -3,7 +3,6 @@ module Fltk.Button
     Button
   , Style(..)
   , new
-    -- * API
     -- ** Read-write properties
   , active
   , align
@@ -27,6 +26,7 @@ module Fltk.Button
   , shortcut
   , tooltip
   , type_
+  , value
   , visible
   , visibleFocus
   , when
@@ -35,11 +35,11 @@ module Fltk.Button
   , callback
   , contains
   , height
+  , inside
   , rectangle
   , topWindow
   , topWindowOffset
   , takesEvents
-  , value
   , visibleR
   , width
   , window
@@ -56,7 +56,6 @@ module Fltk.Button
   , drawLabel
   , handle
   , hasCallback
-  , inside
   , measureLabel
   , redraw
   , redrawLabel
@@ -65,7 +64,6 @@ module Fltk.Button
   , setColorWithBgSel
   , setDamageInside
   , setonly
-  , setValue
   , takeFocus
   ) where
 
@@ -75,6 +73,7 @@ import Fltk.Internal.Types (Button(..), Group(..), Image(..), Widget(..),
 import qualified Fltk.Internal.Widget as Widget
 
 import Data.Coerce   (coerce)
+import Data.Functor  (void)
 import Data.Maybe    (fromMaybe)
 import Data.StateVar (StateVar, makeStateVar)
 import Data.Text     (Text)
@@ -285,6 +284,12 @@ type_ ::
 type_ =
   prop Fltk.getType_ Fltk.setType
 
+value ::
+     Button -- ^
+  -> StateVar Bool
+value =
+  prop Fltk.getValue (\b -> void . Fltk.setValue b)
+
 visible ::
      Button -- ^
   -> StateVar Bool
@@ -356,12 +361,6 @@ topWindowOffset ::
   -> IO Fltk.Position
 topWindowOffset =
   wrapped Fltk.getTopWindowOffset
-
-value ::
-     Button -- ^
-  -> IO Bool
-value =
-  wrapped Fltk.getValue
 
 visibleR ::
      Button -- ^
@@ -526,13 +525,6 @@ setonly ::
   -> IO ()
 setonly =
   wrapped Fltk.setonly
-
-setValue ::
-     Button -- ^
-  -> Bool -- ^
-  -> IO Bool
-setValue =
-  wrapped Fltk.setValue
 
 takeFocus ::
      Button -- ^

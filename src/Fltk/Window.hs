@@ -1,7 +1,6 @@
 module Fltk.Window
   ( Window
   , new
-    -- * API
     -- ** Properties
   , active
   , align

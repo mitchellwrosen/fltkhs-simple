@@ -2,7 +2,6 @@ module Fltk.Box
   ( -- * Box
     Box
   , new
-    -- * API
     -- ** Read-write properties
   , active
   , align
@@ -32,6 +31,7 @@ module Fltk.Box
   , contains
   , hasCallback
   , height
+  , inside
   , rectangle
   , takesEvents
   , topWindow
@@ -51,7 +51,6 @@ module Fltk.Box
   , drawFocus
   , drawLabel
   , handle
-  , inside
   , measureLabel
   , redraw
   , redrawLabel
@@ -268,6 +267,13 @@ height ::
 height =
   wrapped Fltk.getH
 
+inside ::
+     Box -- ^
+  -> Widget -- ^
+  -> IO Bool
+inside box widget =
+  wrapped Fltk.inside box (unWidget widget)
+
 rectangle ::
      Box -- ^
   -> IO Fltk.Rectangle
@@ -387,13 +393,6 @@ handle ::
   -> IO (Either Fltk.UnknownEvent ())
 handle =
   wrapped Fltk.handle
-
-inside ::
-     Box -- ^
-  -> Widget -- ^
-  -> IO Bool
-inside box widget =
-  wrapped Fltk.inside box (unWidget widget)
 
 measureLabel ::
      Box -- ^
