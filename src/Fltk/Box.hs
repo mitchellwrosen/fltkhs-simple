@@ -46,8 +46,6 @@ module Fltk.Box
   , destroy
   , doCallback
   , drawBackdrop
-  , drawBox
-  , drawBoxWithBoxtype
   , drawFocus
   , drawLabel
   , handle
@@ -357,21 +355,6 @@ drawBackdrop ::
   -> IO ()
 drawBackdrop =
   wrapped Fltk.drawBackdrop
-
-drawBox ::
-     Box -- ^
-  -> IO ()
-drawBox =
-  wrapped Fltk.drawBox
-
-drawBoxWithBoxtype ::
-     Box -- ^
-  -> Fltk.Boxtype -- ^
-  -> Fltk.Color -- ^
-  -> Maybe Fltk.Rectangle -- ^
-  -> IO ()
-drawBoxWithBoxtype =
-  wrapped Fltk.drawBoxWithBoxtype
 
 drawFocus ::
      Box -- ^

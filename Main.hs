@@ -32,23 +32,26 @@ main = do
   Box.labelSize box $= (FontSize 36)
   Box.labelType box $= ShadowLabelType
 
-  _ <-
-    Button.new
-      Button.Plain
-        (Rectangle
-          (Position (X 30) (Y 30))
-          (Size (Width 100) (Height 50)))
-        "Hello"
+  -- _ <-
+  --   Button.new
+  --     Button.Plain
+  --       (Rectangle
+  --         (Position (X 30) (Y 30))
+  --         (Size (Width 100) (Height 50)))
+  --       "Hello"
 
-  _ <-
-    Button.new
-      Button.Check
-        (Rectangle
-          (Position (X 35) (Y 35))
-          (Size (Width 100) (Height 50)))
-        "World"
+  -- _ <-
+  --   Button.new
+  --     Button.Check
+  --       (Rectangle
+  --         (Position (X 35) (Y 35))
+  --         (Size (Width 100) (Height 50)))
+  --       "World"
 
   Window.end window
+
   Window.visible window $= True
+
+  -- Window.drawBox window
 
   run

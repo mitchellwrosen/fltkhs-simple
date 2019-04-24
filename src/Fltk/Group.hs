@@ -57,8 +57,6 @@ module Fltk.Group
   , destroy
   , doCallback
   , drawBackdrop
-  , drawBox
-  , drawBoxWithBoxtype
   , drawChild
   , drawChildren
   , drawFocus
@@ -451,21 +449,6 @@ drawBackdrop ::
   -> IO ()
 drawBackdrop =
   wrapped Fltk.drawBackdrop
-
-drawBox ::
-     Group -- ^
-  -> IO ()
-drawBox =
-  wrapped Fltk.drawBox
-
-drawBoxWithBoxtype ::
-     Group -- ^
-  -> Fltk.Boxtype -- ^
-  -> Fltk.Color -- ^
-  -> Maybe Fltk.Rectangle -- ^
-  -> IO ()
-drawBoxWithBoxtype =
-  wrapped Fltk.drawBoxWithBoxtype
 
 drawChild ::
      Group -- ^

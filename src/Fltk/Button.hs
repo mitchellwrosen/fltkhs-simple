@@ -50,8 +50,6 @@ module Fltk.Button
   , destroy
   , doCallback
   , drawBackdrop
-  , drawBox
-  , drawBoxWithBoxtype
   , drawFocus
   , drawLabel
   , handle
@@ -416,21 +414,6 @@ drawBackdrop ::
   -> IO ()
 drawBackdrop =
   wrapped Fltk.drawBackdrop
-
-drawBox ::
-     Button -- ^
-  -> IO ()
-drawBox =
-  wrapped Fltk.drawBox
-
-drawBoxWithBoxtype ::
-     Button -- ^
-  -> Fltk.Boxtype -- ^
-  -> Fltk.Color -- ^
-  -> Maybe Fltk.Rectangle -- ^
-  -> IO ()
-drawBoxWithBoxtype =
-  wrapped Fltk.drawBoxWithBoxtype
 
 drawFocus ::
      Button -- ^
