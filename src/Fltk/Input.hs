@@ -2,33 +2,60 @@ module Fltk.Input
   ( -- * Input
     Input
   , new
-    -- * API
-    -- ** Properties
+    -- ** Read-write properties
   , active
   , align
   , box
   , changed
   , color
+  , cursorColor
   , damage
   , deimage
   , flags
   , image
+  , inputType
   , label
   , labelColor
   , labelFont
   , labelSize
   , labelType
+  , mark
+  , maximumSize
   , output
   , parent
+  , position
+  , readonly
   , selectionColor
+  , shortcut
+  , tabNav
+  , textColor
+  , textFont
+  , textSize
   , tooltip
   , type_
+  , value
   , visible
   , visibleFocus
   , when
-    -- ** Functions
+  , wrap
+    -- ** Read-only queries
   , activeR
+  , callback
   , contains
+  , hasCallback
+  , height
+  , index
+  , inside
+  , rectangle
+  , takesEvents
+  , topWindow
+  , topWindowOffset
+  , visibleR
+  , width
+  , window
+  , x
+  , y
+    -- ** Effectful functions
   , copy
   , copyCuts
   , copyTooltip
@@ -43,70 +70,26 @@ module Fltk.Input
   , drawFocus
   , drawLabel
   , drawText
-  , getCallback
-  , getCursorColor
-  , getH
-  , getInputType
-  , getMark
-  , getMaximumSize
-  , getPosition
-  , getReadonly
-  , getRectangle
-  , getShortcut
-  , getSize
-  , getTabNav
-  , getTextcolor
-  , getTextfont
-  , getTextsize
-  , getTooltip
-  , getTopWindow
-  , getTopWindowOffset
-  , getValue
-  , getVisibleR
-  , getW
-  , getWindow
-  , getWrap
-  , getX
-  , getY
   , handle
-  , hasCallback
-  , index
   , insert
   , insertWithLength
-  , inside
   , measureLabel
   , redraw
   , redrawLabel
   , replace
   , resize
-  , setAlign
   , setCallback
   , setColorWithBgSel
-  , setCursorColor
   , setDamageInside
-  , setInputType
-  , setMark
-  , setMaximumSize
-  , setPosition
-  , setReadonly
-  , setShortcut
   , setSize
-  , setTabNav
-  , setTextcolor
-  , setTextfont
-  , setTextsize
-  , setValue
-  , setWrap
-  , staticValue
   , takeFocus
-  , takesevents
   , undo
   ) where
 
 import Fltk.Internal.Types (Group(..), Image(..), Input(..), Widget(..),
                             Window(..))
 
-import qualified Fltk.Internal.Widget as Widget
+import qualified Fltk.Internal as Internal
 
 import Data.Coerce   (coerce)
 import Data.StateVar (StateVar)
@@ -139,146 +122,223 @@ wrapped =
 
 
 --------------------------------------------------------------------------------
--- Properties
+-- Read-write properties
 --------------------------------------------------------------------------------
 
 active ::
      Input -- ^
   -> StateVar Bool
 active =
-  wrapped Widget.active
+  wrapped Internal.active
 
 align ::
      Input -- ^
   -> StateVar Fltk.Alignments
 align =
-  wrapped Widget.align
+  wrapped Internal.align
 
 box ::
      Input -- ^
   -> StateVar Fltk.Boxtype
 box =
-  wrapped Widget.box
+  wrapped Internal.box
 
 changed ::
      Input -- ^
   -> StateVar Bool
 changed =
-  wrapped Widget.changed
+  wrapped Internal.changed
 
 color ::
      Input -- ^
   -> StateVar Fltk.Color
 color =
-  wrapped Widget.color
+  wrapped Internal.color
+
+cursorColor ::
+     Input -- ^
+  -> StateVar Fltk.Color
+cursorColor =
+  wrapped Internal.cursorColor
 
 damage ::
      Input -- ^
   -> StateVar [Fltk.Damage]
 damage =
-  wrapped Widget.damage
+  wrapped Internal.damage
 
 deimage ::
      Input -- ^
   -> StateVar (Maybe Image)
 deimage =
-  wrapped Widget.deimage
+  wrapped Internal.deimage
 
 flags ::
      Input -- ^
   -> StateVar [Fltk.WidgetFlag]
 flags =
-  wrapped Widget.flags
+  wrapped Internal.flags
 
 image ::
      Input -- ^
   -> StateVar (Maybe Image)
 image =
-  wrapped Widget.image
+  wrapped Internal.image
+
+inputType ::
+     Input -- ^
+  -> StateVar Fltk.FlInputType
+inputType =
+  wrapped Internal.inputType
 
 label ::
      Input -- ^
   -> StateVar Text
 label =
-  wrapped Widget.label
+  wrapped Internal.label
 
 labelColor ::
      Input -- ^
   -> StateVar Fltk.Color
 labelColor =
-  wrapped Widget.labelColor
+  wrapped Internal.labelColor
 
 labelFont ::
      Input -- ^
   -> StateVar Fltk.Font
 labelFont =
-  wrapped Widget.labelFont
+  wrapped Internal.labelFont
 
 labelSize ::
      Input -- ^
   -> StateVar Fltk.FontSize
 labelSize =
-  wrapped Widget.labelSize
+  wrapped Internal.labelSize
 
 labelType ::
      Input -- ^
   -> StateVar Fltk.Labeltype
 labelType =
-  wrapped Widget.labelType
+  wrapped Internal.labelType
+
+mark ::
+     Input -- ^
+  -> StateVar Int
+mark =
+  wrapped Internal.mark
+
+maximumSize ::
+     Input -- ^
+  -> StateVar Int
+maximumSize =
+  wrapped Internal.maximumSize
 
 output ::
      Input -- ^
   -> StateVar Bool
 output =
-  wrapped Widget.output
+  wrapped Internal.output
 
 parent ::
      Input -- ^
   -> StateVar (Maybe Group)
 parent =
-  wrapped Widget.parent
+  wrapped Internal.parent
+
+position ::
+     Input -- ^
+  -> StateVar Int
+position =
+  wrapped Internal.position
+
+readonly ::
+     Input -- ^
+  -> StateVar Bool
+readonly =
+  wrapped Internal.readonly
 
 selectionColor ::
      Input -- ^
   -> StateVar Fltk.Color
 selectionColor =
-  wrapped Widget.selectionColor
+  wrapped Internal.selectionColor
+
+shortcut ::
+     Input -- ^
+  -> StateVar (Maybe Fltk.ShortcutKeySequence)
+shortcut =
+  wrapped Internal.shortcut
+
+tabNav ::
+     Input -- ^
+  -> StateVar Bool
+tabNav =
+  wrapped Internal.tabNav
+
+textColor ::
+     Input -- ^
+  -> StateVar Fltk.Color
+textColor =
+  wrapped Internal.textColor
+
+textFont ::
+     Input -- ^
+  -> StateVar Fltk.Font
+textFont =
+  wrapped Internal.textFont
+
+textSize ::
+     Input -- ^
+  -> StateVar Fltk.FontSize
+textSize =
+  wrapped Internal.textSize
 
 tooltip ::
      Input -- ^
   -> StateVar Text
 tooltip =
-  wrapped Widget.tooltip
+  wrapped Internal.tooltip
 
 type_ ::
      Input -- ^
   -> StateVar Word8
 type_ =
-  wrapped Widget.type_
+  wrapped Internal.type_
+
+value ::
+     Input -- ^
+  -> StateVar Text
+value =
+  wrapped Internal.value
 
 visible ::
      Input -- ^
   -> StateVar Bool
 visible =
-  wrapped Widget.visible
+  wrapped Internal.visible
 
 visibleFocus ::
      Input -- ^
   -> StateVar Bool
 visibleFocus =
-  wrapped Widget.visibleFocus
+  wrapped Internal.visibleFocus
 
 when ::
      Input -- ^
   -> StateVar [Fltk.When]
 when =
-  wrapped Widget.when
+  wrapped Internal.when
+
+wrap ::
+     Input -- ^
+  -> StateVar Bool
+wrap =
+  wrapped Internal.wrap
 
 
 --------------------------------------------------------------------------------
--- Functions
+-- Read-only queries
 --------------------------------------------------------------------------------
-
 
 activeR ::
      Input -- ^
@@ -292,6 +352,97 @@ contains ::
   -> IO Bool
 contains input widget =
   wrapped Fltk.contains input (unWidget widget)
+
+callback ::
+     Input -- ^
+  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
+callback =
+  wrapped Fltk.getCallback
+
+hasCallback ::
+     Input -- ^
+  -> IO Bool
+hasCallback =
+  wrapped Fltk.hasCallback
+
+height ::
+     Input -- ^
+  -> IO Fltk.Height
+height =
+  wrapped Fltk.getH
+
+index ::
+     Input -- ^
+  -> Fltk.AtIndex -- ^
+  -> IO Char
+index =
+  wrapped Fltk.index
+
+inside ::
+     Input -- ^
+  -> Widget -- ^
+  -> IO Bool
+inside input widget =
+  wrapped Fltk.inside input (unWidget widget)
+
+rectangle ::
+     Input -- ^
+  -> IO Fltk.Rectangle
+rectangle =
+  wrapped Fltk.getRectangle
+
+takesEvents ::
+     Input -- ^
+  -> IO Bool
+takesEvents =
+  wrapped Fltk.takesevents
+
+topWindow ::
+     Input -- ^
+  -> IO (Maybe Window)
+topWindow =
+  coerce (wrapped Fltk.getTopWindow)
+
+topWindowOffset ::
+     Input -- ^
+  -> IO Fltk.Position
+topWindowOffset =
+  wrapped Fltk.getTopWindowOffset
+
+visibleR ::
+     Input -- ^
+  -> IO Bool
+visibleR =
+  wrapped Fltk.getVisibleR
+
+width ::
+     Input -- ^
+  -> IO Fltk.Width
+width =
+  wrapped Fltk.getW
+
+window ::
+     Input -- ^
+  -> IO (Maybe Window)
+window =
+  coerce (wrapped Fltk.getWindow)
+
+x ::
+     Input -- ^
+  -> IO Fltk.X
+x =
+  wrapped Fltk.getX
+
+y ::
+     Input -- ^
+  -> IO Fltk.Y
+y =
+  wrapped Fltk.getY
+
+
+--------------------------------------------------------------------------------
+-- Effectful functions
+--------------------------------------------------------------------------------
 
 -- | Put the current selection into the clipboard.
 copy ::
@@ -390,175 +541,12 @@ drawLabel ::
 drawLabel =
   wrapped Fltk.drawLabel
 
-getCallback ::
-     Input -- ^
-  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
-getCallback =
-  wrapped Fltk.getCallback
-
-getCursorColor ::
-     Input -- ^
-  -> IO Fltk.Color
-getCursorColor =
-  wrapped Fltk.getCursorColor
-
-getH ::
-     Input -- ^
-  -> IO Fltk.Height
-getH =
-  wrapped Fltk.getH
-
-getInputType ::
-     Input -- ^
-  -> IO Fltk.FlInputType
-getInputType =
-  wrapped Fltk.getInputType
-
-getMark ::
-     Input -- ^
-  -> IO Int
-getMark =
-  wrapped Fltk.getMark
-
-getMaximumSize ::
-     Input -- ^
-  -> IO Int
-getMaximumSize =
-  wrapped Fltk.getMaximumSize
-
-getPosition ::
-     Input -- ^
-  -> IO Int
-getPosition =
-  wrapped Fltk.getPosition
-
-getReadonly ::
-     Input -- ^
-  -> IO Bool
-getReadonly =
-  wrapped Fltk.getReadonly
-
-getRectangle ::
-     Input -- ^
-  -> IO Fltk.Rectangle
-getRectangle =
-  wrapped Fltk.getRectangle
-
-getShortcut ::
-     Input -- ^
-  -> IO (Maybe Fltk.ShortcutKeySequence)
-getShortcut =
-  wrapped Fltk.getShortcut
-
-getSize ::
-     Input -- ^
-  -> IO Int
-getSize =
-  wrapped Fltk.getSize
-
-getTabNav ::
-     Input -- ^
-  -> IO Bool
-getTabNav =
-  wrapped Fltk.getTabNav
-
-getTextcolor ::
-     Input -- ^
-  -> IO Fltk.Color
-getTextcolor =
-  wrapped Fltk.getTextcolor
-
-getTextfont ::
-     Input -- ^
-  -> IO Fltk.Font
-getTextfont =
-  wrapped Fltk.getTextfont
-
-getTextsize ::
-     Input -- ^
-  -> IO Fltk.FontSize
-getTextsize =
-  wrapped Fltk.getTextsize
-
-getTooltip ::
-     Input -- ^
-  -> IO Text
-getTooltip =
-  wrapped Fltk.getTooltip
-
-getTopWindow ::
-     Input -- ^
-  -> IO (Maybe Window)
-getTopWindow =
-  coerce (wrapped Fltk.getTopWindow)
-
-getTopWindowOffset ::
-     Input -- ^
-  -> IO Fltk.Position
-getTopWindowOffset =
-  wrapped Fltk.getTopWindowOffset
-
-getValue ::
-     Input -- ^
-  -> IO Text
-getValue =
-  wrapped Fltk.getValue
-
-getVisibleR ::
-     Input -- ^
-  -> IO Bool
-getVisibleR =
-  wrapped Fltk.getVisibleR
-
-getW ::
-     Input -- ^
-  -> IO Fltk.Width
-getW =
-  wrapped Fltk.getW
-
-getWindow ::
-     Input -- ^
-  -> IO (Maybe Window)
-getWindow =
-  coerce (wrapped Fltk.getWindow)
-
-getWrap ::
-     Input -- ^
-  -> IO Bool
-getWrap =
-  wrapped Fltk.getWrap
-
-getX ::
-     Input -- ^
-  -> IO Fltk.X
-getX =
-  wrapped Fltk.getX
-
-getY ::
-     Input -- ^
-  -> IO Fltk.Y
-getY =
-  wrapped Fltk.getY
-
 handle ::
      Input -- ^
   -> Fltk.Event -- ^
   -> IO (Either Fltk.UnknownEvent ())
 handle =
   wrapped Fltk.handle
-
-hasCallback ::
-     Input -- ^
-  -> IO Bool
-hasCallback =
-  wrapped Fltk.hasCallback
-
-index ::
-     Input -- ^
-  -> Fltk.AtIndex -- ^
-  -> IO Char
-index =
-  wrapped Fltk.index
 
 insert ::
      Input -- ^
@@ -574,13 +562,6 @@ insertWithLength ::
   -> IO (Either Fltk.NoChange ())
 insertWithLength =
   wrapped Fltk.insertWithLength
-
-inside ::
-     Input -- ^
-  -> Widget -- ^
-  -> IO Bool
-inside input widget =
-  wrapped Fltk.inside input (unWidget widget)
 
 measureLabel ::
      Input -- ^
@@ -616,13 +597,6 @@ resize ::
 resize =
   wrapped Fltk.resize
 
-setAlign ::
-     Input -- ^
-  -> Fltk.Alignments
-  -> IO ()
-setAlign =
-  wrapped Fltk.setAlign
-
 setCallback ::
      Input -- ^
   -> (Input -> IO ()) -- ^
@@ -638,13 +612,6 @@ setColorWithBgSel ::
 setColorWithBgSel =
   wrapped Fltk.setColorWithBgSel
 
-setCursorColor ::
-     Input -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setCursorColor =
-  wrapped Fltk.setCursorColor
-
 setDamageInside ::
      Input -- ^
   -> [Fltk.Damage] -- ^
@@ -653,49 +620,6 @@ setDamageInside ::
 setDamageInside =
   wrapped Fltk.setDamageInside
 
-setInputType ::
-     Input -- ^
-  -> Fltk.FlInputType -- ^
-  -> IO ()
-setInputType =
-  wrapped Fltk.setInputType
-
-setMark ::
-     Input -- ^
-  -> Int -- ^
-  -> IO (Either Fltk.NoChange ())
-setMark =
-  wrapped Fltk.setMark
-
-setMaximumSize ::
-     Input -- ^
-  -> Int -- ^
-  -> IO ()
-setMaximumSize =
-  wrapped Fltk.setMaximumSize
-
-setPosition ::
-     Input -- ^
-  -> Int -- ^
-  -> Maybe Int -- ^
-  -> IO (Either Fltk.NoChange ())
-setPosition =
-  wrapped Fltk.setPosition
-
-setReadonly ::
-     Input -- ^
-  -> Bool -- ^
-  -> IO ()
-setReadonly =
-  wrapped Fltk.setReadonly
-
-setShortcut ::
-     Input -- ^
-  -> Fltk.ShortcutKeySequence -- ^
-  -> IO ()
-setShortcut =
-  wrapped Fltk.setShortcut
-
 setSize ::
      Input -- ^
   -> Fltk.Size -- ^
@@ -703,66 +627,11 @@ setSize ::
 setSize =
   wrapped Fltk.setSize
 
-setTabNav ::
-     Input -- ^
-  -> Bool -- ^
-  -> IO ()
-setTabNav =
-  wrapped Fltk.setTabNav
-
-setTextcolor ::
-     Input -- ^
-  -> Fltk.Color -- ^
-  -> IO ()
-setTextcolor =
-  wrapped Fltk.setTextcolor
-
-setTextfont ::
-     Input -- ^
-  -> Fltk.Font -- ^
-  -> IO ()
-setTextfont =
-  wrapped Fltk.setTextfont
-
-setTextsize ::
-     Input -- ^
-  -> Fltk.FontSize -- ^
-  -> IO ()
-setTextsize =
-  wrapped Fltk.setTextsize
-
-setValue ::
-     Input -- ^
-  -> Text -- ^
-  -> IO (Either Fltk.NoChange ())
-setValue =
-  wrapped Fltk.setValue
-
-setWrap ::
-     Input -- ^
-  -> Bool -- ^
-  -> IO ()
-setWrap =
-  wrapped Fltk.setWrap
-
-staticValue ::
-     Input -- ^
-  -> Text -- ^
-  -> IO (Either Fltk.NoChange ())
-staticValue =
-  wrapped Fltk.staticValue
-
 takeFocus ::
      Input -- ^
   -> IO (Either Fltk.NoChange ())
 takeFocus =
   wrapped Fltk.takeFocus
-
-takesevents ::
-     Input -- ^
-  -> IO Bool
-takesevents =
-  wrapped Fltk.takesevents
 
 undo ::
      Input -- ^

@@ -70,11 +70,10 @@ module Fltk.Button
 import Fltk.Internal.Types (Button(..), Group(..), Image(..), Widget(..),
                             Window(..))
 
-import qualified Fltk.Internal.Widget as Widget
+import qualified Fltk.Internal as Internal
 
 import Data.Coerce   (coerce)
 import Data.Functor  (void)
-import Data.Maybe    (fromMaybe)
 import Data.StateVar (StateVar, makeStateVar)
 import Data.Text     (Text)
 import Foreign.Ptr   (FunPtr)
@@ -152,43 +151,43 @@ active ::
      Button -- ^
   -> StateVar Bool
 active =
-  wrapped Widget.active
+  wrapped Internal.active
 
 align ::
      Button -- ^
   -> StateVar Fltk.Alignments
 align =
-  wrapped Widget.align
+  wrapped Internal.align
 
 box ::
      Button -- ^
   -> StateVar Fltk.Boxtype
 box =
-  wrapped Widget.box
+  wrapped Internal.box
 
 changed ::
      Button -- ^
   -> StateVar Bool
 changed =
-  wrapped Widget.changed
+  wrapped Internal.changed
 
 color ::
      Button -- ^
   -> StateVar Fltk.Color
 color =
-  wrapped Widget.color
+  wrapped Internal.color
 
 damage ::
      Button -- ^
   -> StateVar [Fltk.Damage]
 damage =
-  wrapped Widget.damage
+  wrapped Internal.damage
 
 deimage ::
      Button -- ^
   -> StateVar (Maybe Image)
 deimage =
-  wrapped Widget.deimage
+  wrapped Internal.deimage
 
 downBox ::
      Button -- ^
@@ -206,77 +205,73 @@ flags ::
      Button -- ^
   -> StateVar [Fltk.WidgetFlag]
 flags =
-  wrapped Widget.flags
+  wrapped Internal.flags
 
 image ::
      Button -- ^
   -> StateVar (Maybe Image)
 image =
-  wrapped Widget.image
+  wrapped Internal.image
 
 label ::
      Button -- ^
   -> StateVar Text
 label =
-  wrapped Widget.label
+  wrapped Internal.label
 
 labelColor ::
      Button -- ^
   -> StateVar Fltk.Color
 labelColor =
-  wrapped Widget.labelColor
+  wrapped Internal.labelColor
 
 labelFont ::
      Button -- ^
   -> StateVar Fltk.Font
 labelFont =
-  wrapped Widget.labelFont
+  wrapped Internal.labelFont
 
 labelSize ::
      Button -- ^
   -> StateVar Fltk.FontSize
 labelSize =
-  wrapped Widget.labelSize
+  wrapped Internal.labelSize
 
 labelType ::
      Button -- ^
   -> StateVar Fltk.Labeltype
 labelType =
-  wrapped Widget.labelType
+  wrapped Internal.labelType
 
 output ::
      Button -- ^
   -> StateVar Bool
 output =
-  wrapped Widget.output
+  wrapped Internal.output
 
 parent ::
      Button -- ^
   -> StateVar (Maybe Group)
 parent =
-  wrapped Widget.parent
+  wrapped Internal.parent
 
 selectionColor ::
      Button -- ^
   -> StateVar Fltk.Color
 selectionColor =
-  wrapped Widget.selectionColor
+  wrapped Internal.selectionColor
 
 shortcut ::
      Button -- ^
   -> StateVar (Maybe Fltk.ShortcutKeySequence)
 shortcut =
-  prop
-    Fltk.getShortcut
-    (\button ->
-      Fltk.setShortcut button .
-        fromMaybe (Fltk.ShortcutKeySequence [] (Fltk.NormalKeyType '\0')))
+  wrapped Internal.shortcut
 
 tooltip ::
      Button -- ^
   -> StateVar Text
 tooltip =
-  wrapped Widget.tooltip
+  wrapped Internal.tooltip
 
 type_ ::
      Button -- ^
@@ -294,19 +289,19 @@ visible ::
      Button -- ^
   -> StateVar Bool
 visible =
-  wrapped Widget.visible
+  wrapped Internal.visible
 
 visibleFocus ::
      Button -- ^
   -> StateVar Bool
 visibleFocus =
-  wrapped Widget.visibleFocus
+  wrapped Internal.visibleFocus
 
 when ::
      Button -- ^
   -> StateVar [Fltk.When]
 when =
-  wrapped Widget.when
+  wrapped Internal.when
 
 
 --------------------------------------------------------------------------------

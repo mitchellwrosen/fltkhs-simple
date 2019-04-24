@@ -64,7 +64,7 @@ module Fltk.Box
 import Fltk.Internal.Types (Box(..), Group(..), Image(..), Widget(..),
                             Window(..))
 
-import qualified Fltk.Internal.Widget as Widget
+import qualified Fltk.Internal as Internal
 
 import Data.Coerce   (coerce)
 import Data.StateVar (StateVar)
@@ -103,133 +103,133 @@ active ::
      Box -- ^
   -> StateVar Bool
 active =
-  wrapped Widget.active
+  wrapped Internal.active
 
 align ::
      Box -- ^
   -> StateVar Fltk.Alignments
 align =
-  wrapped Widget.align
+  wrapped Internal.align
 
 box ::
      Box -- ^
   -> StateVar Fltk.Boxtype
 box =
-  wrapped Widget.box
+  wrapped Internal.box
 
 changed ::
      Box -- ^
   -> StateVar Bool
 changed =
-  wrapped Widget.changed
+  wrapped Internal.changed
 
 color ::
      Box -- ^
   -> StateVar Fltk.Color
 color =
-  wrapped Widget.color
+  wrapped Internal.color
 
 damage ::
      Box -- ^
   -> StateVar [Fltk.Damage]
 damage =
-  wrapped Widget.damage
+  wrapped Internal.damage
 
 deimage ::
      Box -- ^
   -> StateVar (Maybe Image)
 deimage =
-  wrapped Widget.deimage
+  wrapped Internal.deimage
 
 flags ::
      Box -- ^
   -> StateVar [Fltk.WidgetFlag]
 flags =
-  wrapped Widget.flags
+  wrapped Internal.flags
 
 image ::
      Box -- ^
   -> StateVar (Maybe Image)
 image =
-  wrapped Widget.image
+  wrapped Internal.image
 
 label ::
      Box -- ^
   -> StateVar Text
 label =
-  wrapped Widget.label
+  wrapped Internal.label
 
 labelColor ::
      Box -- ^
   -> StateVar Fltk.Color
 labelColor =
-  wrapped Widget.labelColor
+  wrapped Internal.labelColor
 
 labelFont ::
      Box -- ^
   -> StateVar Fltk.Font
 labelFont =
-  wrapped Widget.labelFont
+  wrapped Internal.labelFont
 
 labelSize ::
      Box -- ^
   -> StateVar Fltk.FontSize
 labelSize =
-  wrapped Widget.labelSize
+  wrapped Internal.labelSize
 
 labelType ::
      Box -- ^
   -> StateVar Fltk.Labeltype
 labelType =
-  wrapped Widget.labelType
+  wrapped Internal.labelType
 
 output ::
      Box -- ^
   -> StateVar Bool
 output =
-  wrapped Widget.output
+  wrapped Internal.output
 
 parent ::
      Box -- ^
   -> StateVar (Maybe Group)
 parent =
-  wrapped Widget.parent
+  wrapped Internal.parent
 
 selectionColor ::
      Box -- ^
   -> StateVar Fltk.Color
 selectionColor =
-  wrapped Widget.selectionColor
+  wrapped Internal.selectionColor
 
 tooltip ::
      Box -- ^
   -> StateVar Text
 tooltip =
-  wrapped Widget.tooltip
+  wrapped Internal.tooltip
 
 type_ ::
      Box -- ^
   -> StateVar Word8
 type_ =
-  wrapped Widget.type_
+  wrapped Internal.type_
 
 visible ::
      Box -- ^
   -> StateVar Bool
 visible =
-  wrapped Widget.visible
+  wrapped Internal.visible
 
 visibleFocus ::
      Box -- ^
   -> StateVar Bool
 visibleFocus =
-  wrapped Widget.visibleFocus
+  wrapped Internal.visibleFocus
 
 when ::
      Box -- ^
   -> StateVar [Fltk.When]
 when =
-  wrapped Widget.when
+  wrapped Internal.when
 
 
 --------------------------------------------------------------------------------

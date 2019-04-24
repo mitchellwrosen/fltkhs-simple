@@ -1,36 +1,54 @@
-module Fltk.Internal.Widget
+module Fltk.Internal
   ( active
   , align
   , box
   , changed
+  , clipChildren
   , color
+  , cursorColor
   , damage
   , deimage
   , flags
   , image
+  , inputType
   , label
   , labelColor
   , labelFont
   , labelSize
   , labelType
+  , mark
+  , maximumSize
   , output
   , parent
+  , position
+  , readonly
+  , resizable
   , selectionColor
+  , shortcut
+  , tabNav
+  , textColor
+  , textFont
+  , textSize
   , tooltip
   , type_
+  , value
   , visible
   , visibleFocus
   , when
+  , wrap
   ) where
 
-import Fltk.Internal.Types (Group(..), Image(..))
+import Fltk.Internal.Types (Group(..), Image(..), Widget(..))
 
 import Data.Coerce   (coerce)
 import Data.Foldable (traverse_)
+import Data.Functor  (void)
+import Data.Maybe    (fromMaybe)
 import Data.StateVar (StateVar, makeStateVar)
 import Data.Text     (Text)
 import Data.Word     (Word8)
 
+import qualified Graphics.UI.FLTK.LowLevel.Base.Input      as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Base.Widget     as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
@@ -93,6 +111,17 @@ changed x =
       False -> Fltk.clearChanged x
       True -> Fltk.setChanged x)
 
+clipChildren ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.ClipChildren ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetClipChildren ())
+     , Fltk.Op (Fltk.ClipChildren ()) r a (IO Bool)
+     , Fltk.Op (Fltk.SetClipChildren ()) s a (Bool -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+clipChildren x =
+  makeStateVar (Fltk.clipChildren x) (Fltk.setClipChildren x)
+
 color ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetColor ())
      , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetColor ())
@@ -103,6 +132,17 @@ color ::
   -> StateVar Fltk.Color
 color x =
   makeStateVar (Fltk.getColor x) (Fltk.setColor x)
+
+cursorColor ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetCursorColor ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetCursorColor ())
+     , Fltk.Op (Fltk.GetCursorColor ()) r a (IO Fltk.Color)
+     , Fltk.Op (Fltk.SetCursorColor ()) s a (Fltk.Color -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Fltk.Color
+cursorColor x =
+  makeStateVar (Fltk.getCursorColor x) (Fltk.setCursorColor x)
 
 damage ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetDamage ())
@@ -158,6 +198,17 @@ image x =
   makeStateVar
     (coerce @(IO (Maybe (Fltk.Ref Fltk.Image))) (Fltk.getImage x))
     (coerce @(Maybe (Fltk.Ref Fltk.Image) -> IO ()) (Fltk.setImage x))
+
+inputType ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetInputType ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetInputType ())
+     , Fltk.Op (Fltk.GetInputType ()) r a (IO Fltk.FlInputType)
+     , Fltk.Op (Fltk.SetInputType ()) s a (Fltk.FlInputType -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Fltk.FlInputType
+inputType x =
+  makeStateVar (Fltk.getInputType x) (Fltk.setInputType x)
 
 label ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabel ())
@@ -216,6 +267,30 @@ labelType x =
     (Fltk.getLabeltype x)
     (\t -> Fltk.setLabeltype x t Fltk.ResolveImageLabelOverwrite)
 
+mark ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetMark ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetMark ())
+     , Fltk.Op (Fltk.GetMark ()) r a (IO Int)
+     , Fltk.Op (Fltk.SetMark ()) s a (Int -> IO (Either Fltk.NoChange ()))
+     )
+  => Fltk.Ref a
+  -> StateVar Int
+mark x =
+  makeStateVar
+    (Fltk.getMark x)
+    (void . (Fltk.setMark x :: Int -> IO (Either Fltk.NoChange ())))
+
+maximumSize ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetMaximumSize ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetMaximumSize ())
+     , Fltk.Op (Fltk.GetMaximumSize ()) r a (IO Int)
+     , Fltk.Op (Fltk.SetMaximumSize ()) s a (Int -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Int
+maximumSize x =
+  makeStateVar (Fltk.getMaximumSize x) (Fltk.setMaximumSize x)
+
 output ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetOutput ())
      , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetOutput ())
@@ -246,6 +321,43 @@ parent x =
     (coerce @(IO (Maybe (Fltk.Ref Fltk.GroupBase))) (Fltk.getParent x))
     (coerce @(Maybe (Fltk.Ref Fltk.GroupBase) -> IO ()) (Fltk.setParent x))
 
+position ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetPosition ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetPosition ())
+     , Fltk.Op (Fltk.GetPosition ()) r a (IO Int)
+     , Fltk.Op (Fltk.SetPosition ()) s a (Int -> Maybe Int -> IO (Either Fltk.NoChange ()))
+     )
+  => Fltk.Ref a
+  -> StateVar Int
+position x =
+  makeStateVar
+    (Fltk.getPosition x)
+    (\n -> void (Fltk.setPosition x n (Nothing :: Maybe Int) :: IO (Either Fltk.NoChange ())))
+
+readonly ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetReadonly ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetReadonly ())
+     , Fltk.Op (Fltk.GetReadonly ()) r a (IO Bool)
+     , Fltk.Op (Fltk.SetReadonly ()) s a (Bool -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+readonly x =
+  makeStateVar (Fltk.getReadonly x) (Fltk.setReadonly x)
+
+resizable ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetResizable ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetResizable ())
+     , Fltk.Op (Fltk.GetResizable ()) r a (IO (Maybe (Fltk.Ref Fltk.WidgetBase)))
+     , Fltk.Op (Fltk.SetResizable ()) s a (Maybe (Fltk.Ref Fltk.WidgetBase) -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar (Maybe Widget)
+resizable x =
+  makeStateVar
+    (coerce @(IO (Maybe (Fltk.Ref Fltk.WidgetBase))) (Fltk.getResizable x))
+    (coerce @(Maybe (Fltk.Ref Fltk.WidgetBase) -> IO ()) (Fltk.setResizable x))
+
 selectionColor ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetSelectionColor ())
      , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetSelectionColor ())
@@ -256,6 +368,64 @@ selectionColor ::
   -> StateVar Fltk.Color
 selectionColor x =
   makeStateVar (Fltk.getSelectionColor x) (Fltk.setSelectionColor x)
+
+shortcut ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetShortcut ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetShortcut ())
+     , Fltk.Op (Fltk.GetShortcut ()) r a (IO (Maybe Fltk.ShortcutKeySequence))
+     , Fltk.Op (Fltk.SetShortcut ()) s a (Fltk.ShortcutKeySequence -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar (Maybe Fltk.ShortcutKeySequence)
+shortcut x =
+  makeStateVar
+    (Fltk.getShortcut x)
+    (Fltk.setShortcut x .
+      fromMaybe (Fltk.ShortcutKeySequence [] (Fltk.NormalKeyType '\0')))
+
+tabNav ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetTabNav ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetTabNav ())
+     , Fltk.Op (Fltk.GetTabNav ()) r a (IO Bool)
+     , Fltk.Op (Fltk.SetTabNav ()) s a (Bool -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+tabNav x =
+  makeStateVar (Fltk.getTabNav x) (Fltk.setTabNav x)
+
+textColor ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetTextcolor ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetTextcolor ())
+     , Fltk.Op (Fltk.GetTextcolor ()) r a (IO Fltk.Color)
+     , Fltk.Op (Fltk.SetTextcolor ()) s a (Fltk.Color -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Fltk.Color
+textColor x =
+  makeStateVar (Fltk.getTextcolor x) (Fltk.setTextcolor x)
+
+textFont ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetTextfont ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetTextfont ())
+     , Fltk.Op (Fltk.GetTextfont ()) r a (IO Fltk.Font)
+     , Fltk.Op (Fltk.SetTextfont ()) s a (Fltk.Font -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Fltk.Font
+textFont x =
+  makeStateVar (Fltk.getTextfont x) (Fltk.setTextfont x)
+
+textSize ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetTextsize ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetTextsize ())
+     , Fltk.Op (Fltk.GetTextsize ()) r a (IO Fltk.FontSize)
+     , Fltk.Op (Fltk.SetTextsize ()) s a (Fltk.FontSize -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Fltk.FontSize
+textSize x =
+  makeStateVar (Fltk.getTextsize x) (Fltk.setTextsize x)
 
 tooltip ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetTooltip ())
@@ -278,6 +448,19 @@ type_ ::
   -> StateVar Word8
 type_ x =
   makeStateVar (Fltk.getType_ x) (Fltk.setType x)
+
+value ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetValue ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetValue ())
+     , Fltk.Op (Fltk.GetValue ()) r a (IO Text)
+     , Fltk.Op (Fltk.SetValue ()) s a (Text -> IO (Either Fltk.NoChange ()))
+     )
+  => Fltk.Ref a
+  -> StateVar Text
+value x =
+  makeStateVar
+    (Fltk.getValue x)
+    (void . (Fltk.setValue x :: Text -> IO (Either Fltk.NoChange ())))
 
 visible ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetVisible ())
@@ -317,3 +500,14 @@ when ::
   -> StateVar [Fltk.When]
 when x =
   makeStateVar (Fltk.getWhen x) (Fltk.setWhen x)
+
+wrap ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetWrap ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetWrap ())
+     , Fltk.Op (Fltk.GetWrap ()) r a (IO Bool)
+     , Fltk.Op (Fltk.SetWrap ()) s a (Bool -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+wrap x =
+  makeStateVar (Fltk.getWrap x) (Fltk.setWrap x)

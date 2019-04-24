@@ -51,10 +51,9 @@ library
     src
 
   other-modules:
-    Fltk.Internal.Group
+    Fltk.Internal
     Fltk.Internal.Types
     Fltk.Internal.Upcast
-    Fltk.Internal.Widget
 
 executable example
   build-depends:
