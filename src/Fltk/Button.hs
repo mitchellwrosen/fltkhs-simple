@@ -49,9 +49,6 @@ module Fltk.Button
   , copyTooltip
   , destroy
   , doCallback
-  , drawBackdrop
-  , drawFocus
-  , drawLabel
   , handle
   , hasCallback
   , measureLabel
@@ -408,26 +405,6 @@ doCallback ::
   -> IO ()
 doCallback =
   wrapped Fltk.doCallback
-
-drawBackdrop ::
-     Button -- ^
-  -> IO ()
-drawBackdrop =
-  wrapped Fltk.drawBackdrop
-
-drawFocus ::
-     Button -- ^
-  -> Maybe (Fltk.Boxtype, Fltk.Rectangle)
-  -> IO ()
-drawFocus =
-  wrapped Fltk.drawFocus
-
-drawLabel ::
-     Button -- ^
-  -> Maybe (Fltk.Rectangle, Fltk.Alignments)
-  -> IO ()
-drawLabel =
-  wrapped Fltk.drawLabel
 
 handle ::
      Button -- ^

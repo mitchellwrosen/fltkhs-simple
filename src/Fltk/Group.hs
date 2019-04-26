@@ -56,12 +56,6 @@ module Fltk.Group
   , ddfdesignKludge
   , destroy
   , doCallback
-  , drawBackdrop
-  , drawChild
-  , drawChildren
-  , drawFocus
-  , drawLabel
-  , drawOutsideLabel
   , end
   , focus
   , handle
@@ -443,46 +437,6 @@ doCallback ::
   -> IO ()
 doCallback =
   wrapped Fltk.doCallback
-
-drawBackdrop ::
-     Group -- ^
-  -> IO ()
-drawBackdrop =
-  wrapped Fltk.drawBackdrop
-
-drawChild ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO ()
-drawChild group widget =
-  wrapped Fltk.drawChild group (unWidget widget)
-
-drawChildren ::
-     Group -- ^
-  -> IO ()
-drawChildren =
-  wrapped Fltk.drawChildren
-
-drawFocus ::
-     Group -- ^
-  -> Maybe (Fltk.Boxtype, Fltk.Rectangle) -- ^
-  -> IO ()
-drawFocus =
-  wrapped Fltk.drawFocus
-
-drawLabel ::
-     Group -- ^
-  -> Maybe (Fltk.Rectangle, Fltk.Alignments) -- ^
-  -> IO ()
-drawLabel =
-  wrapped Fltk.drawLabel
-
-drawOutsideLabel ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO ()
-drawOutsideLabel group widget =
-  wrapped Fltk.drawOutsideLabel group (unWidget widget)
 
 end ::
      Group -- ^

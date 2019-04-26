@@ -45,9 +45,6 @@ module Fltk.Box
   , copyTooltip
   , destroy
   , doCallback
-  , drawBackdrop
-  , drawFocus
-  , drawLabel
   , handle
   , measureLabel
   , redraw
@@ -349,26 +346,6 @@ doCallback ::
   -> IO ()
 doCallback =
   wrapped Fltk.doCallback
-
-drawBackdrop ::
-     Box -- ^
-  -> IO ()
-drawBackdrop =
-  wrapped Fltk.drawBackdrop
-
-drawFocus ::
-     Box -- ^
-  -> Maybe (Fltk.Boxtype, Fltk.Rectangle) -- ^
-  -> IO ()
-drawFocus =
-  wrapped Fltk.drawFocus
-
-drawLabel ::
-     Box -- ^
-  -> Maybe (Fltk.Rectangle, Fltk.Alignments) -- ^
-  -> IO ()
-drawLabel =
-  wrapped Fltk.drawLabel
 
 handle ::
      Box -- ^
