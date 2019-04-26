@@ -25,6 +25,7 @@ module Fltk.Internal
   , resizable
   , selectionColor
   , shortcut
+  , size
   , tabNav
   , textColor
   , textFont
@@ -382,6 +383,27 @@ shortcut x =
     (Fltk.getShortcut x)
     (Fltk.setShortcut x .
       fromMaybe (Fltk.ShortcutKeySequence [] (Fltk.NormalKeyType '\0')))
+
+size ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetX ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.GetY ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.GetW ())
+     , Fltk.Match u ~ Fltk.FindOp a a (Fltk.GetH ())
+     , Fltk.Match v ~ Fltk.FindOp a a (Fltk.Resize ())
+     , Fltk.Op (Fltk.GetX ()) r a (IO Fltk.X)
+     , Fltk.Op (Fltk.GetY ()) s a (IO Fltk.Y)
+     , Fltk.Op (Fltk.GetW ()) t a (IO Fltk.Width)
+     , Fltk.Op (Fltk.GetH ()) u a (IO Fltk.Height)
+     , Fltk.Op (Fltk.Resize ()) v a (Fltk.Rectangle -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Fltk.Rectangle
+size x =
+  makeStateVar
+    (Fltk.Rectangle
+      <$> (Fltk.Position <$> Fltk.getX x <*> Fltk.getY x)
+      <*> (Fltk.Size <$> Fltk.getW x <*> Fltk.getH x))
+    (Fltk.resize x)
 
 tabNav ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetTabNav ())

@@ -20,6 +20,7 @@ module Fltk.Box
   , output
   , parent
   , selectionColor
+  , size
   , tooltip
   , type_
   , visible
@@ -30,17 +31,12 @@ module Fltk.Box
   , callback
   , contains
   , hasCallback
-  , height
   , inside
-  , rectangle
   , takesEvents
   , topWindow
   , topWindowOffset
   , visibleR
-  , width
   , window
-  , x
-  , y
     -- ** Effectful functions
   , copyTooltip
   , destroy
@@ -49,7 +45,6 @@ module Fltk.Box
   , measureLabel
   , redraw
   , redrawLabel
-  , resize
   , setCallback
   , setColorWithBgSel
   , setDamageInside
@@ -196,6 +191,12 @@ selectionColor ::
 selectionColor =
   wrapped Internal.selectionColor
 
+size ::
+     Box -- ^
+  -> StateVar Fltk.Rectangle
+size =
+  wrapped Internal.size
+
 tooltip ::
      Box -- ^
   -> StateVar Text
@@ -256,24 +257,12 @@ hasCallback ::
 hasCallback =
   wrapped Fltk.hasCallback
 
-height ::
-     Box -- ^
-  -> IO Fltk.Height
-height =
-  wrapped Fltk.getH
-
 inside ::
      Box -- ^
   -> Widget -- ^
   -> IO Bool
 inside box widget =
   wrapped Fltk.inside box (unWidget widget)
-
-rectangle ::
-     Box -- ^
-  -> IO Fltk.Rectangle
-rectangle =
- wrapped Fltk.getRectangle
 
 takesEvents ::
      Box -- ^
@@ -299,29 +288,11 @@ visibleR ::
 visibleR =
   wrapped Fltk.getVisibleR
 
-width ::
-     Box -- ^
-  -> IO Fltk.Width
-width =
-  wrapped Fltk.getW
-
 window ::
      Box -- ^
   -> IO (Maybe Window)
 window =
   coerce (wrapped Fltk.getWindow)
-
-x ::
-     Box -- ^
-  -> IO Fltk.X
-x =
-  wrapped Fltk.getX
-
-y ::
-     Box -- ^
-  -> IO Fltk.Y
-y =
-  wrapped Fltk.getY
 
 
 --------------------------------------------------------------------------------
@@ -372,13 +343,6 @@ redrawLabel ::
   -> IO ()
 redrawLabel =
   wrapped Fltk.redrawLabel
-
-resize ::
-     Box -- ^
-  -> Fltk.Rectangle -- ^
-  -> IO ()
-resize =
-  wrapped Fltk.resize
 
 setCallback ::
      Box -- ^

@@ -24,6 +24,7 @@ module Fltk.Button
   , parent
   , selectionColor
   , shortcut
+  , size
   , tooltip
   , type_
   , value
@@ -34,17 +35,12 @@ module Fltk.Button
   , activeR
   , callback
   , contains
-  , height
   , inside
-  , rectangle
   , topWindow
   , topWindowOffset
   , takesEvents
   , visibleR
-  , width
   , window
-  , x
-  , y
     -- ** Effectful functions
   , copyTooltip
   , destroy
@@ -54,7 +50,6 @@ module Fltk.Button
   , measureLabel
   , redraw
   , redrawLabel
-  , resize
   , setCallback
   , setColorWithBgSel
   , setDamageInside
@@ -262,6 +257,12 @@ shortcut ::
 shortcut =
   wrapped Internal.shortcut
 
+size ::
+     Button -- ^
+  -> StateVar Fltk.Rectangle
+size =
+  wrapped Internal.size
+
 tooltip ::
      Button -- ^
   -> StateVar Text
@@ -322,18 +323,6 @@ contains ::
 contains button widget =
   wrapped Fltk.contains button (unWidget widget)
 
-height ::
-     Button -- ^
-  -> IO Fltk.Height
-height =
-  wrapped Fltk.getH
-
-rectangle ::
-     Button -- ^
-  -> IO Fltk.Rectangle
-rectangle =
-  wrapped Fltk.getRectangle
-
 takesEvents ::
      Button -- ^
   -> IO Bool
@@ -358,29 +347,11 @@ visibleR ::
 visibleR =
   wrapped Fltk.getVisibleR
 
-width ::
-     Button -- ^
-  -> IO Fltk.Width
-width =
-  wrapped Fltk.getW
-
 window ::
      Button -- ^
   -> IO (Maybe Window)
 window =
   coerce (wrapped Fltk.getWindow)
-
-x ::
-     Button -- ^
-  -> IO Fltk.X
-x =
-  wrapped Fltk.getX
-
-y ::
-     Button -- ^
-  -> IO Fltk.Y
-y =
-  wrapped Fltk.getY
 
 
 --------------------------------------------------------------------------------
@@ -444,13 +415,6 @@ redrawLabel ::
   -> IO ()
 redrawLabel =
   wrapped Fltk.redrawLabel
-
-resize ::
-     Button -- ^
-  -> Fltk.Rectangle -- ^
-  -> IO ()
-resize =
-  wrapped Fltk.resize
 
 setCallback ::
      Button -- ^

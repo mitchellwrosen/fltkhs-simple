@@ -22,6 +22,7 @@ module Fltk.Group
   , parent
   -- , resizable
   , selectionColor
+  , size
   , tooltip
   , type_
   , visible
@@ -36,17 +37,12 @@ module Fltk.Group
   , contains
   , find
   , hasCallback
-  , height
   , inside
-  , rectangle
   , takesEvents
   , topWindow
   , topWindowOffset
   , visibleR
-  , width
   , window
-  , x
-  , y
     -- ** Effectful functions
   , add
   , addResizable
@@ -66,7 +62,6 @@ module Fltk.Group
   , redrawLabel
   , removeIndex
   , removeWidget
-  , resize
   , setCallback
   , setColorWithBgSel
   , setDamageInside
@@ -229,6 +224,12 @@ selectionColor ::
 selectionColor =
   wrapped Internal.selectionColor
 
+size ::
+     Group -- ^
+  -> StateVar Fltk.Rectangle
+size =
+  wrapped Internal.size
+
 tooltip ::
      Group -- ^
   -> StateVar Text
@@ -315,24 +316,12 @@ hasCallback ::
 hasCallback =
   wrapped Fltk.hasCallback
 
-height ::
-     Group -- ^
-  -> IO Fltk.Height
-height =
-  wrapped Fltk.getH
-
 inside ::
      Group -- ^
   -> Widget -- ^
   -> IO Bool
 inside group widget =
   wrapped Fltk.inside group (unWidget widget)
-
-rectangle ::
-     Group -- ^
-  -> IO Fltk.Rectangle
-rectangle =
-  wrapped Fltk.getRectangle
 
 takesEvents ::
      Group -- ^
@@ -358,29 +347,11 @@ visibleR ::
 visibleR =
   wrapped Fltk.getVisibleR
 
-width ::
-     Group -- ^
-  -> IO Fltk.Width
-width =
-  wrapped Fltk.getW
-
 window ::
      Group -- ^
   -> IO (Maybe Window)
 window =
   coerce (wrapped Fltk.getWindow)
-
-x ::
-     Group -- ^
-  -> IO Fltk.X
-x =
-  wrapped Fltk.getX
-
-y ::
-     Group -- ^
-  -> IO Fltk.Y
-y =
-  wrapped Fltk.getY
 
 
 --------------------------------------------------------------------------------
@@ -508,13 +479,6 @@ removeWidget ::
   -> IO ()
 removeWidget group widget =
   wrapped Fltk.removeWidget group (unWidget widget)
-
-resize ::
-     Group -- ^
-  -> Fltk.Rectangle -- ^
-  -> IO ()
-resize =
-  wrapped Fltk.resize
 
 setCallback ::
      Group -- ^

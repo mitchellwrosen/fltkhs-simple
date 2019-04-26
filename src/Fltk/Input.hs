@@ -27,6 +27,7 @@ module Fltk.Input
   , readonly
   , selectionColor
   , shortcut
+  , size
   , tabNav
   , textColor
   , textFont
@@ -43,18 +44,13 @@ module Fltk.Input
   , callback
   , contains
   , hasCallback
-  , height
   , index
   , inside
-  , rectangle
   , takesEvents
   , topWindow
   , topWindowOffset
   , visibleR
-  , width
   , window
-  , x
-  , y
     -- ** Effectful functions
   , copy
   , copyCuts
@@ -72,7 +68,6 @@ module Fltk.Input
   , redraw
   , redrawLabel
   , replace
-  , resize
   , setCallback
   , setColorWithBgSel
   , setDamageInside
@@ -264,6 +259,12 @@ shortcut ::
 shortcut =
   wrapped Internal.shortcut
 
+size ::
+     Input -- ^
+  -> StateVar Fltk.Rectangle
+size =
+  wrapped Internal.size
+
 tabNav ::
      Input -- ^
   -> StateVar Bool
@@ -360,12 +361,6 @@ hasCallback ::
 hasCallback =
   wrapped Fltk.hasCallback
 
-height ::
-     Input -- ^
-  -> IO Fltk.Height
-height =
-  wrapped Fltk.getH
-
 index ::
      Input -- ^
   -> Fltk.AtIndex -- ^
@@ -379,12 +374,6 @@ inside ::
   -> IO Bool
 inside input widget =
   wrapped Fltk.inside input (unWidget widget)
-
-rectangle ::
-     Input -- ^
-  -> IO Fltk.Rectangle
-rectangle =
-  wrapped Fltk.getRectangle
 
 takesEvents ::
      Input -- ^
@@ -410,29 +399,11 @@ visibleR ::
 visibleR =
   wrapped Fltk.getVisibleR
 
-width ::
-     Input -- ^
-  -> IO Fltk.Width
-width =
-  wrapped Fltk.getW
-
 window ::
      Input -- ^
   -> IO (Maybe Window)
 window =
   coerce (wrapped Fltk.getWindow)
-
-x ::
-     Input -- ^
-  -> IO Fltk.X
-x =
-  wrapped Fltk.getX
-
-y ::
-     Input -- ^
-  -> IO Fltk.Y
-y =
-  wrapped Fltk.getY
 
 
 --------------------------------------------------------------------------------
@@ -549,13 +520,6 @@ replace ::
   -> IO (Either Fltk.NoChange ())
 replace =
   wrapped Fltk.replace
-
-resize ::
-     Input -- ^
-  -> Fltk.Rectangle -- ^
-  -> IO ()
-resize =
-  wrapped Fltk.resize
 
 setCallback ::
      Input -- ^
