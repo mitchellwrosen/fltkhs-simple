@@ -9,6 +9,8 @@ module Fltk.Internal
   , damage
   , deimage
   , flags
+  , icon
+  , iconLabel
   , image
   , inputType
   , label
@@ -37,6 +39,7 @@ module Fltk.Internal
   , visibleFocus
   , when
   , wrap
+  , xclass
   ) where
 
 import Fltk.Internal.Types (Group(..), Image(..), Widget(..))
@@ -186,6 +189,30 @@ flags x =
       oldFlags :: [Fltk.WidgetFlag] <- Fltk.flags x
       traverse_ (Fltk.clearFlag x :: Fltk.WidgetFlag -> IO ()) oldFlags
       traverse_ (Fltk.setFlag x :: Fltk.WidgetFlag -> IO ()) newFlags)
+
+icon ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetIcon ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetIcon ())
+     , Fltk.Op (Fltk.GetIcon ()) r a (IO (Maybe (Fltk.Ref Fltk.Image)))
+     , Fltk.Op (Fltk.SetIcon ()) s a (Maybe (Fltk.Ref Fltk.Image) -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar (Maybe Image)
+icon x =
+  makeStateVar
+    (coerce @(IO (Maybe (Fltk.Ref Fltk.Image))) (Fltk.getIcon x))
+    (coerce @(Maybe (Fltk.Ref Fltk.Image) -> IO ()) (Fltk.setIcon x))
+
+iconLabel ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetIconlabel ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetIconlabel ())
+     , Fltk.Op (Fltk.GetIconlabel ()) r a (IO Text)
+     , Fltk.Op (Fltk.SetIconlabel ()) s a (Text -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Text
+iconLabel x =
+  makeStateVar (Fltk.getIconlabel x) (Fltk.setIconlabel x)
 
 image ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetImage ())
@@ -533,3 +560,14 @@ wrap ::
   -> StateVar Bool
 wrap x =
   makeStateVar (Fltk.getWrap x) (Fltk.setWrap x)
+
+xclass ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetXclass ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetXclass ())
+     , Fltk.Op (Fltk.GetXclass ()) r a (IO Text)
+     , Fltk.Op (Fltk.SetXclass ()) s a (Text -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Text
+xclass x =
+  makeStateVar (Fltk.getXclass x) (Fltk.setXclass x)

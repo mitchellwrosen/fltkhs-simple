@@ -1,15 +1,19 @@
 module Fltk.Window
-  ( Window
+  ( -- * Window
+    Window
   , new
-    -- ** Properties
+    -- ** Read-write properties
   , active
   , align
   , box
   , changed
+  , clipChildren
   , color
   , damage
   , deimage
   , flags
+  , icon
+  , iconLabel
   , image
   , label
   , labelColor
@@ -18,99 +22,85 @@ module Fltk.Window
   , labelType
   , output
   , parent
+  -- , resizable
   , selectionColor
+  , size
   , tooltip
   , type_
   , visible
   , visibleFocus
   , when
-    -- ** Functions
+  , xclass
+    -- ** Read-only queries
   , activeR
+  , array
+  , border
+  , callback
+  , child
+  , children
+  , contains
+  , decoratedH
+  , decoratedW
+  , find
+  , hasCallback
+  , inside
+  , menuWindow
+  , modal
+  , nonModal
+  , override
+  , shown
+  , takesEvents
+  , tooltipWindow
+  , topWindow
+  , topWindowOffset
+  , visibleR
+  , window
+  , xRoot
+  , yRoot
+    -- ** Functions
   , add
   , addResizable
   , begin
-  , children
   , clear
-  , clearBorder
-  , clipChildren
-  , contains
   , copyLabel
   , copyTooltip
   , ddfdesignKludge
   , destroy
   , doCallback
   , end
-  , find
   , flush
   , focus
   , freePosition
   , fullscreenOff
-  , getArray
-  , getBorder
-  , getCallback
-  , getChild
-  , getDecoratedH
-  , getDecoratedW
-  , getH
-  , getIcon
-  , getIconlabel
-  , getMenuWindow
-  , getModal
-  , getOverride
-  , getRectangle
-  , getResizable
-  , getTooltipWindow
-  , getTopWindow
-  , getTopWindowOffset
-  , getVisibleR
-  , getW
-  , getWindow
-  , getX
-  , getXRoot
-  , getXclass
-  , getY
-  , getYRoot
   , handle
-  , hasCallback
   , hotSpot
   , iconize
   , initSizes
   , insert
-  , inside
   , makeCurrent
   , makeFullscreen
   , measureLabel
-  , nonModal
   , redraw
   , redrawLabel
   , removeIndex
   , removeWidget
-  , resize
   , setBorder
   , setCallback
-  , setClipChildren
   , setColorWithBgSel
   , setCursor
   , setCursorWithFgBg
   , setDamageInside
   , setDefaultCursor
   , setDefaultCursorWithFgBg
-  , setIcon
-  , setIconlabel
   , setLabelWithIconlabel
-  , setMenuWindow
   , setModal
   , setNonModal
   , setNotResizable
   , setOverride
-  , setResizable
   , setTooltipWindow
-  , setXclass
-  , shown
   , sizeRange
   , sizeRangeWithArgs
   , takeFocus
-  , takesevents
   , updateChild
   , waitForExpose
   , within
@@ -152,7 +142,7 @@ new size pos title =
 
 
 --------------------------------------------------------------------------------
--- Properties
+-- Read-write properties
 --------------------------------------------------------------------------------
 
 prop ::
@@ -187,6 +177,12 @@ changed ::
 changed =
   wrapped Internal.changed
 
+clipChildren ::
+     Window -- ^
+  -> StateVar Bool
+clipChildren =
+  wrapped Internal.clipChildren
+
 color ::
      Window -- ^
   -> StateVar Fltk.Color
@@ -210,6 +206,18 @@ flags ::
   -> StateVar [Fltk.WidgetFlag]
 flags =
   wrapped Internal.flags
+
+icon ::
+     Window -- ^
+  -> StateVar (Maybe Image)
+icon =
+  wrapped Internal.icon
+
+iconLabel ::
+     Window -- ^
+  -> StateVar Text
+iconLabel =
+  wrapped Internal.iconLabel
 
 image ::
      Window -- ^
@@ -265,6 +273,18 @@ selectionColor ::
 selectionColor =
   wrapped Internal.selectionColor
 
+shown ::
+     Window -- ^
+  -> IO Bool
+shown =
+  wrapped Fltk.shown
+
+size ::
+     Window -- ^
+  -> StateVar Fltk.Rectangle
+size =
+  wrapped Internal.size
+
 tooltip ::
      Window -- ^
   -> StateVar Text
@@ -295,9 +315,15 @@ when ::
 when =
   wrapped Internal.when
 
+xclass ::
+     Window -- ^
+  -> StateVar Text
+xclass =
+  wrapped Internal.xclass
+
 
 --------------------------------------------------------------------------------
--- Functions
+-- Read-only queries
 --------------------------------------------------------------------------------
 
 activeR ::
@@ -305,6 +331,153 @@ activeR ::
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
+
+array ::
+     Window -- ^
+  -> IO [Widget]
+array =
+  coerce (wrapped Fltk.getArray)
+
+border ::
+     Window -- ^
+  -> IO Bool
+border =
+  wrapped Fltk.getBorder
+
+callback ::
+     Window -- ^
+  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
+callback =
+  wrapped Fltk.getCallback
+
+child ::
+     Window -- ^
+  -> Fltk.AtIndex -- ^
+  -> IO (Maybe Widget)
+child =
+  coerce (wrapped Fltk.getChild)
+
+children ::
+     Window -- ^
+  -> IO Int
+children =
+  wrapped Fltk.children
+
+contains ::
+     Window -- ^
+  -> Widget -- ^
+  -> IO Bool
+contains window widget =
+  wrapped Fltk.contains window (unWidget widget)
+
+decoratedH ::
+     Window -- ^
+  -> IO Int
+decoratedH =
+  wrapped Fltk.getDecoratedH
+
+decoratedW ::
+     Window -- ^
+  -> IO Int
+decoratedW =
+  wrapped Fltk.getDecoratedW
+
+find ::
+     Window -- ^
+  -> Widget -- ^
+  -> IO Fltk.AtIndex
+find window widget =
+  wrapped Fltk.find window (unWidget widget)
+
+hasCallback ::
+     Window -- ^
+  -> IO Bool
+hasCallback =
+  wrapped Fltk.hasCallback
+
+inside ::
+     Window -- ^
+  -> Widget -- ^
+  -> IO Bool
+inside window widget =
+  wrapped Fltk.inside window (unWidget widget)
+
+menuWindow ::
+     Window -- ^
+  -> IO Bool
+menuWindow =
+  wrapped Fltk.getMenuWindow
+
+modal ::
+     Window -- ^
+  -> IO Bool
+modal =
+  wrapped Fltk.getModal
+
+nonModal ::
+     Window -- ^
+  -> IO Bool
+nonModal =
+  wrapped Fltk.nonModal
+
+override ::
+     Window -- ^
+  -> IO Bool
+override =
+  wrapped Fltk.getOverride
+
+takesEvents ::
+     Window -- ^
+  -> IO Bool
+takesEvents =
+  wrapped Fltk.takesevents
+
+tooltipWindow ::
+     Window -- ^
+  -> IO Bool
+tooltipWindow =
+  wrapped Fltk.getTooltipWindow
+
+topWindow ::
+     Window -- ^
+  -> IO (Maybe Window)
+topWindow =
+  coerce (wrapped Fltk.getTopWindow)
+
+topWindowOffset ::
+     Window -- ^
+  -> IO Fltk.Position
+topWindowOffset =
+  wrapped Fltk.getTopWindowOffset
+
+visibleR ::
+     Window -- ^
+  -> IO Bool
+visibleR =
+  wrapped Fltk.getVisibleR
+
+window ::
+     Window -- ^
+  -> IO (Maybe Window)
+window =
+  coerce (wrapped Fltk.getWindow)
+
+xRoot ::
+     Window -- ^
+  -> IO Int
+xRoot =
+  wrapped Fltk.getXRoot
+
+yRoot ::
+     Window -- ^
+  -> IO Int
+yRoot =
+  wrapped Fltk.getYRoot
+
+
+--------------------------------------------------------------------------------
+-- Functions
+--------------------------------------------------------------------------------
 
 add ::
      Window -- ^
@@ -326,36 +499,11 @@ begin ::
 begin =
   wrapped Fltk.begin
 
-children ::
-     Window -- ^
-  -> IO Int
-children =
-  wrapped Fltk.children
-
 clear ::
      Window -- ^
   -> IO ()
 clear =
   wrapped Fltk.clear
-
-clearBorder ::
-     Window -- ^
-  -> IO ()
-clearBorder =
-  wrapped Fltk.clearBorder
-
-clipChildren ::
-     Window -- ^
-  -> IO Bool
-clipChildren =
-  wrapped Fltk.clipChildren
-
-contains ::
-     Window -- ^
-  -> Widget -- ^
-  -> IO Bool
-contains window widget =
-  wrapped Fltk.contains window (unWidget widget)
 
 copyLabel ::
      Window -- ^
@@ -395,13 +543,6 @@ end ::
 end =
   wrapped Fltk.end
 
-find ::
-     Window -- ^
-  -> Widget -- ^
-  -> IO Fltk.AtIndex
-find window widget =
-  wrapped Fltk.find window (unWidget widget)
-
 flush ::
      Window -- ^
   -> IO ()
@@ -428,156 +569,11 @@ fullscreenOff ::
 fullscreenOff =
   wrapped Fltk.fullscreenOff
 
-getArray ::
-     Window -- ^
-  -> IO [Widget]
-getArray =
-  coerce (wrapped Fltk.getArray)
-
-getBorder ::
-     Window -- ^
-  -> IO Bool
-getBorder =
-  wrapped Fltk.getBorder
-
-getCallback ::
-     Window -- ^
-  -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
-getCallback =
-  wrapped Fltk.getCallback
-
-getChild ::
-     Window -- ^
-  -> Fltk.AtIndex -- ^
-  -> IO (Maybe Widget)
-getChild =
-  coerce (wrapped Fltk.getChild)
-
-getDecoratedH ::
-     Window -- ^
-  -> IO Int
-getDecoratedH =
-  wrapped Fltk.getDecoratedH
-
-getDecoratedW ::
-     Window -- ^
-  -> IO Int
-getDecoratedW =
-  wrapped Fltk.getDecoratedW
-
-getH ::
-     Window -- ^
-  -> IO Fltk.Height
-getH =
-  wrapped Fltk.getH
-
-getIcon ::
-     Window -- ^
-  -> IO (Maybe Image)
-getIcon =
-  coerce (wrapped Fltk.getIcon)
-
-getIconlabel ::
-     Window -- ^
-  -> IO Text
-getIconlabel =
-  wrapped Fltk.getIconlabel
-
-getMenuWindow ::
-     Window -- ^
-  -> IO Bool
-getMenuWindow =
-  wrapped Fltk.getMenuWindow
-
-getModal ::
-     Window -- ^
-  -> IO Bool
-getModal =
-  wrapped Fltk.getModal
-
-getOverride ::
-     Window -- ^
-  -> IO Bool
-getOverride =
-  wrapped Fltk.getOverride
-
-getRectangle ::
-     Window -- ^
-  -> IO Fltk.Rectangle
-getRectangle =
- wrapped Fltk.getRectangle
-
-getResizable ::
-     Window -- ^
-  -> IO (Maybe Widget)
-getResizable =
-  coerce (wrapped Fltk.getResizable)
-
-getTooltipWindow ::
-     Window -- ^
-  -> IO Bool
-getTooltipWindow =
-  wrapped Fltk.getTooltipWindow
-
-getTopWindow ::
-     Window -- ^
-  -> IO (Maybe Window)
-getTopWindow =
-  coerce (wrapped Fltk.getTopWindow)
-
-getTopWindowOffset ::
-     Window -- ^
-  -> IO Fltk.Position
-getTopWindowOffset =
-  wrapped Fltk.getTopWindowOffset
-
-getVisibleR ::
-     Window -- ^
-  -> IO Bool
-getVisibleR =
-  wrapped Fltk.getVisibleR
-
-getW ::
-     Window -- ^
-  -> IO Fltk.Width
-getW =
-  wrapped Fltk.getW
-
-getWindow ::
-     Window -- ^
-  -> IO (Maybe Window)
-getWindow =
-  coerce (wrapped Fltk.getWindow)
-
-getX ::
-     Window -- ^
-  -> IO Fltk.X
-getX =
-  wrapped Fltk.getX
-
-getXRoot ::
-     Window -- ^
-  -> IO Int
-getXRoot =
-  wrapped Fltk.getXRoot
-
-getXclass ::
-     Window -- ^
-  -> IO Text
-getXclass =
-  wrapped Fltk.getXclass
-
-getY ::
-     Window -- ^
-  -> IO Fltk.Y
-getY =
-  wrapped Fltk.getY
-
-getYRoot ::
-     Window -- ^
-  -> IO Int
-getYRoot =
-  wrapped Fltk.getYRoot
+-- getResizable ::
+--      Window -- ^
+--   -> IO (Maybe Widget)
+-- getResizable =
+--   coerce (wrapped Fltk.getResizable)
 
 handle ::
      Window -- ^
@@ -585,12 +581,6 @@ handle ::
   -> IO (Either Fltk.UnknownEvent ())
 handle =
   wrapped Fltk.handle
-
-hasCallback ::
-     Window -- ^
-  -> IO Bool
-hasCallback =
-  wrapped Fltk.hasCallback
 
 hotSpot ::
      Window -- ^
@@ -627,13 +617,6 @@ insert window widget =
 --   -> Ref b
 --   -> IO ()
 
-inside ::
-     Window -- ^
-  -> Widget -- ^
-  -> IO Bool
-inside window widget =
-  wrapped Fltk.inside window (unWidget widget)
-
 makeCurrent ::
      Window -- ^
   -> IO ()
@@ -652,12 +635,6 @@ measureLabel ::
   -> IO Fltk.Size
 measureLabel =
   wrapped Fltk.measureLabel
-
-nonModal ::
-     Window -- ^
-  -> IO Bool
-nonModal =
-  wrapped Fltk.nonModal
 
 redraw ::
      Window -- ^
@@ -685,13 +662,6 @@ removeWidget ::
 removeWidget window widget =
   wrapped Fltk.removeWidget window (unWidget widget)
 
-resize ::
-     Window -- ^
-  -> Fltk.Rectangle -- ^
-  -> IO ()
-resize =
-  wrapped Fltk.resize
-
 setBorder ::
      Window -- ^
   -> Bool -- ^
@@ -705,13 +675,6 @@ setCallback ::
   -> IO ()
 setCallback box callback =
   wrapped Fltk.setCallback box (coerce callback)
-
-setClipChildren ::
-     Window -- ^
-  -> Bool -- ^
-  -> IO ()
-setClipChildren =
-  wrapped Fltk.setClipChildren
 
 setColorWithBgSel ::
      Window -- ^
@@ -759,20 +722,6 @@ setDefaultCursorWithFgBg ::
 setDefaultCursorWithFgBg =
   wrapped Fltk.setDefaultCursorWithFgBg
 
-setIcon ::
-     Window-- ^
-  -> Maybe Image-- ^
-  -> IO ()
-setIcon window image =
-  wrapped Fltk.setIcon window (coerce image :: Maybe (Fltk.Ref Fltk.Image))
-
-setIconlabel ::
-     Window -- ^
-  -> Text -- ^
-  -> IO ()
-setIconlabel =
-  wrapped Fltk.setIconlabel
-
 setLabelWithIconlabel ::
      Window -- ^
   -> Text -- ^
@@ -780,12 +729,6 @@ setLabelWithIconlabel ::
   -> IO ()
 setLabelWithIconlabel =
   wrapped Fltk.setLabelWithIconlabel
-
-setMenuWindow ::
-     Window -- ^
-  -> IO ()
-setMenuWindow =
-  wrapped Fltk.setMenuWindow
 
 setModal ::
      Window -- ^
@@ -811,31 +754,11 @@ setOverride ::
 setOverride =
   wrapped Fltk.setOverride
 
-setResizable ::
-     Window -- ^
-  -> Maybe Widget -- ^
-  -> IO ()
-setResizable window widget =
-  wrapped Fltk.setResizable window (coerce widget :: Maybe (Fltk.Ref (Fltk.WidgetBase)))
-
 setTooltipWindow ::
      Window -- ^
   -> IO ()
 setTooltipWindow =
   wrapped Fltk.setTooltipWindow
-
-setXclass ::
-     Window -- ^
-  -> Text -- ^
-  -> IO ()
-setXclass =
-  wrapped Fltk.setXclass
-
-shown ::
-     Window -- ^
-  -> IO Bool
-shown =
-  wrapped Fltk.shown
 
 sizeRange ::
      Window -- ^
@@ -857,12 +780,6 @@ takeFocus ::
   -> IO (Either Fltk.NoChange ())
 takeFocus =
   wrapped Fltk.takeFocus
-
-takesevents ::
-     Window -- ^
-  -> IO Bool
-takesevents =
-  wrapped Fltk.takesevents
 
 updateChild ::
      Window -- ^
