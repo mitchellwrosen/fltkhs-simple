@@ -1,42 +1,50 @@
-module Fltk.Group
-  ( -- * Group
-    Group
+module Fltk.Widget.Input
+  ( -- * Input
+    Input
   , new
     -- ** Read-write properties
   , active
   , align
   , box
   , changed
-  , clipChildren
   , color
+  , cursorColor
   , damage
   , deimage
   , flags
   , image
+  , inputType
   , label
   , labelColor
   , labelFont
   , labelSize
   , labelType
+  , mark
+  , maximumSize
   , output
   , parent
-  -- , resizable
+  , position
+  , readonly
   , selectionColor
+  , shortcut
   , size
+  , tabNav
+  , textColor
+  , textFont
+  , textSize
   , tooltip
   , type_
+  , value
   , visible
   , visibleFocus
   , when
+  , wrap
     -- ** Read-only queries
   , activeR
-  , array
   , callback
-  , child
-  , children
   , contains
-  , find
   , hasCallback
+  , index
   , inside
   , takesEvents
   , topWindow
@@ -44,33 +52,32 @@ module Fltk.Group
   , visibleR
   , window
     -- ** Effectful functions
-  , add
-  , addResizable
-  , begin
-  , clear
+  , copy
+  , copyCuts
   , copyTooltip
-  , ddfdesignKludge
+  , cut
+  , cutFromCursor
+  , cutRange
   , destroy
   , doCallback
-  , end
-  , focus
+  , drawText
   , handle
-  , initSizes
   , insert
+  , insertWithLength
   , measureLabel
   , redraw
   , redrawLabel
-  , removeIndex
-  , removeWidget
+  , replace
   , setCallback
   , setColorWithBgSel
   , setDamageInside
+  , setSize
   , takeFocus
-  , updateChild
-  , within
+  , undo
   ) where
 
-import Fltk.Internal.Types (Group(..), Image(..), Widget(..), Window(..))
+import Fltk.Internal.Types (Group(..), Image(..), Input(..), Widget(..),
+                            Window(..))
 
 import qualified Fltk.Internal as Internal
 
@@ -80,8 +87,9 @@ import Data.Text     (Text)
 import Data.Word     (Word8)
 import Foreign.Ptr   (FunPtr)
 
-import qualified Graphics.UI.FLTK.LowLevel.Base.Group      as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Base.Input      as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Base.Widget     as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Dispatch        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
@@ -90,13 +98,14 @@ import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 new ::
      Fltk.Rectangle -- ^
   -> Text -- ^
-  -> IO Group
-new rect label =
-  coerce (Fltk.groupNew rect (Just label))
+  -> Maybe Fltk.FlInputType
+  -> IO Input
+new bounds label typ =
+  Input . Fltk.safeCast <$> Fltk.inputNew bounds (Just label) typ
 
 wrapped ::
-     (Fltk.Ref Fltk.GroupBase -> a)
-  -> Group
+     (Fltk.Ref Fltk.InputBase -> a)
+  -> Input
   -> a
 wrapped =
   coerce
@@ -107,248 +116,291 @@ wrapped =
 --------------------------------------------------------------------------------
 
 active ::
-     Group -- ^
+     Input -- ^
   -> StateVar Bool
 active =
   wrapped Internal.active
 
 align ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Alignments
 align =
   wrapped Internal.align
 
 box ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Boxtype
 box =
   wrapped Internal.box
 
 changed ::
-     Group -- ^
+     Input -- ^
   -> StateVar Bool
 changed =
   wrapped Internal.changed
 
-clipChildren ::
-     Group -- ^
-  -> StateVar Bool
-clipChildren =
-  wrapped Internal.clipChildren
-
 color ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Color
 color =
   wrapped Internal.color
 
+cursorColor ::
+     Input -- ^
+  -> StateVar Fltk.Color
+cursorColor =
+  wrapped Internal.cursorColor
+
 damage ::
-     Group -- ^
+     Input -- ^
   -> StateVar [Fltk.Damage]
 damage =
   wrapped Internal.damage
 
 deimage ::
-     Group -- ^
+     Input -- ^
   -> StateVar (Maybe Image)
 deimage =
   wrapped Internal.deimage
 
 flags ::
-     Group -- ^
+     Input -- ^
   -> StateVar [Fltk.WidgetFlag]
 flags =
   wrapped Internal.flags
 
 image ::
-     Group -- ^
+     Input -- ^
   -> StateVar (Maybe Image)
 image =
   wrapped Internal.image
 
+inputType ::
+     Input -- ^
+  -> StateVar Fltk.FlInputType
+inputType =
+  wrapped Internal.inputType
+
 label ::
-     Group -- ^
+     Input -- ^
   -> StateVar Text
 label =
   wrapped Internal.label
 
 labelColor ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Color
 labelColor =
   wrapped Internal.labelColor
 
 labelFont ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Font
 labelFont =
   wrapped Internal.labelFont
 
 labelSize ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.FontSize
 labelSize =
   wrapped Internal.labelSize
 
 labelType ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Labeltype
 labelType =
   wrapped Internal.labelType
 
+mark ::
+     Input -- ^
+  -> StateVar Int
+mark =
+  wrapped Internal.mark
+
+maximumSize ::
+     Input -- ^
+  -> StateVar Int
+maximumSize =
+  wrapped Internal.maximumSize
+
 output ::
-     Group -- ^
+     Input -- ^
   -> StateVar Bool
 output =
   wrapped Internal.output
 
 parent ::
-     Group -- ^
+     Input -- ^
   -> StateVar (Maybe Group)
 parent =
   wrapped Internal.parent
 
-{-
-https://github.com/deech/fltkhs/issues/119
+position ::
+     Input -- ^
+  -> StateVar Int
+position =
+  wrapped Internal.position
 
-resizable ::
-     Group -- ^
-  -> StateVar (Maybe Widget)
-resizable =
-  wrapped Internal.resizable
--}
+readonly ::
+     Input -- ^
+  -> StateVar Bool
+readonly =
+  wrapped Internal.readonly
 
 selectionColor ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Color
 selectionColor =
   wrapped Internal.selectionColor
 
+shortcut ::
+     Input -- ^
+  -> StateVar (Maybe Fltk.ShortcutKeySequence)
+shortcut =
+  wrapped Internal.shortcut
+
 size ::
-     Group -- ^
+     Input -- ^
   -> StateVar Fltk.Rectangle
 size =
   wrapped Internal.size
 
+tabNav ::
+     Input -- ^
+  -> StateVar Bool
+tabNav =
+  wrapped Internal.tabNav
+
+textColor ::
+     Input -- ^
+  -> StateVar Fltk.Color
+textColor =
+  wrapped Internal.textColor
+
+textFont ::
+     Input -- ^
+  -> StateVar Fltk.Font
+textFont =
+  wrapped Internal.textFont
+
+textSize ::
+     Input -- ^
+  -> StateVar Fltk.FontSize
+textSize =
+  wrapped Internal.textSize
+
 tooltip ::
-     Group -- ^
+     Input -- ^
   -> StateVar Text
 tooltip =
   wrapped Internal.tooltip
 
 type_ ::
-     Group -- ^
+     Input -- ^
   -> StateVar Word8
 type_ =
   wrapped Internal.type_
 
+value ::
+     Input -- ^
+  -> StateVar Text
+value =
+  wrapped Internal.value
+
 visible ::
-     Group -- ^
+     Input -- ^
   -> StateVar Bool
 visible =
   wrapped Internal.visible
 
 visibleFocus ::
-     Group -- ^
+     Input -- ^
   -> StateVar Bool
 visibleFocus =
   wrapped Internal.visibleFocus
 
 when ::
-     Group -- ^
+     Input -- ^
   -> StateVar [Fltk.When]
 when =
   wrapped Internal.when
 
+wrap ::
+     Input -- ^
+  -> StateVar Bool
+wrap =
+  wrapped Internal.wrap
+
 
 --------------------------------------------------------------------------------
 -- Read-only queries
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 activeR ::
-     Group -- ^
+     Input -- ^
   -> IO Bool
 activeR =
   wrapped Fltk.activeR
 
-array ::
-     Group -- ^
-  -> IO [Widget]
-array =
-  coerce (wrapped Fltk.getArray)
+contains ::
+     Input -- ^
+  -> Widget -- ^
+  -> IO Bool
+contains input widget =
+  wrapped Fltk.contains input (unWidget widget)
 
 callback ::
-     Group -- ^
+     Input -- ^
   -> IO (FunPtr Fltk.CallbackWithUserDataPrim)
 callback =
   wrapped Fltk.getCallback
 
-child ::
-     Group -- ^
-  -> Fltk.AtIndex -- ^
-  -> IO (Maybe Widget)
-child =
-  coerce (wrapped Fltk.getChild)
-
-children ::
-     Group -- ^
-  -> IO Int
-children =
-  wrapped Fltk.children
-
-contains ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO Bool
-contains group widget =
-  wrapped Fltk.contains group (unWidget widget)
-
-find ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO Fltk.AtIndex
-find group widget =
-  wrapped Fltk.find group (unWidget widget)
-
 hasCallback ::
-     Group -- ^
+     Input -- ^
   -> IO Bool
 hasCallback =
   wrapped Fltk.hasCallback
 
+index ::
+     Input -- ^
+  -> Fltk.AtIndex -- ^
+  -> IO Char
+index =
+  wrapped Fltk.index
+
 inside ::
-     Group -- ^
+     Input -- ^
   -> Widget -- ^
   -> IO Bool
-inside group widget =
-  wrapped Fltk.inside group (unWidget widget)
+inside input widget =
+  wrapped Fltk.inside input (unWidget widget)
 
 takesEvents ::
-     Group -- ^
+     Input -- ^
   -> IO Bool
 takesEvents =
   wrapped Fltk.takesevents
 
 topWindow ::
-     Group -- ^
+     Input -- ^
   -> IO (Maybe Window)
 topWindow =
   coerce (wrapped Fltk.getTopWindow)
 
 topWindowOffset ::
-     Group -- ^
+     Input -- ^
   -> IO Fltk.Position
-topWindowOffset  =
+topWindowOffset =
   wrapped Fltk.getTopWindowOffset
 
 visibleR ::
-     Group -- ^
+     Input -- ^
   -> IO Bool
 visibleR =
   wrapped Fltk.getVisibleR
 
 window ::
-     Group -- ^
+     Input -- ^
   -> IO (Maybe Window)
 window =
   coerce (wrapped Fltk.getWindow)
@@ -358,137 +410,126 @@ window =
 -- Effectful functions
 --------------------------------------------------------------------------------
 
-add ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO ()
-add group widget =
-  wrapped Fltk.add group (unWidget widget)
+-- | Put the current selection into the clipboard.
+copy ::
+     Input -- ^
+  -> Fltk.Clipboard -- ^
+  -> IO (Either Fltk.NoChange ())
+copy =
+  wrapped Fltk.copy
 
-addResizable ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO ()
-addResizable group widget =
-  wrapped Fltk.addResizable group (unWidget widget)
-
-begin ::
-     Group -- ^
-  -> IO ()
-begin =
-  wrapped Fltk.begin
-
-clear ::
-     Group -- ^
-  -> IO ()
-clear =
-  wrapped Fltk.clear
+-- | Copies the yank buffer to the clipboard.
+copyCuts ::
+     Input -- ^
+  -> IO (Either Fltk.NoChange ())
+copyCuts =
+  wrapped Fltk.copyCuts
 
 copyTooltip ::
-     Group -- ^
+     Input -- ^
   -> Text -- ^
   -> IO ()
 copyTooltip =
   wrapped Fltk.copyTooltip
 
-ddfdesignKludge ::
-     Group -- ^
-  -> IO (Maybe Widget)
-ddfdesignKludge =
-  coerce (wrapped Fltk.ddfdesignKludge)
+-- | Deletes the current selection.
+cut ::
+     Input -- ^
+  -> IO (Either Fltk.NoChange ())
+cut =
+  wrapped Fltk.cut
+
+cutFromCursor ::
+     Input -- ^
+  -> Int -- ^
+  -> IO (Either Fltk.NoChange ())
+cutFromCursor =
+  wrapped Fltk.cutFromCursor
+
+cutRange ::
+     Input -- ^
+  -> Fltk.IndexRange -- ^
+  -> IO (Either Fltk.NoChange ())
+cutRange =
+  wrapped Fltk.cutRange
 
 destroy ::
-     Group -- ^
+     Input -- ^
   -> IO ()
 destroy =
   wrapped Fltk.destroy
 
 doCallback ::
-     Group -- ^
+     Input -- ^
   -> IO ()
 doCallback =
   wrapped Fltk.doCallback
 
-end ::
-     Group -- ^
+drawText ::
+     Input -- ^
+  -> Fltk.Rectangle -- ^
   -> IO ()
-end =
-  wrapped Fltk.end
-
-focus ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO ()
-focus group widget =
-  wrapped Fltk.focus group (unWidget widget)
+drawText =
+  wrapped Fltk.drawText
 
 handle ::
-     Group -- ^
+     Input -- ^
   -> Fltk.Event -- ^
   -> IO (Either Fltk.UnknownEvent ())
 handle =
   wrapped Fltk.handle
 
-initSizes ::
-     Group -- ^
-  -> IO ()
-initSizes =
-  wrapped Fltk.initSizes
-
 insert ::
-     Group -- ^
-  -> Widget -- ^
-  -> Fltk.AtIndex -- ^
-  -> IO ()
-insert group widget =
-  wrapped Fltk.insert group (unWidget widget)
+     Input -- ^
+  -> Text -- ^
+  -> IO (Either Fltk.NoChange ())
+insert =
+  wrapped Fltk.insert
 
--- insertBefore :: (Parent a WidgetBase) => Group -> Ref a -> Ref b -> IO ()
--- insertBefore=
---   wrapped Fltk.insertBefore
+insertWithLength ::
+     Input -- ^
+  -> Text -- ^
+  -> Int -- ^
+  -> IO (Either Fltk.NoChange ())
+insertWithLength =
+  wrapped Fltk.insertWithLength
 
 measureLabel ::
-     Group -- ^
+     Input -- ^
   -> Maybe Fltk.Width -- ^
   -> IO Fltk.Size
 measureLabel =
   wrapped Fltk.measureLabel
 
 redraw ::
-     Group -- ^
+     Input -- ^
   -> IO ()
 redraw =
   wrapped Fltk.redraw
 
 redrawLabel ::
-     Group -- ^
+     Input -- ^
   -> IO ()
 redrawLabel =
   wrapped Fltk.redrawLabel
 
-removeIndex ::
-     Group -- ^
-  -> Fltk.AtIndex -- ^
-  -> IO ()
-removeIndex =
-  wrapped Fltk.removeIndex
-
-removeWidget ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO ()
-removeWidget group widget =
-  wrapped Fltk.removeWidget group (unWidget widget)
+replace ::
+     Input -- ^
+  -> Fltk.IndexRange -- ^
+  -> Text -- ^
+  -> IO (Either Fltk.NoChange ())
+replace =
+  wrapped Fltk.replace
 
 setCallback ::
-     Group -- ^
-  -> (Group -> IO ()) -- ^
+     Input -- ^
+  -> (Input -> IO ()) -- ^
   -> IO ()
-setCallback group callback =
-  wrapped Fltk.setCallback group (coerce callback)
+setCallback input callback =
+  wrapped Fltk.setCallback input (coerce callback)
 
 setColorWithBgSel ::
-     Group -- ^
+     Input -- ^
   -> Fltk.Color -- ^
   -> Fltk.Color -- ^
   -> IO ()
@@ -496,29 +537,28 @@ setColorWithBgSel =
   wrapped Fltk.setColorWithBgSel
 
 setDamageInside ::
-     Group -- ^
+     Input -- ^
   -> [Fltk.Damage] -- ^
   -> Fltk.Rectangle -- ^
   -> IO ()
 setDamageInside =
   wrapped Fltk.setDamageInside
 
+setSize ::
+     Input -- ^
+  -> Fltk.Size -- ^
+  -> IO ()
+setSize =
+  wrapped Fltk.setSize
+
 takeFocus ::
-     Group -- ^
+     Input -- ^
   -> IO (Either Fltk.NoChange ())
 takeFocus =
   wrapped Fltk.takeFocus
 
-updateChild ::
-     Group -- ^
-  -> Widget -- ^
-  -> IO ()
-updateChild group widget =
-  wrapped Fltk.updateChild group (unWidget widget)
-
-within ::
-     Group -- ^
-  -> IO a -- ^
-  -> IO a
-within =
-  wrapped Fltk.within
+undo ::
+     Input -- ^
+  -> IO (Either Fltk.NoChange ())
+undo =
+  wrapped Fltk.undo

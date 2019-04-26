@@ -10,10 +10,10 @@ module Fltk
   , Upcast(..)
   ) where
 
-import Fltk.Box             (Box)
-import Fltk.Button          (Button)
-import Fltk.Group           (Group)
-import Fltk.Image           (Image)
-import Fltk.Internal.Upcast (Upcast(..))
-import Fltk.Widget          (Widget)
-import Fltk.Window          (Window)
+import Fltk.Image               (Image)
+import Fltk.Internal.Upcast     (Upcast(..))
+import Fltk.Widget              (Widget)
+import Fltk.Widget.Box          (Box)
+import Fltk.Widget.Button       (Button)
+import Fltk.Widget.Group        (Group)
+import Fltk.Widget.Group.Window (Window)

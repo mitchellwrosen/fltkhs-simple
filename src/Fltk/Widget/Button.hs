@@ -1,4 +1,4 @@
-module Fltk.Button
+module Fltk.Widget.Button
   ( -- * Button
     Button
   , Style(..)

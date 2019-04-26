@@ -25,13 +25,13 @@ library
 
   exposed-modules:
     Fltk
-    Fltk.Box
-    Fltk.Button
-    Fltk.Group
     Fltk.Image
-    Fltk.Input
     Fltk.Widget
-    Fltk.Window
+    Fltk.Widget.Box
+    Fltk.Widget.Button
+    Fltk.Widget.Group
+    Fltk.Widget.Group.Window
+    Fltk.Widget.Input
 
   ghc-options:
     -Wall

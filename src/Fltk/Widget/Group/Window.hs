@@ -1,4 +1,4 @@
-module Fltk.Window
+module Fltk.Widget.Group.Window
   ( -- * Window
     Window
   , new

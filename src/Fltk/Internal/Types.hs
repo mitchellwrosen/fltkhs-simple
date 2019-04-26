@@ -56,7 +56,7 @@ newtype Widget
   = Widget { unWidget :: Fltk.Ref Fltk.WidgetBase }
 
 
--- | A 'Window' is a 'Fltk.Group.Group', which is a 'Fltk.Widget.Widget'.
+-- | A 'Window' is a 'Fltk.Widget.Group.Group', which is a 'Fltk.Widget.Widget'.
 --
 -- <https://www.fltk.org/doc-1.4/classFl__Window.html>
 newtype Window

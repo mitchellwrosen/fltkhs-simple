@@ -7,9 +7,9 @@ import Graphics.UI.FLTK.LowLevel.FL              (run)
 import Graphics.UI.FLTK.LowLevel.Fl_Enumerations
 import Graphics.UI.FLTK.LowLevel.Fl_Types
 
-import qualified Fltk.Box    as Box
-import qualified Fltk.Button as Button
-import qualified Fltk.Window as Window
+import qualified Fltk.Widget.Box          as Box
+import qualified Fltk.Widget.Button       as Button
+import qualified Fltk.Widget.Group.Window as Window
 
 
 main :: IO Int
