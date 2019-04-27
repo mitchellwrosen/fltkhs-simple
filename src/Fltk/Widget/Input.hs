@@ -502,10 +502,10 @@ replace =
 
 setCallback ::
      Input -- ^
-  -> (Input -> IO ()) -- ^
+  -> IO () -- ^
   -> IO ()
 setCallback input callback =
-  wrapped Fltk.setCallback input (coerce callback)
+  wrapped Fltk.setCallback input (const callback)
 
 setColorWithBgSel ::
      Input -- ^

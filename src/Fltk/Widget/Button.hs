@@ -90,13 +90,6 @@ data Style
   | Round
   | Toggle
 
-wrapped ::
-     (Fltk.Ref Fltk.ButtonBase -> a)
-  -> Button
-  -> a
-wrapped =
-  coerce
-
 new ::
      Style -- ^
   -> Fltk.Rectangle -- ^
@@ -120,6 +113,13 @@ new style bounds label =
       -> IO Button
     go f =
       Button . Fltk.safeCast <$> f bounds (Just label)
+
+wrapped ::
+     (Fltk.Ref Fltk.ButtonBase -> a)
+  -> Button
+  -> a
+wrapped =
+  coerce
 
 
 --------------------------------------------------------------------------------
@@ -397,10 +397,10 @@ redrawLabel =
 
 setCallback ::
      Button -- ^
-  -> (Button -> IO ()) -- ^
+  -> IO () -- ^
   -> IO ()
 setCallback button callback =
-  wrapped Fltk.setCallback button (coerce callback)
+  wrapped Fltk.setCallback button (const callback)
 
 setColorWithBgSel ::
      Button -- ^

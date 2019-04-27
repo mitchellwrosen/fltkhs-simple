@@ -59,6 +59,11 @@ data LabelStyle
   = LabelStyle Fltk.Color Fltk.Font Fltk.FontSize Fltk.Labeltype
 
 
+-- | <https://www.fltk.org/doc-1.4/structFl__Menu__Item.html>
+newtype MenuItem
+  = MenuItem { unMenuItem :: Fltk.Ref Fltk.MenuItemBase }
+
+
 -- | <https://www.fltk.org/doc-1.4/classFl__Widget.html>
 newtype Widget
   = Widget { unWidget :: Fltk.Ref Fltk.WidgetBase }

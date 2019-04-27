@@ -26,6 +26,7 @@ library
   exposed-modules:
     Fltk
     Fltk.Image
+    Fltk.MenuItem
     Fltk.Widget
     Fltk.Widget.Box
     Fltk.Widget.Button

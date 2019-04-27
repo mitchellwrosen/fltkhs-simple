@@ -462,10 +462,10 @@ removeWidget group widget =
 
 setCallback ::
      Group -- ^
-  -> (Group -> IO ()) -- ^
+  -> IO () -- ^
   -> IO ()
 setCallback group callback =
-  wrapped Fltk.setCallback group (coerce callback)
+  wrapped Fltk.setCallback group (const callback)
 
 setColorWithBgSel ::
      Group -- ^

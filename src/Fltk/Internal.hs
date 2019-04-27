@@ -15,6 +15,7 @@ module Fltk.Internal
   , inputType
   , label
   , labelStyle
+  , labelStyle2
   , mark
   , maximumSize
   , output
@@ -32,7 +33,9 @@ module Fltk.Internal
   , tooltip
   , type_
   , value
+  , value2
   , visible
+  , visible2
   , visibleFocus
   , when
   , wrap
@@ -279,6 +282,39 @@ labelStyle x =
       Fltk.setLabelsize x size :: IO ()
       Fltk.setLabeltype x typ Fltk.ResolveImageLabelOverwrite :: IO ())
 
+labelStyle2 ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabelcolor ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetLabelcolor ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.GetLabelfont ())
+     , Fltk.Match u ~ Fltk.FindOp a a (Fltk.SetLabelfont ())
+     , Fltk.Match v ~ Fltk.FindOp a a (Fltk.GetLabelsize ())
+     , Fltk.Match w ~ Fltk.FindOp a a (Fltk.SetLabelsize ())
+     , Fltk.Match x ~ Fltk.FindOp a a (Fltk.GetLabeltype ())
+     , Fltk.Match y ~ Fltk.FindOp a a (Fltk.SetLabeltype ())
+     , Fltk.Op (Fltk.GetLabelcolor ()) r a (IO Fltk.Color)
+     , Fltk.Op (Fltk.SetLabelcolor ()) s a (Fltk.Color -> IO ())
+     , Fltk.Op (Fltk.GetLabelfont ()) t a (IO Fltk.Font)
+     , Fltk.Op (Fltk.SetLabelfont ()) u a (Fltk.Font -> IO ())
+     , Fltk.Op (Fltk.GetLabelsize ()) v a (IO Fltk.FontSize)
+     , Fltk.Op (Fltk.SetLabelsize ()) w a (Fltk.FontSize -> IO ())
+     , Fltk.Op (Fltk.GetLabeltype ()) x a (IO Fltk.Labeltype)
+     , Fltk.Op (Fltk.SetLabeltype ()) y a (Fltk.Labeltype -> IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar LabelStyle
+labelStyle2 x =
+  makeStateVar
+    (LabelStyle
+      <$> Fltk.getLabelcolor x
+      <*> Fltk.getLabelfont x
+      <*> Fltk.getLabelsize x
+      <*> Fltk.getLabeltype x)
+    (\(LabelStyle color font size typ) -> do
+      Fltk.setLabelcolor x color :: IO ()
+      Fltk.setLabelfont x font :: IO ()
+      Fltk.setLabelsize x size :: IO ()
+      Fltk.setLabeltype x typ :: IO ())
+
 mark ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetMark ())
      , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetMark ())
@@ -495,6 +531,23 @@ value x =
     (Fltk.getValue x)
     (void . (Fltk.setValue x :: Text -> IO (Either Fltk.NoChange ())))
 
+value2 ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetValue ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.Clear ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.Set ())
+     , Fltk.Op (Fltk.GetValue ()) r a (IO Int)
+     , Fltk.Op (Fltk.Clear ()) s a (IO ())
+     , Fltk.Op (Fltk.Set ()) t a (IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Int
+value2 x =
+  makeStateVar
+    (Fltk.getValue x)
+    (\case
+      0 -> Fltk.clear x
+      _ -> Fltk.set x)
+
 visible ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetVisible ())
      , Fltk.Match s ~ Fltk.FindOp a a (Fltk.Hide ())
@@ -508,6 +561,23 @@ visible ::
 visible x =
   makeStateVar
     (Fltk.getVisible x)
+    (\case
+      False -> Fltk.hide x
+      True -> Fltk.showWidget x)
+
+visible2 ::
+     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.Visible ())
+     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.Hide ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.ShowWidget ())
+     , Fltk.Op (Fltk.Visible ()) r a (IO Bool)
+     , Fltk.Op (Fltk.Hide ()) s a (IO ())
+     , Fltk.Op (Fltk.ShowWidget ()) t a (IO ())
+     )
+  => Fltk.Ref a
+  -> StateVar Bool
+visible2 x =
+  makeStateVar
+    (Fltk.visible x)
     (\case
       False -> Fltk.hide x
       True -> Fltk.showWidget x)

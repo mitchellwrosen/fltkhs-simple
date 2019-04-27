@@ -651,10 +651,10 @@ setBorder =
 
 setCallback ::
      DoubleWindow -- ^
-  -> (DoubleWindow -> IO ()) -- ^
+  -> IO () -- ^
   -> IO ()
 setCallback box callback =
-  wrapped Fltk.setCallback box (coerce callback)
+  wrapped Fltk.setCallback box (const callback)
 
 setColorWithBgSel ::
      DoubleWindow -- ^
