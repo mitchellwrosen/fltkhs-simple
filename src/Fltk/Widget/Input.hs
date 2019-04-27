@@ -15,10 +15,7 @@ module Fltk.Widget.Input
   , image
   , inputType
   , label
-  , labelColor
-  , labelFont
-  , labelSize
-  , labelType
+  , labelStyle
   , mark
   , maximumSize
   , output
@@ -76,8 +73,8 @@ module Fltk.Widget.Input
   , undo
   ) where
 
-import Fltk.Internal.Types (Group(..), Image(..), Input(..), Widget(..),
-                            Window(..))
+import Fltk.Internal.Types (Group(..), Image(..), Input(..), LabelStyle,
+                            Widget(..), Window(..))
 
 import qualified Fltk.Internal as Internal
 
@@ -187,29 +184,11 @@ label ::
 label =
   wrapped Internal.label
 
-labelColor ::
+labelStyle ::
      Input -- ^
-  -> StateVar Fltk.Color
-labelColor =
-  wrapped Internal.labelColor
-
-labelFont ::
-     Input -- ^
-  -> StateVar Fltk.Font
-labelFont =
-  wrapped Internal.labelFont
-
-labelSize ::
-     Input -- ^
-  -> StateVar Fltk.FontSize
-labelSize =
-  wrapped Internal.labelSize
-
-labelType ::
-     Input -- ^
-  -> StateVar Fltk.Labeltype
-labelType =
-  wrapped Internal.labelType
+  -> StateVar LabelStyle
+labelStyle =
+  wrapped Internal.labelStyle
 
 mark ::
      Input -- ^

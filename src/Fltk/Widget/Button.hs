@@ -16,10 +16,7 @@ module Fltk.Widget.Button
   , flags
   , image
   , label
-  , labelColor
-  , labelFont
-  , labelSize
-  , labelType
+  , labelStyle
   , output
   , parent
   , selectionColor
@@ -57,8 +54,8 @@ module Fltk.Widget.Button
   , takeFocus
   ) where
 
-import Fltk.Internal.Types (Button(..), Group(..), Image(..), Widget(..),
-                            Window(..))
+import Fltk.Internal.Types (Button(..), Group(..), Image(..), LabelStyle,
+                            Widget(..), Window(..))
 
 import qualified Fltk.Internal as Internal
 
@@ -209,29 +206,11 @@ label ::
 label =
   wrapped Internal.label
 
-labelColor ::
+labelStyle ::
      Button -- ^
-  -> StateVar Fltk.Color
-labelColor =
-  wrapped Internal.labelColor
-
-labelFont ::
-     Button -- ^
-  -> StateVar Fltk.Font
-labelFont =
-  wrapped Internal.labelFont
-
-labelSize ::
-     Button -- ^
-  -> StateVar Fltk.FontSize
-labelSize =
-  wrapped Internal.labelSize
-
-labelType ::
-     Button -- ^
-  -> StateVar Fltk.Labeltype
-labelType =
-  wrapped Internal.labelType
+  -> StateVar LabelStyle
+labelStyle =
+  wrapped Internal.labelStyle
 
 output ::
      Button -- ^

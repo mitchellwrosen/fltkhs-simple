@@ -2,7 +2,9 @@
 
 module Main (main) where
 
+
 import Data.StateVar                             (($=))
+import Fltk
 import Graphics.UI.FLTK.LowLevel.FL              (run)
 import Graphics.UI.FLTK.LowLevel.Fl_Enumerations
 import Graphics.UI.FLTK.LowLevel.Fl_Types
@@ -28,9 +30,8 @@ main = do
         (Size (Width 300) (Height 100)))
       "Hello, world!"
 
-  Box.labelFont box $= helveticaBoldItalic
-  Box.labelSize box $= (FontSize 36)
-  Box.labelType box $= ShadowLabelType
+  Box.labelStyle box $=
+    LabelStyle blackColor helveticaBoldItalic (FontSize 36) ShadowLabelType
 
   -- _ <-
   --   Button.new

@@ -8,8 +8,9 @@ import Fltk.Internal.Upcast (Upcast(..))
 
 import Data.Coerce (coerce)
 
-import qualified Graphics.UI.FLTK.LowLevel.Fl_Types  as Fltk
-import qualified Graphics.UI.FLTK.LowLevel.Hierarchy as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Fl_Enumerations as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Fl_Types        as Fltk
+import qualified Graphics.UI.FLTK.LowLevel.Hierarchy       as Fltk
 
 
 -- | <https://www.fltk.org/doc-1.4/classFl__Box.html>
@@ -47,13 +48,15 @@ newtype Image
   = Image { unImage :: Fltk.Ref Fltk.Image }
 
 
--- | An 'Input' is a 'Fltk.Widget.Widget'.
---
--- <https://www.fltk.org/doc-1.4/classFl__Input.html>
+-- | <https://www.fltk.org/doc-1.4/classFl__Input.html>
 newtype Input
   = Input { unInput :: Fltk.Ref Fltk.InputBase }
 
 instance Upcast Input Widget where upcast = coerce
+
+
+data LabelStyle
+  = LabelStyle Fltk.Color Fltk.Font Fltk.FontSize Fltk.Labeltype
 
 
 -- | <https://www.fltk.org/doc-1.4/classFl__Widget.html>
@@ -61,9 +64,7 @@ newtype Widget
   = Widget { unWidget :: Fltk.Ref Fltk.WidgetBase }
 
 
--- | A 'Window' is a 'Fltk.Widget.Group.Group', which is a 'Fltk.Widget.Widget'.
---
--- <https://www.fltk.org/doc-1.4/classFl__Window.html>
+-- | <https://www.fltk.org/doc-1.4/classFl__Window.html>
 newtype Window
   = Window { unWindow :: Fltk.Ref Fltk.WindowBase }
 

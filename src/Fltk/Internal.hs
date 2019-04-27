@@ -14,10 +14,7 @@ module Fltk.Internal
   , image
   , inputType
   , label
-  , labelColor
-  , labelFont
-  , labelSize
-  , labelType
+  , labelStyle
   , mark
   , maximumSize
   , output
@@ -42,7 +39,7 @@ module Fltk.Internal
   , xclass
   ) where
 
-import Fltk.Internal.Types (Group(..), Image(..), Widget(..))
+import Fltk.Internal.Types (Group(..), Image(..), LabelStyle(..), Widget(..))
 
 import Data.Coerce   (coerce)
 import Data.Foldable (traverse_)
@@ -249,51 +246,38 @@ label ::
 label x =
   makeStateVar (Fltk.getLabel x) (Fltk.setLabel x)
 
-labelColor ::
+labelStyle ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabelcolor ())
      , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetLabelcolor ())
+     , Fltk.Match t ~ Fltk.FindOp a a (Fltk.GetLabelfont ())
+     , Fltk.Match u ~ Fltk.FindOp a a (Fltk.SetLabelfont ())
+     , Fltk.Match v ~ Fltk.FindOp a a (Fltk.GetLabelsize ())
+     , Fltk.Match w ~ Fltk.FindOp a a (Fltk.SetLabelsize ())
+     , Fltk.Match x ~ Fltk.FindOp a a (Fltk.GetLabeltype ())
+     , Fltk.Match y ~ Fltk.FindOp a a (Fltk.SetLabeltype ())
      , Fltk.Op (Fltk.GetLabelcolor ()) r a (IO Fltk.Color)
      , Fltk.Op (Fltk.SetLabelcolor ()) s a (Fltk.Color -> IO ())
+     , Fltk.Op (Fltk.GetLabelfont ()) t a (IO Fltk.Font)
+     , Fltk.Op (Fltk.SetLabelfont ()) u a (Fltk.Font -> IO ())
+     , Fltk.Op (Fltk.GetLabelsize ()) v a (IO Fltk.FontSize)
+     , Fltk.Op (Fltk.SetLabelsize ()) w a (Fltk.FontSize -> IO ())
+     , Fltk.Op (Fltk.GetLabeltype ()) x a (IO Fltk.Labeltype)
+     , Fltk.Op (Fltk.SetLabeltype ()) y a (Fltk.Labeltype -> Fltk.ResolveImageLabelConflict -> IO ())
      )
   => Fltk.Ref a
-  -> StateVar Fltk.Color
-labelColor x =
-  makeStateVar (Fltk.getLabelcolor x) (Fltk.setLabelcolor x)
-
-labelFont ::
-     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabelfont ())
-     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetLabelfont ())
-     , Fltk.Op (Fltk.GetLabelfont ()) r a (IO Fltk.Font)
-     , Fltk.Op (Fltk.SetLabelfont ()) s a (Fltk.Font -> IO ())
-     )
-  => Fltk.Ref a
-  -> StateVar Fltk.Font
-labelFont x =
-  makeStateVar (Fltk.getLabelfont x) (Fltk.setLabelfont x)
-
-labelSize ::
-     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabelsize ())
-     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetLabelsize ())
-     , Fltk.Op (Fltk.GetLabelsize ()) r a (IO Fltk.FontSize)
-     , Fltk.Op (Fltk.SetLabelsize ()) s a (Fltk.FontSize -> IO ())
-     )
-  => Fltk.Ref a
-  -> StateVar Fltk.FontSize
-labelSize x =
-  makeStateVar (Fltk.getLabelsize x) (Fltk.setLabelsize x)
-
-labelType ::
-     ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetLabeltype ())
-     , Fltk.Match s ~ Fltk.FindOp a a (Fltk.SetLabeltype ())
-     , Fltk.Op (Fltk.GetLabeltype ()) r a (IO Fltk.Labeltype)
-     , Fltk.Op (Fltk.SetLabeltype ()) s a (Fltk.Labeltype -> Fltk.ResolveImageLabelConflict -> IO ())
-     )
-  => Fltk.Ref a
-  -> StateVar Fltk.Labeltype
-labelType x =
+  -> StateVar LabelStyle
+labelStyle x =
   makeStateVar
-    (Fltk.getLabeltype x)
-    (\t -> Fltk.setLabeltype x t Fltk.ResolveImageLabelOverwrite)
+    (LabelStyle
+      <$> Fltk.getLabelcolor x
+      <*> Fltk.getLabelfont x
+      <*> Fltk.getLabelsize x
+      <*> Fltk.getLabeltype x)
+    (\(LabelStyle color font size typ) -> do
+      Fltk.setLabelcolor x color :: IO ()
+      Fltk.setLabelfont x font :: IO ()
+      Fltk.setLabelsize x size :: IO ()
+      Fltk.setLabeltype x typ Fltk.ResolveImageLabelOverwrite :: IO ())
 
 mark ::
      ( Fltk.Match r ~ Fltk.FindOp a a (Fltk.GetMark ())
