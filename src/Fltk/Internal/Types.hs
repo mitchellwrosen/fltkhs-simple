@@ -12,20 +12,25 @@ import qualified Graphics.UI.FLTK.LowLevel.Fl_Types  as Fltk
 import qualified Graphics.UI.FLTK.LowLevel.Hierarchy as Fltk
 
 
--- | A 'Box' is a 'Fltk.Widget.Widget'.
---
--- <https://www.fltk.org/doc-1.4/classFl__Box.html>
+-- | <https://www.fltk.org/doc-1.4/classFl__Box.html>
 newtype Box
   = Box { unBox :: Fltk.Ref Fltk.Box }
 
 
--- | A 'Button' is a 'Fltk.Widget.Widget'.
---
--- <https://www.fltk.org/doc-1.4/classFl__Button.html>
+-- | <https://www.fltk.org/doc-1.4/classFl__Button.html>
 newtype Button
   = Button { unButton :: Fltk.Ref Fltk.ButtonBase }
 
 instance Upcast Button Widget where upcast = coerce
+
+
+-- | <https://www.fltk.org/doc-1.4/classFl__Double__Window.html>
+newtype DoubleWindow
+  = DoubleWindow { unDoubleWindow :: Fltk.Ref Fltk.DoubleWindowBase }
+
+instance Upcast DoubleWindow Group  where upcast = coerce
+instance Upcast DoubleWindow Widget where upcast = coerce
+instance Upcast DoubleWindow Window where upcast = coerce
 
 
 -- | A 'Group' is a 'Fltk.Widget.Widget'.

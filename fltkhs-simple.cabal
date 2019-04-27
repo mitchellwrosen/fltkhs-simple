@@ -31,6 +31,7 @@ library
     Fltk.Widget.Button
     Fltk.Widget.Group
     Fltk.Widget.Group.Window
+    Fltk.Widget.Group.Window.DoubleWindow
     Fltk.Widget.Input
 
   ghc-options:
